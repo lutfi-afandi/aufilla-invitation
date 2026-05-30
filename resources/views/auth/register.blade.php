@@ -1,26 +1,32 @@
-<x-guest-layout>
+@extends('layouts.guest')
+
+@section('content')
+    <div class="mb-6 text-center">
+        <h2 class="text-2xl font-bold text-brand-dark">Buat Akun Baru</h2>
+        <p class="text-sm text-gray-500 mt-1">Daftar untuk memulai membuat undangan digital Anda</p>
+    </div>
+
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
-        <!-- Username -->
+        <!-- Couple Name -->
         <div>
-            <x-input-label for="username" :value="__('Username')" />
-            <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('username')" class="mt-2" />
+            <label for="couple_name" class="block font-medium text-sm text-brand-dark">{{ __('Nama Pasangan (Contoh: Romeo & Juliet)') }}</label>
+            <input id="couple_name" class="block mt-1 w-full border-gray-300 focus:border-brand-light focus:ring-brand-light rounded-md shadow-sm" type="text" name="couple_name" :value="old('couple_name')" required autofocus />
+            <x-input-error :messages="$errors->get('couple_name')" class="mt-2" />
         </div>
 
         <!-- Email Address -->
         <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" autocomplete="email" />
+            <label for="email" class="block font-medium text-sm text-brand-dark">{{ __('Email') }}</label>
+            <input id="email" class="block mt-1 w-full border-gray-300 focus:border-brand-light focus:ring-brand-light rounded-md shadow-sm" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
         <!-- Password -->
         <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
+            <label for="password" class="block font-medium text-sm text-brand-dark">{{ __('Password') }}</label>
+            <input id="password" class="block mt-1 w-full border-gray-300 focus:border-brand-light focus:ring-brand-light rounded-md shadow-sm"
                             type="password"
                             name="password"
                             required autocomplete="new-password" />
@@ -30,23 +36,22 @@
 
         <!-- Confirm Password -->
         <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
+            <label for="password_confirmation" class="block font-medium text-sm text-brand-dark">{{ __('Konfirmasi Password') }}</label>
+            <input id="password_confirmation" class="block mt-1 w-full border-gray-300 focus:border-brand-light focus:ring-brand-light rounded-md shadow-sm"
                             type="password"
                             name="password_confirmation" required autocomplete="new-password" />
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
+        <div class="mt-6">
+            <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-3 bg-brand-dark border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-brand-light focus:bg-brand-light active:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-brand-accent focus:ring-offset-2 transition ease-in-out duration-150">
+                {{ __('Daftar') }}
+            </button>
+        </div>
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
+        <div class="mt-6 text-center">
+            <p class="text-sm text-gray-600">Sudah punya akun? <a href="{{ route('login') }}" class="font-bold text-brand-dark hover:text-brand-light hover:underline">Masuk di sini</a></p>
         </div>
     </form>
-</x-guest-layout>
+@endsection

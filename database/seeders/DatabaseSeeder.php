@@ -18,8 +18,24 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'username' => 'admin',
+            'email' => 'admin@example.com',
+            'role' => 'admin',
+            'password' => bcrypt('admin123'),
+        ]);
+
+        User::factory()->create([
+            'username' => 'lutfi',
+            'email' => 'lutfi@example.com',
+            'role' => 'client',
+            'password' => bcrypt('admin123'),
+        ]);
+
+        \App\Models\Theme::create([
+            'name' => 'Demo Theme 1',
+            'code' => 'demo1',
+            'thumbnail' => '/assets/img/thumbnail-tema/demo1.png',
+            'is_active' => true,
         ]);
     }
 }

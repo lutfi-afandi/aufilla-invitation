@@ -22,7 +22,13 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'role',
     ];
+
+    public function invitation()
+    {
+        return $this->hasOne(Invitation::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

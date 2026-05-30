@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2C1810;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4A2C2A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1A0F0A;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C28B8B;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#B8860B;stop-opacity:0.2" />
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1920" fill="url(#grad1)"/>
+  <circle cx="200" cy="300" r="120" fill="url(#grad2)" opacity="0.4"/>
+  <circle cx="880" cy="200" r="90" fill="url(#grad2)" opacity="0.3"/>
+  <circle cx="100" cy="1600" r="150" fill="url(#grad2)" opacity="0.3"/>
+  <circle cx="950" cy="1700" r="100" fill="url(#grad2)" opacity="0.4"/>
+  <g opacity="0.5" stroke="#C28B8B" stroke-width="2" fill="none">
+    <path d="M0,0 Q150,100 200,300 Q250,500 150,600"/>
+    <path d="M200,300 Q100,250 50,200"/>
+    <path d="M200,300 Q280,280 320,220"/>
+    <ellipse cx="50" cy="200" rx="30" ry="15" fill="#C28B8B" opacity="0.4" transform="rotate(-30,50,200)"/>
+    <ellipse cx="320" cy="220" rx="25" ry="12" fill="#C28B8B" opacity="0.4" transform="rotate(20,320,220)"/>
+    <ellipse cx="150" cy="600" rx="35" ry="18" fill="#C28B8B" opacity="0.4" transform="rotate(-10,150,600)"/>
+  </g>
+  <g opacity="0.5" stroke="#B8860B" stroke-width="2" fill="none">
+    <path d="M1080,0 Q930,100 880,300 Q830,500 930,600"/>
+    <path d="M880,300 Q980,250 1030,200"/>
+    <path d="M880,300 Q800,280 760,220"/>
+    <ellipse cx="1030" cy="200" rx="30" ry="15" fill="#B8860B" opacity="0.4" transform="rotate(30,1030,200)"/>
+    <ellipse cx="760" cy="220" rx="25" ry="12" fill="#B8860B" opacity="0.4" transform="rotate(-20,760,220)"/>
+    <ellipse cx="930" cy="600" rx="35" ry="18" fill="#B8860B" opacity="0.4" transform="rotate(10,930,600)"/>
+  </g>
+  <g transform="translate(540,960)" opacity="0.3">
+    <circle r="200" fill="none" stroke="#C28B8B" stroke-width="1"/>
+    <circle r="180" fill="none" stroke="#B8860B" stroke-width="0.5"/>
+    <line x1="-200" y1="0" x2="200" y2="0" stroke="#C28B8B" stroke-width="0.5"/>
+    <line x1="0" y1="-200" x2="0" y2="200" stroke="#C28B8B" stroke-width="0.5"/>
+  </g>
+</svg>

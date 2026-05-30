@@ -96,8 +96,9 @@ Untuk mempercepat pengembangan namun tetap menjaga keteraturan (*clean code*), p
 
 Aplikasi ini dituntut untuk memberikan pengalaman yang instan tanpa membebani server dengan muat ulang (*reload*) halaman penuh secara terus-menerus. Seluruh interaksi dikendalikan oleh **jQuery**.
 
-1. **Dashboard Klien (Single-Container Tab Switcher):**
-   Saat Klien mengisi data (Data Pengantin -> Acara -> Galeri), antarmuka menggunakan **Tab Switcher**. Semua form dimuat sekaligus namun disembunyikan menggunakan kelas `.hidden` Tailwind. Gunakan jQuery untuk *toggle* kelas tersebut saat klien berpindah tab (contoh: `$('#tab-acara').removeClass('hidden')`).
+1. **Dashboard Klien (Multi-Page dengan AJAX Form):**
+   Antarmuka klien dipisah menjadi beberapa halaman berbeda berdasarkan rute (contoh: `/client/pengantin`, `/client/acara`, `/client/tamu`) menggunakan Sidebar atau Top-nav. 
+   **Penting:** Meskipun halamannya terpisah, setiap kali form utama disubmit (misal: menyimpan Data Pengantin), form WAJIB ditangani oleh jQuery AJAX (`$.ajax`). Tidak ada *page reload* saat menekan tombol simpan, cukup ubah tombol menjadi *loading state* dan tampilkan SweetAlert saat data berhasil disimpan.
 2. **Form RSVP & Ucapan:**
    Wajib menggunakan **jQuery AJAX** (`$.ajax` / `$.post`). Ketika form disubmit:
    - Tombol berubah menjadi *loading state* via jQuery.

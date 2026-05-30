@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F7E7CE;stop-opacity:1" />
+      <stop offset="40%" style="stop-color:#E8D5B7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D2B48C;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="rose" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C28B8B;stop-opacity:0.5" />
+      <stop offset="100%" style="stop-color:#A07070;stop-opacity:0.3" />
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+  <!-- Soft bokeh circles -->
+  <circle cx="300" cy="400" r="200" fill="#C28B8B" opacity="0.1"/>
+  <circle cx="800" cy="600" r="250" fill="#B8860B" opacity="0.08"/>
+  <circle cx="150" cy="1200" r="180" fill="#C28B8B" opacity="0.1"/>
+  <circle cx="900" cy="1400" r="220" fill="#B8860B" opacity="0.08"/>
+  <circle cx="540" cy="960" r="300" fill="#D2B48C" opacity="0.15"/>
+  <!-- Decorative lines -->
+  <g stroke="#C28B8B" stroke-width="1" opacity="0.3" fill="none">
+    <path d="M0,400 Q270,350 540,400 Q810,450 1080,400"/>
+    <path d="M0,800 Q270,750 540,800 Q810,850 1080,800"/>
+    <path d="M0,1200 Q270,1150 540,1200 Q810,1250 1080,1200"/>
+    <path d="M0,1600 Q270,1550 540,1600 Q810,1650 1080,1600"/>
+  </g>
+  <!-- Floral corner top-left -->
+  <g opacity="0.4" stroke="#8F9779" stroke-width="1.5" fill="none">
+    <path d="M0,0 C100,50 150,150 100,250 C50,350 0,400 50,500"/>
+    <path d="M100,250 C150,200 200,180 250,150"/>
+    <path d="M100,250 C80,300 60,350 80,400"/>
+    <ellipse cx="250" cy="150" rx="20" ry="10" fill="#8F9779" opacity="0.5" transform="rotate(-20,250,150)"/>
+    <ellipse cx="80" cy="400" rx="18" ry="9" fill="#8F9779" opacity="0.5" transform="rotate(10,80,400)"/>
+    <ellipse cx="50" cy="500" rx="22" ry="11" fill="#8F9779" opacity="0.5" transform="rotate(-5,50,500)"/>
+  </g>
+  <!-- Floral corner top-right -->
+  <g opacity="0.4" stroke="#C28B8B" stroke-width="1.5" fill="none">
+    <path d="M1080,0 C980,50 930,150 980,250 C1030,350 1080,400 1030,500"/>
+    <path d="M980,250 C930,200 880,180 830,150"/>
+    <path d="M980,250 C1000,300 1020,350 1000,400"/>
+    <ellipse cx="830" cy="150" rx="20" ry="10" fill="#C28B8B" opacity="0.5" transform="rotate(20,830,150)"/>
+    <ellipse cx="1000" cy="400" rx="18" ry="9" fill="#C28B8B" opacity="0.5" transform="rotate(-10,1000,400)"/>
+    <ellipse cx="1030" cy="500" rx="22" ry="11" fill="#C28B8B" opacity="0.5" transform="rotate(5,1030,500)"/>
+  </g>
+  <!-- Center heart ornament -->
+  <g transform="translate(540,960)" opacity="0.2">
+    <path d="M0,-30 C-5,-40 -20,-40 -20,-25 C-20,-10 0,5 0,5 C0,5 20,-10 20,-25 C20,-40 5,-40 0,-30 Z" fill="#C28B8B"/>
+    <circle r="100" fill="none" stroke="#B8860B" stroke-width="0.5"/>
+    <circle r="120" fill="none" stroke="#C28B8B" stroke-width="0.5"/>
+  </g>
+  <!-- Text placeholder area -->
+  <rect x="190" y="800" width="700" height="320" rx="10" fill="white" opacity="0.15"/>
+</svg>
