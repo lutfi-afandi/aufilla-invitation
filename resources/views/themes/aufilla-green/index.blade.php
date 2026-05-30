@@ -38,16 +38,35 @@
             'alamat_pengiriman' => null,
         ];
 
-        $tamu = (object) [
-            'nama' => request('to', 'Bapak/Ibu/Saudara/i')
-        ];
+        $meta_title = "The Wedding of " . $pengaturan->nama_panggilan_wanita . " & " . $pengaturan->nama_panggilan_pria;
+        $meta_desc = "Kami mengundang Anda untuk hadir di acara pernikahan kami pada " . $pengaturan->tanggal_pernikahan->translatedFormat('l, d F Y') . ".";
+        
+        $nama_tamu_display = $tamu ? $tamu->nama_tamu : request('to', 'Bapak/Ibu/Saudara/i');
     @endphp
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Undangan Pernikahan - {{ $invitation->pria_nama }} & {{ $invitation->wanita_nama }}
-    </title>
-    <meta name="description"
-        content="Undangan Pernikahan {{ $invitation->wanita_nama_lengkap }} & {{ $invitation->pria_nama_lengkap }} - {{ $akad ? \Carbon\Carbon::parse($akad->tanggal)->translatedFormat('l, d F Y') : '' }}. Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir." />
+    <!-- Primary Meta Tags -->
+    <title>{{ $meta_title }}</title>
+    <meta name="title" content="{{ $meta_title }}">
+    <meta name="description" content="{{ $meta_desc }}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $meta_title }}">
+    <meta property="og:description" content="{{ $meta_desc }}">
+    <meta property="og:image" content="{{ $pengaturan->foto_hero }}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="{{ $meta_title }}">
+    <meta property="twitter:description" content="{{ $meta_desc }}">
+    <meta property="twitter:image" content="{{ $pengaturan->foto_hero }}">
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
+    
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="{{ asset('themes/aufilla-green/css/tailwind.css') }}" rel="stylesheet" />
     <link href="{{ asset('themes/aufilla-green/css/google-fonts.css') }}" rel="stylesheet" />
@@ -402,7 +421,7 @@
 
         .music-controller {
             position: fixed;
-            top: 24px;
+            bottom: 24px;
             right: 24px;
             width: 48px;
             height: 48px;
@@ -674,7 +693,7 @@
                     style="display: inline-block; padding: 0.5rem 1.5rem; border-radius: 16px; background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
                     <h2 id="guest-name" class="font-heading text-xl md:text-2xl text-[#e5c088] font-semibold font-serif"
                         style="margin: 0; font-weight: 600;">
-                        {{ $tamu->nama }}
+                        {{ $nama_tamu_display }}
                     </h2>
                 </div>
             </div>
@@ -704,6 +723,45 @@
             <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
         </svg>
     </div>
+
+
+    @if(isset($tamu) && isset($qrCode))
+    <!-- Floating QR Button (100% inline styles) -->
+    <button id="qr-btn" onclick="document.getElementById('qr-modal').style.display='flex'"
+        style="position: fixed; bottom: 84px; right: 24px; width: 48px; height: 48px; z-index: 9999; background-color: #1d3226; color: #e5c088; border: 1px solid rgba(197,168,128,0.3); border-radius: 9999px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); padding: 0;">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+    </button>
+
+    <!-- QR Modal (100% inline styles) -->
+    <div id="qr-modal"
+        style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 10000; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 1rem;">
+        <div style="background: #fff; border-radius: 1rem; box-shadow: 0 25px 50px rgba(0,0,0,0.25); width: 100%; max-width: 24rem; overflow: hidden; text-align: center; margin: auto;">
+            <div style="background-color: #1d3226; padding: 1rem; color: #fff; display: flex; justify-content: space-between; align-items: center;">
+                <h3 class="font-heading" style="font-size: 1.125rem; font-weight: 700; color: #e5c088; margin: 0;">Tiket Akses Masuk</h3>
+                <button onclick="document.getElementById('qr-modal').style.display='none'"
+                    style="background: none; border: none; color: #fff; cursor: pointer; padding: 4px;">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div style="padding: 2rem; display: flex; flex-direction: column; align-items: center;">
+                <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 1.5rem; line-height: 1.6;">Selamat datang! Silakan tunjukkan QR Code ini kepada resepsionis saat Anda tiba di lokasi acara.</p>
+                <div style="background: #fff; padding: 0.75rem; border: 4px solid rgba(29,50,38,0.1); border-radius: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: inline-block; margin-bottom: 1.5rem;">
+                    {!! $qrCode !!}
+                </div>
+                <div style="width: 100%; height: 1px; background-color: #e5e7eb; margin-bottom: 1rem;"></div>
+                <p class="font-heading" style="font-weight: 700; font-size: 1.5rem; color: #1d3226; margin: 0;">{{ $tamu->nama_tamu }}</p>
+                <span style="font-size: 0.75rem; font-family: monospace; color: #9ca3af; margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.1em;">{{ $tamu->kode_qr }}</span>
+                <div style="margin-top: 1.5rem;">
+                    <a href="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data={{ $tamu->kode_qr }}" download="QR_{{ $tamu->nama_tamu }}.png" target="_blank"
+                        style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.5rem; background-color: #1d3226; color: #e5c088; border-radius: 9999px; text-decoration: none; font-size: 0.875rem; font-weight: 600;">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Simpan Tiket (PNG)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 
     <!-- Floating Navbar -->
     <nav id="floating-nav" class="floating-navbar">
@@ -1265,9 +1323,9 @@
                                     class="block text-xs font-semibold text-[#2c3930]/80 mb-1 font-body"
                                     style="display: block; font-size: 0.75rem; margin-bottom: 0.25rem; font-weight: 600;">Nama
                                     Lengkap</label>
-                                <input type="text" id="rsvp-name" required
-                                    placeholder="Masukkan nama lengkap Anda" value="{{ $tamu->nama }}"
-                                    style="width: 100%; padding: 0.6rem 1rem; border-radius: 12px; border: 1px solid rgba(197, 168, 128, 0.4); background-color: rgba(255,255,255,0.7); outline: none; font-size: 0.85rem;">
+                                <input type="text" id="rsvp-name" name="nama" required
+                                    class="w-full bg-white/50 border border-[#c5a880]/30 rounded-xl px-4 py-3 outline-none focus:border-[#c5a880] focus:ring-1 focus:ring-[#c5a880] transition-all"
+                                    placeholder="Masukkan nama lengkap Anda" value="{{ $nama_tamu_display }}">
                             </div>
                             <div>
                                 <label for="rsvp-status"
@@ -1401,6 +1459,7 @@
             </div>
         </section>
 
+
     </main>
 
     <script src="{{ asset('themes/aufilla-green/js/aos.js') }}"></script>
@@ -1420,8 +1479,11 @@
             let guestName = urlParams.get('to') || urlParams.get('guest');
             if (guestName) {
                 guestName = decodeURIComponent(guestName.replace(/\+/g, ' '));
-                document.getElementById('guest-name').innerText = guestName;
-                document.getElementById('rsvp-name').value = guestName;
+                let guestNameEl = document.getElementById('guest-name');
+                if (guestNameEl) guestNameEl.innerText = guestName;
+                
+                let rsvpNameEl = document.getElementById('rsvp-name');
+                if (rsvpNameEl) rsvpNameEl.value = guestName;
             }
         }
         parseGuestName();

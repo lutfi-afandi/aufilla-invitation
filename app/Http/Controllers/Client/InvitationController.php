@@ -125,7 +125,6 @@ class InvitationController extends Controller
     public function updateSettings(Request $request)
     {
         $request->validate([
-            'status' => 'required|in:draft,trial,aktif,nonaktif',
             'music_file' => 'nullable|file|mimes:mp3,wav|max:10240', // Max 10MB
         ]);
 
@@ -135,7 +134,6 @@ class InvitationController extends Controller
         }
 
         $updateData = [
-            'status' => $request->status,
             'is_galeri_aktif' => $request->has('is_galeri_aktif'),
             'is_cerita_aktif' => $request->has('is_cerita_aktif'),
             'is_kado_aktif' => $request->has('is_kado_aktif'),

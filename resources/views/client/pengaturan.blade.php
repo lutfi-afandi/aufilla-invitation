@@ -36,12 +36,10 @@
                                 
                                 <div>
                                     <label class="block font-medium text-brand-dark mb-2 text-sm">Status Undangan</label>
-                                    <select name="status" class="w-full bg-white border-1.5 border-brand-accent/30 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/20 transition-all outline-none">
-                                        <option value="draft" {{ $invitation->status == 'draft' ? 'selected' : '' }}>Draft (Hanya Anda)</option>
-                                        <option value="trial" {{ $invitation->status == 'trial' ? 'selected' : '' }}>Trial (Bisa diakses publik)</option>
-                                        <option value="aktif" {{ $invitation->status == 'aktif' ? 'selected' : '' }}>Aktif Premium</option>
-                                        <option value="nonaktif" {{ $invitation->status == 'nonaktif' ? 'selected' : '' }}>Nonaktifkan</option>
-                                    </select>
+                                    <div class="w-full bg-gray-100 border-1.5 border-brand-accent/30 rounded-xl px-4 py-2.5 text-sm text-gray-600 font-medium cursor-not-allowed uppercase">
+                                        {{ $invitation->status }}
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">*Status mutlak hak akses Admin.</p>
                                 </div>
                                 
                                 <div>

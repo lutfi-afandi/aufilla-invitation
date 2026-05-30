@@ -54,11 +54,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/tamu/data', [\App\Http\Controllers\Client\TamuController::class, 'index'])->name('tamu.data');
         Route::post('/tamu', [\App\Http\Controllers\Client\TamuController::class, 'store'])->name('tamu.store');
         Route::delete('/tamu/{id}', [\App\Http\Controllers\Client\TamuController::class, 'destroy'])->name('tamu.destroy');
+        Route::post('/tamu/{id}/toggle-wa', [\App\Http\Controllers\Client\TamuController::class, 'toggleWa'])->name('tamu.toggleWa');
+        Route::get('/tamu/export-excel', [\App\Http\Controllers\Client\TamuController::class, 'exportExcel'])->name('tamu.export');
+        Route::post('/tamu/import-excel', [\App\Http\Controllers\Client\TamuController::class, 'importExcel'])->name('tamu.import');
+        Route::get('/tamu/template-excel', [\App\Http\Controllers\Client\TamuController::class, 'downloadTemplate'])->name('tamu.template');
     });
 
-    // --- PUBLIC INVITATION ROUTE (Must be at the bottom) ---
-    Route::post('/{slug}/ucapan', [\App\Http\Controllers\PublicInvitationController::class, 'storeUcapan'])->name('public.ucapan.store');
-    Route::get('/{slug}', [\App\Http\Controllers\PublicInvitationController::class, 'show'])->name('public.invitation');
+
 
     // Receptionist Routes
     Route::middleware(['role:resepsionis'])->prefix('receptionist')->name('receptionist.')->group(function () {
@@ -71,3 +73,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// --- PUBLIC INVITATION ROUTE (Must be at the very bottom, after all other routes including auth) ---
+Route::post('/{slug}/ucapan', [\App\Http\Controllers\PublicInvitationController::class, 'storeUcapan'])->name('public.ucapan.store');
+Route::get('/{slug}', [\App\Http\Controllers\PublicInvitationController::class, 'show'])->name('public.invitation');

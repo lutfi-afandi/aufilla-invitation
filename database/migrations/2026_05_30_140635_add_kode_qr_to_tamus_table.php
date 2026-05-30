@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tamus', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('invitation_id')->constrained('invitations')->cascadeOnDelete();
-            $table->string('nama_tamu');
-            $table->string('no_wa')->nullable();
-            $table->timestamps();
+        Schema::table('tamus', function (Blueprint $table) {
+            $table->string('kode_qr')->nullable()->unique()->after('no_wa');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tamus');
+        Schema::table('tamus', function (Blueprint $table) {
+            //
+        });
     }
 };

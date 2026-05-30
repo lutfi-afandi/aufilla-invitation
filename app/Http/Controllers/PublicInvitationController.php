@@ -42,7 +42,19 @@ class PublicInvitationController extends Controller
             abort(500, 'File tema (' . $invitation->theme->code . ') tidak ditemukan di server.');
         }
 
-        return view($viewPath, compact('invitation', 'akad', 'resepsi', 'wishes', 'galeris', 'ceritas', 'kados'));
+        // Handle Guest and QR Code
+        $tamu = null;
+        $qrCode = null;
+        if (request()->has('to')) {
+            $namaTamu = request()->query('to');
+            $tamu = $invitation->tamus()->where('nama_tamu', $namaTamu)->first();
+            if ($tamu) {
+                // Generate QR Code containing the Tamu Kode QR
+                $qrCode = \SimpleSoftwareIO\QrCode\Facades\QrCode::size(250)->margin(2)->generate($tamu->kode_qr);
+            }
+        }
+
+        return view($viewPath, compact('invitation', 'akad', 'resepsi', 'wishes', 'galeris', 'ceritas', 'kados', 'tamu', 'qrCode'));
     }
 
     public function storeUcapan(Request $request, $slug)
