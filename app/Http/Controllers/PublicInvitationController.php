@@ -31,6 +31,9 @@ class PublicInvitationController extends Controller
         $akad = $invitation->acaras->where('tipe_acara', 'akad')->first();
         $resepsi = $invitation->acaras->where('tipe_acara', 'resepsi')->first();
         $wishes = $invitation->ucapans()->orderBy('created_at', 'desc')->get(); // Fetch wishes
+        $galeris = $invitation->galeris()->orderBy('created_at', 'desc')->get();
+        $ceritas = $invitation->ceritas()->orderBy('tanggal', 'asc')->get();
+        $kados = $invitation->kados()->orderBy('created_at', 'asc')->get();
 
         // Dynamically load the view based on the theme code
         $viewPath = 'themes.' . $invitation->theme->code . '.index';
@@ -39,7 +42,7 @@ class PublicInvitationController extends Controller
             abort(500, 'File tema (' . $invitation->theme->code . ') tidak ditemukan di server.');
         }
 
-        return view($viewPath, compact('invitation', 'akad', 'resepsi', 'wishes'));
+        return view($viewPath, compact('invitation', 'akad', 'resepsi', 'wishes', 'galeris', 'ceritas', 'kados'));
     }
 
     public function storeUcapan(Request $request, $slug)

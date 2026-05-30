@@ -13,7 +13,7 @@
         
         <!-- Card Body -->
         <div class="p-7">
-            <form id="form-pengaturan">
+            <form id="form-pengaturan" enctype="multipart/form-data">
                 @csrf
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     
@@ -45,8 +45,15 @@
                                 </div>
                                 
                                 <div>
-                                    <label class="block font-medium text-brand-dark mb-2 text-sm">URL Musik Latar (MP3)</label>
-                                    <input type="url" name="music_file" value="{{ $invitation->music_file }}" class="w-full bg-white border-1.5 border-brand-accent/30 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/20 transition-all outline-none" placeholder="https://example.com/song.mp3">
+                                    <label class="block font-medium text-brand-dark mb-2 text-sm">Musik Latar (MP3/WAV)</label>
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <audio id="audio-preview" controls class="w-full h-10" style="border-radius: 0.75rem;">
+                                            <source id="audio-source" src="{{ $invitation->music_url }}" type="audio/mpeg">
+                                            Browser Anda tidak mendukung elemen audio.
+                                        </audio>
+                                    </div>
+                                    <input type="file" id="music_file" name="music_file" accept=".mp3,.wav,audio/*" class="w-full bg-white border-1.5 border-brand-accent/30 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/20 transition-all outline-none">
+                                    <p class="text-[11px] text-gray-500 mt-1">Kosongkan jika tidak ingin mengganti lagu. (Maks 10MB)</p>
                                 </div>
                             </div>
                         </div>
@@ -104,13 +111,14 @@
                     </div>
                 </div>
                 
-                <div class="mt-8 flex justify-between items-center pt-5 border-t border-brand-accent/10">
-                    <div id="preview-link" class="text-sm">
-                        @if($invitation->slug)
-                            Lihat undangan publik: <a href="{{ url('/' . $invitation->slug) }}" target="_blank" class="text-brand-dark font-bold hover:underline">{{ url('/' . $invitation->slug) }}</a>
-                        @endif
+                <div class="mt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                    <div class="text-sm w-full md:w-auto break-all">
+                        <span class="text-gray-500 block mb-1">Lihat undangan publik: </span>
+                        <a href="{{ route('public.invitation', $invitation->slug) }}" target="_blank" class="font-semibold text-brand-accent hover:underline">
+                            {{ route('public.invitation', $invitation->slug) }}
+                        </a>
                     </div>
-                    <button type="submit" id="btn-save-pengaturan" class="bg-gradient-to-br from-brand-accent to-brand-accent-dark hover:from-brand-accent-dark hover:to-[#a28056] text-white font-semibold py-2.5 px-6 rounded-xl shadow-[0_4px_15px_rgba(197,168,128,0.3)] hover:shadow-[0_6px_20px_rgba(197,168,128,0.4)] transition-all duration-300 transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <button type="submit" id="btn-save-pengaturan" class="w-full md:w-auto bg-gradient-to-br from-brand-accent to-brand-accent-dark hover:from-brand-accent-dark hover:to-[#a28056] text-white font-semibold py-2.5 px-6 rounded-xl shadow-[0_4px_15px_rgba(197,168,128,0.3)] hover:shadow-[0_6px_20px_rgba(197,168,128,0.4)] transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                         Simpan Pengaturan
                     </button>
@@ -141,10 +149,14 @@
             
             btn.html('<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Menyimpan...').prop('disabled', true);
             
+            var formData = new FormData(this);
+
             $.ajax({
                 url: "{{ route('client.pengaturan.update') }}",
                 method: "POST",
-                data: $(this).serialize(),
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function(response) {
                     btn.html(originalText).prop('disabled', false);
                     
@@ -166,17 +178,44 @@
                 },
                 error: function(xhr) {
                     btn.html(originalText).prop('disabled', false);
-                    let errMsg = 'Gagal menyimpan data.';
-                    if(xhr.responseJSON && xhr.responseJSON.errors) {
-                        errMsg = Object.values(xhr.responseJSON.errors)[0][0];
+                    let errorMsg = 'Gagal menyimpan pengaturan.';
+                    
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        let errors = xhr.responseJSON.errors;
+                        let firstError = Object.values(errors)[0][0];
+                        errorMsg = firstError;
+                        if (firstError.includes('max')) {
+                            errorMsg = 'Ukuran file lagu terlalu besar (Maks 10MB).';
+                        } else if (firstError.includes('mimes')) {
+                            errorMsg = 'Format lagu tidak didukung. Harap unggah MP3 atau WAV.';
+                        }
                     }
+
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: errMsg
+                        text: errorMsg
                     });
                 }
             });
+        });
+
+        // Audio preview updater
+        $('#music_file').on('change', function(e) {
+            if (this.files && this.files[0]) {
+                var file = this.files[0];
+                var objectUrl = URL.createObjectURL(file);
+                
+                var audioPreview = document.getElementById('audio-preview');
+                var audioSource = document.getElementById('audio-source');
+                
+                // Stop current audio if playing
+                audioPreview.pause();
+                
+                // Update source and load
+                audioSource.src = objectUrl;
+                audioPreview.load(); // Reload the new source
+            }
         });
     });
 </script>

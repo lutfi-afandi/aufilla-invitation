@@ -30,11 +30,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/acara', [\App\Http\Controllers\Client\DashboardController::class, 'acara'])->name('acara');
         Route::get('/tamu', [\App\Http\Controllers\Client\DashboardController::class, 'tamu'])->name('tamu');
         Route::get('/pengaturan', [\App\Http\Controllers\Client\DashboardController::class, 'pengaturan'])->name('pengaturan');
+        Route::get('/galeri', [\App\Http\Controllers\Client\DashboardController::class, 'galeri'])->name('galeri');
+        Route::get('/cerita', [\App\Http\Controllers\Client\DashboardController::class, 'cerita'])->name('cerita');
+        Route::get('/kado', [\App\Http\Controllers\Client\DashboardController::class, 'kado'])->name('kado');
 
         // Form Data endpoints (AJAX Submissions)
         Route::post('/mempelai', [\App\Http\Controllers\Client\InvitationController::class, 'updateMempelai'])->name('mempelai.update');
         Route::post('/acara', [\App\Http\Controllers\Client\InvitationController::class, 'updateAcara'])->name('acara.update');
         Route::post('/pengaturan', [\App\Http\Controllers\Client\InvitationController::class, 'updateSettings'])->name('pengaturan.update');
+
+        // Feature endpoints
+        Route::post('/galeri', [\App\Http\Controllers\Client\FeatureController::class, 'storeGaleri'])->name('galeri.store');
+        Route::delete('/galeri/{id}', [\App\Http\Controllers\Client\FeatureController::class, 'destroyGaleri'])->name('galeri.destroy');
+
+        Route::post('/cerita', [\App\Http\Controllers\Client\FeatureController::class, 'storeCerita'])->name('cerita.store');
+        Route::delete('/cerita/{id}', [\App\Http\Controllers\Client\FeatureController::class, 'destroyCerita'])->name('cerita.destroy');
+
+        Route::post('/kado/alamat', [\App\Http\Controllers\Client\FeatureController::class, 'updateAlamatKado'])->name('kado.alamat.update');
+        Route::post('/kado', [\App\Http\Controllers\Client\FeatureController::class, 'storeKado'])->name('kado.store');
+        Route::delete('/kado/{id}', [\App\Http\Controllers\Client\FeatureController::class, 'destroyKado'])->name('kado.destroy');
 
         // Tamu Management endpoints
         Route::get('/tamu/data', [\App\Http\Controllers\Client\TamuController::class, 'index'])->name('tamu.data');

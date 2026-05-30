@@ -5,6 +5,8 @@
 @section('content')
 <div class="max-w-7xl mx-auto w-full">
     
+    @include('client.partials.tab_navigation')
+
     <div class="bg-white border border-brand-accent/15 rounded-[20px] shadow-[0_10px_30px_rgba(10,34,20,0.03)] overflow-hidden">
         <!-- Card Header -->
         <div class="bg-gradient-to-r from-brand-dark/5 to-transparent border-b border-brand-accent/15 px-7 py-5">

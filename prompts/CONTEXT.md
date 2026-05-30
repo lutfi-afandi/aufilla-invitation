@@ -1,23 +1,24 @@
 # STATUS PENGEMBANGAN APLIKASI (APPLICATION CONTEXT)
 
 ## 1. Fase Saat Ini
-- Sedang mengerjakan: **Fase 5 - Pembuatan Admin Dashboard & Manajemen Tema** (Setelah menyelesaikan Fase 4 Dashboard Klien).
+- Sedang mengerjakan: **Fase 6 - Sisa Modul Klien (Galeri, Cerita, Kado) & Admin Dashboard**.
 
 ## 2. Fitur yang Sudah Selesai (Done)
-- [x] Migration database (hybrid username/email, tabel `themes`, `invitations`, `acaras`, `galeris`, `tamus`, `ucapans`).
-- [x] Modifikasi Laravel Breeze untuk login multi-kolom (username/email) dan fitur Quick Register (generate trial 1 hari).
-- [x] Base Layout Blade menggunakan sistem Strict Template Inheritance (`@extends`, `@section`).
-- [x] Manajemen Aset Lokal (jQuery & SweetAlert2 via `npm` dan `app.js`).
-- [x] Middleware `CheckRole` terpusat (Admin, Client, Receptionist).
-- [x] Arsitektur Routing & Controller yang terpisah (`Admin`, `Client`, `Receptionist`).
-- [x] UI Dashboard Klien (Single-Container Tab Switcher, no-reload AJAX forms).
+- [x] Migration database & Modifikasi Laravel Breeze (Quick Register).
+- [x] Base Layout Blade (Strict Template Inheritance).
+- [x] Manajemen Aset Lokal (jQuery & SweetAlert2 via `npm`).
+- [x] Middleware `CheckRole` dan Arsitektur Multi-Pilar (Admin, Client, Receptionist).
+- [x] **Panel Klien**: UI Dashboard, Form Pengantin, Form Acara, Buku Tamu, Pengaturan Tema/Status (Multi-Page AJAX).
+- [x] **Tema Engine Publik**: Render dinamis `/{slug}`.
+- [x] Migrasi tema `aufilla-green` dan penyelarasan variabel dengan data undangan V2.
+- [x] AJAX submission untuk form RSVP Publik (Dinding Ucapan) dan status kehadiran.
 
 ## 3. Tugas Selanjutnya (Next Todo)
+- [ ] Membangun antarmuka Manajemen Galeri Foto (Client).
+- [ ] Membangun antarmuka Linimasa Cerita Cinta (Client).
+- [ ] Membangun antarmuka Rekening/Kado Digital (Client).
 - [ ] Menyelesaikan UI Dashboard Admin (Kelola Klien & Status Tema).
-- [ ] Menyelesaikan Service Logic yang lebih kompleks (seperti menyimpan gambar cover_img).
-- [ ] Membangun Theme Engine Publik (`/{slug}`) yang merender file blade spesifik berdasarkan data `themes`.
-- [ ] Pembuatan AJAX submission untuk form RSVP Publik.
 
 ## 4. Perubahan Database & Arsitektur Terakhir
-- Redirect login (`AuthenticatedSessionController`) dibuat *strict* (`redirect()->route('dashboard')`) untuk menghindari isu *intended URL* yang menyebabkan loop/error 403.
-- Tabel relasional anak (seperti `tamus`, `ucapans`) terhubung dengan foreign key ke tabel `invitations`.
+- Arsitektur Client berpindah dari *Single-Container* (tab switch DOM) ke *Multi-Page Architecture* agar lebih ringan.
+- Skema *Ucapans* (kolom `pesan`, enum `tidak`) telah diselaraskan dengan rute form RSVP publik `aufilla-green`.

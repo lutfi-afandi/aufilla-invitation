@@ -32,18 +32,11 @@
             Dashboard
         </a>
         
-        <!-- Data Pengantin -->
+        <!-- Kelola Undangan -->
         <a href="{{ route('client.pengantin') }}" 
-           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 {{ Request::routeIs('client.pengantin') ? 'bg-brand-accent/10 border-l-4 border-brand-accent text-brand-accent font-semibold' : 'text-white/70 hover:bg-brand-accent/5 hover:text-brand-accent border-l-4 border-transparent font-medium' }}">
+           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('client.pengantin', 'client.acara', 'client.galeri', 'client.cerita', 'client.kado') ? 'bg-brand-accent/10 border-l-4 border-brand-accent text-brand-accent font-semibold' : 'text-white/70 hover:bg-brand-accent/5 hover:text-brand-accent border-l-4 border-transparent font-medium' }}">
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-            Data Pengantin
-        </a>
-
-        <!-- Acara -->
-        <a href="{{ route('client.acara') }}" 
-           class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 {{ Request::routeIs('client.acara') ? 'bg-brand-accent/10 border-l-4 border-brand-accent text-brand-accent font-semibold' : 'text-white/70 hover:bg-brand-accent/5 hover:text-brand-accent border-l-4 border-transparent font-medium' }}">
-            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg>
-            Data Acara
+            Kelola Undangan
         </a>
 
         <!-- Manajemen Tamu -->
@@ -52,6 +45,8 @@
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
             Buku Tamu
         </a>
+
+
 
         <!-- Pengaturan -->
         <a href="{{ route('client.pengaturan') }}" 

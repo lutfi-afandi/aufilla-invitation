@@ -10,7 +10,8 @@ class Invitation extends Model
         'user_id', 'theme_id', 'slug', 'status', 'trial_habis_at',
         'pria_nama', 'pria_nama_lengkap', 'pria_ayah', 'pria_ibu',
         'wanita_nama', 'wanita_nama_lengkap', 'wanita_ayah', 'wanita_ibu',
-        'cover_img', 'music_file', 'is_galeri_aktif', 'is_cerita_aktif', 'is_kado_aktif'
+        'cover_img', 'music_file', 'is_galeri_aktif', 'is_cerita_aktif', 'is_kado_aktif', 'alamat_kado',
+        'pria_foto', 'wanita_foto'
     ];
 
     protected $casts = [
@@ -38,6 +39,24 @@ class Invitation extends Model
     public function galeris()
     {
         return $this->hasMany(Galeri::class);
+    }
+
+    public function ceritas()
+    {
+        return $this->hasMany(Cerita::class)->orderBy('tanggal', 'asc');
+    }
+
+    public function getMusicUrlAttribute()
+    {
+        if ($this->music_file) {
+            return asset('storage/' . $this->music_file);
+        }
+        return asset('assets/default/default-music.mp3');
+    }
+
+    public function kados()
+    {
+        return $this->hasMany(Kado::class);
     }
 
     public function tamus()

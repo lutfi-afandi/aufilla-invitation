@@ -56,4 +56,25 @@ class DashboardController extends Controller
         $invitation = $this->getInvitation();
         return view('client.pengaturan', compact('invitation'));
     }
+
+    public function galeri()
+    {
+        $invitation = $this->getInvitation();
+        $galeris = $invitation->galeris()->orderBy('created_at', 'desc')->get();
+        return view('client.galeri', compact('invitation', 'galeris'));
+    }
+
+    public function cerita()
+    {
+        $invitation = $this->getInvitation();
+        $ceritas = $invitation->ceritas()->orderBy('tanggal', 'asc')->get();
+        return view('client.cerita', compact('invitation', 'ceritas'));
+    }
+
+    public function kado()
+    {
+        $invitation = $this->getInvitation();
+        $kados = $invitation->kados()->orderBy('created_at', 'asc')->get();
+        return view('client.kado', compact('invitation', 'kados'));
+    }
 }

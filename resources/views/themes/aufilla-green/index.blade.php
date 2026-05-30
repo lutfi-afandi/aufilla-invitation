@@ -27,7 +27,7 @@
             'alamat_resepsi' => $resepsi->alamat ?? 'Alamat lengkap resepsi',
             'google_maps_url' => $akad->gmaps_link ?? '#',
 
-            'musik_background' => $invitation->music_file ?? 'https://upload.wikimedia.org/wikipedia/commons/2/29/Pachelbel%27s_Canon_in_D_-_arranged_for_piano_and_performed_by_Lee_Galloway.mp3',
+            'musik_background' => $invitation->music_url,
 
             'rekening_1_nama' => null,
             'rekening_1_nomor' => null,
@@ -44,10 +44,10 @@
     @endphp
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Undangan Pernikahan - {{ $pengaturan->nama_panggilan_pria }} & {{ $pengaturan->nama_panggilan_wanita }}
+    <title>Undangan Pernikahan - {{ $invitation->pria_nama }} & {{ $invitation->wanita_nama }}
     </title>
     <meta name="description"
-        content="Undangan Pernikahan {{ $pengaturan->nama_mempelai_wanita }} & {{ $pengaturan->nama_mempelai_pria }} - {{ $pengaturan->tanggal_pernikahan ? $pengaturan->tanggal_pernikahan->translatedFormat('l, d F Y') : '' }}. Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir." />
+        content="Undangan Pernikahan {{ $invitation->wanita_nama_lengkap }} & {{ $invitation->pria_nama_lengkap }} - {{ $akad ? \Carbon\Carbon::parse($akad->tanggal)->translatedFormat('l, d F Y') : '' }}. Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir." />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="{{ asset('themes/aufilla-green/css/tailwind.css') }}" rel="stylesheet" />
     <link href="{{ asset('themes/aufilla-green/css/google-fonts.css') }}" rel="stylesheet" />
@@ -661,8 +661,8 @@
                 style="letter-spacing: 0.3em; margin-bottom: 0.75rem;">Pernikahan Dari</p>
             <h1 class="font-heading text-4xl md:text-5xl font-bold mb-4 tracking-wide leading-tight"
                 style="margin-bottom: 1rem; line-height: 1.2;">
-                {{ $pengaturan->nama_panggilan_wanita }} <span class="text-[#c5a880] font-light">&</span>
-                {{ $pengaturan->nama_panggilan_pria }}
+                {{ $invitation->wanita_nama }} <span class="text-[#c5a880] font-light">&</span>
+                {{ $invitation->pria_nama }}
             </h1>
             <div class="ornament-divider text-[#c5a880] text-sm my-6"
                 style="margin-top: 1.5rem; margin-bottom: 1.5rem;">&#10022;</div>
@@ -691,7 +691,7 @@
         </div>
         <audio id="background-music" loop preload="auto">
             <source
-                src="{{ $pengaturan->musik_background ? asset('storage/' . $pengaturan->musik_background) : 'https://upload.wikimedia.org/wikipedia/commons/2/29/Pachelbel%27s_Canon_in_D_-_arranged_for_piano_and_performed_by_Lee_Galloway.mp3' }}"
+                src="{{ $invitation->music_url }}"
                 type="audio/mpeg">
         </audio>
     </div>
@@ -780,7 +780,7 @@
         <!-- Hero Section -->
         <section id="hero"
             class="relative min-h-screen flex items-center justify-center text-center py-20 px-4 overflow-hidden"
-            style="background-image: url('{{ $pengaturan->foto_hero }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('themes/aufilla-green/images/bg-hero.svg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div style="position: absolute; inset: 0; background-color: rgba(250, 246, 240, 0.88);"></div>
             <div class="relative z-10 w-full max-w-[800px] flex flex-col items-center" data-aos="fade-up"
                 data-aos-duration="1500">
@@ -790,31 +790,31 @@
                     style="background-color: rgba(255,255,255,0.2); backdrop-filter: blur(4px);">
                     <div class="arch-card w-full h-full relative">
                         <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                            style="background-image: url('{{ $pengaturan->foto_hero }}'); filter: brightness(0.9) contrast(1.05);">
+                            style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('themes/aufilla-green/images/bg-hero.svg') }}'); filter: brightness(0.9) contrast(1.05);">
                         </div>
                         <div
                             class="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-[#1d3226]/85 via-transparent to-transparent text-white text-center">
                             <h2 class="font-heading text-4xl md:text-5xl font-bold tracking-wide"
                                 style="font-weight: 700; letter-spacing: 0.05em; margin: 0;">
-                                {{ substr($pengaturan->nama_panggilan_wanita, 0, 1) }} &
-                                {{ substr($pengaturan->nama_panggilan_pria, 0, 1) }}
+                                {{ substr($invitation->wanita_nama, 0, 1) }} &
+                                {{ substr($invitation->pria_nama, 0, 1) }}
                             </h2>
                             <p class="text-xs uppercase tracking-[0.22em] text-[#e5c088] mt-2 font-semibold"
                                 style="letter-spacing: 0.22em; margin-top: 0.5rem;">
-                                {{ $pengaturan->tanggal_pernikahan ? $pengaturan->tanggal_pernikahan->format('d F Y') : '' }}
+                                {{ $akad ? \Carbon\Carbon::parse($akad->tanggal)->format('d F Y') : '' }}
                             </p>
                         </div>
                     </div>
                 </div>
                 <h1 class="font-heading text-5xl md:text-7xl leading-none text-[#1d3226] font-bold mb-4 tracking-wide"
                     style="line-height: 1.1; margin-bottom: 1rem; font-weight: 700;">
-                    {{ $pengaturan->nama_mempelai_wanita }} & {{ $pengaturan->nama_mempelai_pria }}
+                    {{ $invitation->wanita_nama_lengkap }} & {{ $invitation->pria_nama_lengkap }}
                 </h1>
                 <div class="ornament-divider text-[#c5a880] w-[180px] my-4"
                     style="width: 180px; margin-top: 1rem; margin-bottom: 1rem;">&#10022;</div>
                 <p class="text-xs md:text-sm font-semibold text-[#c5a880] tracking-[0.3em] font-body mb-6"
                     style="letter-spacing: 0.3em; margin-bottom: 1.5rem;">
-                    {{ $pengaturan->tanggal_pernikahan ? strtoupper($pengaturan->tanggal_pernikahan->translatedFormat('l, d F Y')) : '' }}
+                    {{ $akad ? strtoupper(\Carbon\Carbon::parse($akad->tanggal)->translatedFormat('l, d F Y')) : '' }}
                 </p>
                 <div class="max-w-[500px] mx-auto py-4 px-6 rounded-2xl glass-card border border-[#c5a880]/20 shadow-sm"
                     style="max-w: 500px; padding: 1rem 1.5rem; border-radius: 16px;">
@@ -859,33 +859,36 @@
                         <div class="arch-outline-wrapper shadow-xl bg-white/30"
                             style="width: 200px; height: 280px; margin-bottom: 1.5rem; background-color: rgba(255,255,255,0.3); padding: 8px;">
                             <div class="arch-card w-full h-full">
-                                <img src="{{ $pengaturan->foto_wanita }}"
-                                    alt="Mempelai Wanita" class="w-full h-full object-cover"
+                                <img src="{{ $invitation->wanita_foto ? asset('storage/' . $invitation->wanita_foto) : asset('themes/aufilla-green/images/bride.png') }}"
+                                    alt="{{ $invitation->wanita_nama_lengkap ?? 'Mempelai Wanita' }}" class="w-full h-full object-cover"
                                     style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
                         </div>
                         <h3 class="font-heading text-2xl md:text-3xl text-[#1d3226] font-bold mb-1"
-                            style="font-weight: 700; margin-bottom: 0.25rem;">{{ $pengaturan->nama_mempelai_wanita }}
+                            style="font-weight: 700; margin-bottom: 0.25rem;">{{ $invitation->wanita_nama_lengkap }}
                         </h3>
                         <p class="text-xs tracking-widest text-[#c5a880] uppercase font-semibold mb-3"
                             style="letter-spacing: 0.15em; margin-bottom: 0.75rem;">
-                            {{ $pengaturan->nama_panggilan_wanita }}</p>
+                            {{ $invitation->wanita_nama }}</p>
                         <p class="text-xs md:text-sm text-[#5a6b5d] mb-4 font-serif leading-relaxed"
                             style="margin-bottom: 1rem; line-height: 1.5;">
                             Putri terkasih dari <br><span class="font-semibold"
-                                style="font-weight: 600;">{{ $pengaturan->nama_ayah_wanita ?? 'Ayah' }}</span> <br>&
+                                style="font-weight: 600;">{{ $invitation->wanita_ayah ?? 'Ayah' }}</span> <br>&
                             <span class="font-semibold"
-                                style="font-weight: 600;">{{ $pengaturan->nama_ibu_wanita ?? 'Ibu' }}</span>
+                                style="font-weight: 600;">{{ $invitation->wanita_ibu ?? 'Ibu' }}</span>
                         </p>
-                        @if ($pengaturan->instagram_wanita)
+                        @if ($pengaturan && $pengaturan->instagram_wanita)
                             <a href="https://instagram.com/{{ $pengaturan->instagram_wanita }}" target="_blank"
-                                class="btn-outline-gold" style="padding: 0.5rem 1.25rem; font-size: 0.75rem;">
-                                <svg viewBox="0 0 24 24" width="16" height="16"
-                                    style="width: 16px; height: 16px;" fill="currentColor">
-                                    <path
-                                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                                class="inline-flex items-center gap-2 text-xs text-[#faf6f0] bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-colors border border-white/20"
+                                style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: #faf6f0; background-color: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.2); text-decoration: none;">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none"
+                                    stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5">
+                                    </rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                                 </svg>
-                                @{{ $pengaturan - > instagram_wanita }}
+                                @{{ $pengaturan->instagram_wanita }}
                             </a>
                         @endif
                     </div>
@@ -901,33 +904,36 @@
                         <div class="arch-outline-wrapper shadow-xl bg-white/30"
                             style="width: 200px; height: 280px; margin-bottom: 1.5rem; background-color: rgba(255,255,255,0.3); padding: 8px;">
                             <div class="arch-card w-full h-full">
-                                <img src="{{ $pengaturan->foto_pria }}"
-                                    alt="Mempelai Pria" class="w-full h-full object-cover"
+                                <img src="{{ $invitation->pria_foto ? asset('storage/' . $invitation->pria_foto) : asset('themes/aufilla-green/images/groom.png') }}"
+                                    alt="{{ $invitation->pria_nama_lengkap ?? 'Mempelai Pria' }}" class="w-full h-full object-cover"
                                     style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
                         </div>
                         <h3 class="font-heading text-2xl md:text-3xl text-[#1d3226] font-bold mb-1"
-                            style="font-weight: 700; margin-bottom: 0.25rem;">{{ $pengaturan->nama_mempelai_pria }}
+                            style="font-weight: 700; margin-bottom: 0.25rem;">{{ $invitation->pria_nama_lengkap }}
                         </h3>
                         <p class="text-xs tracking-widest text-[#c5a880] uppercase font-semibold mb-3"
                             style="letter-spacing: 0.15em; margin-bottom: 0.75rem;">
-                            {{ $pengaturan->nama_panggilan_pria }}</p>
+                            {{ $invitation->pria_nama }}</p>
                         <p class="text-xs md:text-sm text-[#5a6b5d] mb-4 font-serif leading-relaxed"
                             style="margin-bottom: 1rem; line-height: 1.5;">
                             Putra tercinta dari <br><span class="font-semibold"
-                                style="font-weight: 600;">{{ $pengaturan->nama_ayah_pria ?? 'Ayah' }}</span> <br>&
+                                style="font-weight: 600;">{{ $invitation->pria_ayah ?? 'Ayah' }}</span> <br>&
                             <span class="font-semibold"
-                                style="font-weight: 600;">{{ $pengaturan->nama_ibu_pria ?? 'Ibu' }}</span>
+                                style="font-weight: 600;">{{ $invitation->pria_ibu ?? 'Ibu' }}</span>
                         </p>
-                        @if ($pengaturan->instagram_pria)
+                        @if ($pengaturan && $pengaturan->instagram_pria)
                             <a href="https://instagram.com/{{ $pengaturan->instagram_pria }}" target="_blank"
-                                class="btn-outline-gold" style="padding: 0.5rem 1.25rem; font-size: 0.75rem;">
-                                <svg viewBox="0 0 24 24" width="16" height="16"
-                                    style="width: 16px; height: 16px;" fill="currentColor">
-                                    <path
-                                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                                class="inline-flex items-center gap-2 text-xs text-[#faf6f0] bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-colors border border-white/20"
+                                style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: #faf6f0; background-color: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.2); text-decoration: none;">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none"
+                                    stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5">
+                                    </rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                                 </svg>
-                                @{{ $pengaturan - > instagram_pria }}
+                                @{{ $pengaturan->instagram_pria }}
                             </a>
                         @endif
                     </div>
@@ -935,7 +941,33 @@
             </div>
         </section>
 
+        <!-- Gallery Section -->
+        @if($invitation->is_galeri_aktif && $galeris->count() > 0)
+        <section id="gallery" class="py-24 px-6 bg-[#1d3226] relative overflow-hidden" style="padding: 6rem 1.5rem;">
+            <div class="max-w-[1000px] mx-auto relative z-10">
+                <div class="text-center mb-16" style="text-align: center; margin-bottom: 4rem;">
+                    <p data-aos="fade-up" class="text-xs uppercase tracking-[0.3em] text-[#849687] mb-2 font-semibold"
+                        style="letter-spacing: 0.3em; margin-bottom: 0.5rem; color: #849687;">Momen Bahagia</p>
+                    <h2 data-aos="fade-up" class="font-heading text-3xl md:text-5xl text-[#faf6f0] font-bold"
+                        style="font-weight: 700; color: #faf6f0;">Galeri Kami</h2>
+                    <div class="ornament-divider text-[#c5a880] w-[140px] mx-auto"
+                        style="width: 140px; margin-left: auto; margin-right: auto; margin-top: 1rem;">&#10022;</div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    @foreach($galeris as $index => $galeri)
+                    <div data-aos="zoom-in" data-aos-delay="{{ $index * 100 }}" class="relative overflow-hidden rounded-2xl group border border-white/10" style="border-radius: 16px; aspect-ratio: 1/1; overflow: hidden;">
+                        <img src="{{ asset('storage/' . $galeri->image_path) }}" alt="Gallery" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s;">
+                        <div class="absolute inset-0 bg-[#1d3226]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(29,50,38,0.4); opacity: 0; transition: opacity 0.5s;"></div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+        @endif
+
         <!-- Love Journey Timeline - Static content (can be enhanced later) -->
+        @if($invitation->is_cerita_aktif && $ceritas->count() > 0)
         <section id="story" class="py-24 px-6 bg-[#faf6f0]/50 relative overflow-hidden"
             style="padding: 6rem 1.5rem;">
             <div class="max-w-[800px] mx-auto relative z-10">
@@ -949,82 +981,59 @@
                 </div>
                 <div class="relative" style="position: relative;">
                     <div class="timeline-line"></div>
-                    <div class="relative flex flex-wrap md:flex-nowrap md:justify-between items-center mb-12 md:mb-16"
-                        style="position: relative; display: flex; align-items: center; margin-bottom: 3rem;">
-                        <div class="w-full md:w-[45%] md:text-right md:pr-8 mb-4 md:mb-0 order-2 md:order-1"
-                            data-aos="fade-right" style="width: 100%;">
-                            <div class="glass-card p-6 rounded-2xl border border-white shadow-sm inline-block text-left w-full"
-                                style="padding: 1.5rem; border-radius: 16px;">
-                                <span class="text-xs uppercase tracking-widest text-[#c5a880] font-semibold block mb-1"
-                                    style="letter-spacing: 0.1em; display: block; margin-bottom: 0.25rem;">Maret
-                                    2022</span>
-                                <h4 class="font-heading text-xl text-[#1d3226] font-bold mb-2"
-                                    style="font-weight: 700; margin-bottom: 0.5rem;">Pertama Bertemu</h4>
-                                <p class="text-xs md:text-sm text-[#5a6b5d] font-body leading-relaxed"
-                                    style="margin: 0; line-height: 1.6;">Awal mula takdir mempertemukan kami di sebuah
-                                    perpustakaan kota. Sebuah tatapan ketidaksengajaan yang menuntun kami pada
-                                    percakapan hangat yang tak pernah usai.</p>
-                            </div>
+                    @forelse ($ceritas as $index => $cerita)
+                        <div class="relative flex flex-wrap md:flex-nowrap md:justify-between items-center mb-12 md:mb-16"
+                            style="position: relative; display: flex; align-items: center; margin-bottom: 3rem;">
+                            
+                            @if($index % 2 == 0)
+                                <div class="w-full md:w-[45%] md:text-right md:pr-8 mb-4 md:mb-0 order-2 md:order-1"
+                                    data-aos="fade-right" style="width: 100%;">
+                                    <div class="glass-card p-6 rounded-2xl border border-white shadow-sm inline-block text-left w-full"
+                                        style="padding: 1.5rem; border-radius: 16px;">
+                                        <span class="text-xs uppercase tracking-widest text-[#c5a880] font-semibold block mb-1"
+                                            style="letter-spacing: 0.1em; display: block; margin-bottom: 0.25rem;">{{ $cerita->tanggal }}</span>
+                                        <h4 class="font-heading text-xl text-[#1d3226] font-bold mb-2"
+                                            style="font-weight: 700; margin-bottom: 0.5rem;">{{ $cerita->judul }}</h4>
+                                        <p class="text-xs md:text-sm text-[#5a6b5d] font-body leading-relaxed"
+                                            style="margin: 0; line-height: 1.6;">{{ $cerita->isi_cerita }}</p>
+                                    </div>
+                                </div>
+                                <div class="absolute left-0 md:left-1/2 transform -translate-x-[11px] md:-translate-x-1/2 w-6 h-6 rounded-full bg-[#faf6f0] border-4 border-[#c5a880] flex items-center justify-center z-10 order-1 md:order-2"
+                                    style="position: absolute; left: 0; transform: translateX(-11px); width: 24px; height: 24px; border-radius: 50%; border: 4px solid #c5a880; background-color: #faf6f0; z-index: 10;">
+                                    <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #1d3226;"></div>
+                                </div>
+                                <div class="w-full md:w-[45%] md:pl-8 order-3" data-aos="fade-left"></div>
+                            @else
+                                <div class="w-full md:w-[45%] md:pr-8 mb-4 md:mb-0 order-2 md:order-1" data-aos="fade-right"
+                                    style="width: 100%;"></div>
+                                <div class="absolute left-0 md:left-1/2 transform -translate-x-[11px] md:-translate-x-1/2 w-6 h-6 rounded-full bg-[#faf6f0] border-4 border-[#c5a880] flex items-center justify-center z-10 order-1 md:order-2"
+                                    style="position: absolute; left: 0; transform: translateX(-11px); width: 24px; height: 24px; border-radius: 50%; border: 4px solid #c5a880; background-color: #faf6f0; z-index: 10;">
+                                    <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #1d3226;"></div>
+                                </div>
+                                <div class="w-full md:w-[45%] md:pl-8 order-3" data-aos="fade-left" style="width: 100%;">
+                                    <div class="glass-card p-6 rounded-2xl border border-white shadow-sm w-full"
+                                        style="padding: 1.5rem; border-radius: 16px;">
+                                        <span class="text-xs uppercase tracking-widest text-[#c5a880] font-semibold block mb-1"
+                                            style="letter-spacing: 0.1em; display: block; margin-bottom: 0.25rem;">{{ $cerita->tanggal }}</span>
+                                        <h4 class="font-heading text-xl text-[#1d3226] font-bold mb-2"
+                                            style="font-weight: 700; margin-bottom: 0.5rem;">{{ $cerita->judul }}</h4>
+                                        <p class="text-xs md:text-sm text-[#5a6b5d] font-body leading-relaxed"
+                                            style="margin: 0; line-height: 1.6;">{{ $cerita->isi_cerita }}</p>
+                                    </div>
+                                </div>
+                            @endif
+                            
                         </div>
-                        <div class="absolute left-0 md:left-1/2 transform -translate-x-[11px] md:-translate-x-1/2 w-6 h-6 rounded-full bg-[#faf6f0] border-4 border-[#c5a880] flex items-center justify-center z-10 order-1 md:order-2"
-                            style="position: absolute; left: 0; transform: translateX(-11px); width: 24px; height: 24px; border-radius: 50%; border: 4px solid #c5a880; background-color: #faf6f0; z-index: 10;">
-                            <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #1d3226;"></div>
-                        </div>
-                        <div class="w-full md:w-[45%] md:pl-8 order-3" data-aos="fade-left"></div>
-                    </div>
-                    <div class="relative flex flex-wrap md:flex-nowrap md:justify-between items-center mb-12 md:mb-16"
-                        style="position: relative; display: flex; align-items: center; margin-bottom: 3rem;">
-                        <div class="w-full md:w-[45%] md:pr-8 mb-4 md:mb-0 order-2 md:order-1" data-aos="fade-right"
-                            style="width: 100%;"></div>
-                        <div class="absolute left-0 md:left-1/2 transform -translate-x-[11px] md:-translate-x-1/2 w-6 h-6 rounded-full bg-[#faf6f0] border-4 border-[#c5a880] flex items-center justify-center z-10 order-1 md:order-2"
-                            style="position: absolute; left: 0; transform: translateX(-11px); width: 24px; height: 24px; border-radius: 50%; border: 4px solid #c5a880; background-color: #faf6f0; z-index: 10;">
-                            <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #1d3226;"></div>
-                        </div>
-                        <div class="w-full md:w-[45%] md:pl-8 order-3" data-aos="fade-left" style="width: 100%;">
-                            <div class="glass-card p-6 rounded-2xl border border-white shadow-sm w-full"
-                                style="padding: 1.5rem; border-radius: 16px;">
-                                <span class="text-xs uppercase tracking-widest text-[#c5a880] font-semibold block mb-1"
-                                    style="letter-spacing: 0.1em; display: block; margin-bottom: 0.25rem;">Agustus
-                                    2024</span>
-                                <h4 class="font-heading text-xl text-[#1d3226] font-bold mb-2"
-                                    style="font-weight: 700; margin-bottom: 0.5rem;">Menjalin Komitmen</h4>
-                                <p class="text-xs md:text-sm text-[#5a6b5d] font-body leading-relaxed"
-                                    style="margin: 0; line-height: 1.6;">Setelah melewati proses pengenalan yang
-                                    mendalam, kami memutuskan untuk berkomitmen melangkah bersama. Menyatukan visi dan
-                                    tekad untuk membangun masa depan berdua.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="relative flex flex-wrap md:flex-nowrap md:justify-between items-center"
-                        style="position: relative; display: flex; align-items: center;">
-                        <div class="w-full md:w-[45%] md:text-right md:pr-8 mb-4 md:mb-0 order-2 md:order-1"
-                            data-aos="fade-right" style="width: 100%;">
-                            <div class="glass-card p-6 rounded-2xl border border-white shadow-sm inline-block text-left w-full"
-                                style="padding: 1.5rem; border-radius: 16px;">
-                                <span class="text-xs uppercase tracking-widest text-[#c5a880] font-semibold block mb-1"
-                                    style="letter-spacing: 0.1em; display: block; margin-bottom: 0.25rem;">Januari
-                                    2026</span>
-                                <h4 class="font-heading text-xl text-[#1d3226] font-bold mb-2"
-                                    style="font-weight: 700; margin-bottom: 0.5rem;">Ikatan Lamaran</h4>
-                                <p class="text-xs md:text-sm text-[#5a6b5d] font-body leading-relaxed"
-                                    style="margin: 0; line-height: 1.6;">Di hadapan kedua keluarga besar, kami
-                                    memantapkan niat suci dengan mengadakan acara lamaran. Mengikat janji awal untuk
-                                    menuju mahligai pernikahan.</p>
-                            </div>
-                        </div>
-                        <div class="absolute left-0 md:left-1/2 transform -translate-x-[11px] md:-translate-x-1/2 w-6 h-6 rounded-full bg-[#faf6f0] border-4 border-[#c5a880] flex items-center justify-center z-10 order-1 md:order-2"
-                            style="position: absolute; left: 0; transform: translateX(-11px); width: 24px; height: 24px; border-radius: 50%; border: 4px solid #c5a880; background-color: #faf6f0; z-index: 10;">
-                            <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #1d3226;"></div>
-                        </div>
-                        <div class="w-full md:w-[45%] md:pl-8 order-3" data-aos="fade-left"></div>
-                    </div>
+                    @empty
+                    @endforelse
                 </div>
             </div>
         </section>
+        @endif
 
         <!-- Date & Venue Section -->
         <section id="acara" class="py-24 px-6 text-center relative overflow-hidden"
-            style="background-image: url('{{ $pengaturan->foto_hero }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('themes/aufilla-green/images/bg-hero.svg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div
                 style="position: absolute; inset: 0; background-color: rgba(29, 50, 38, 0.85); backdrop-filter: blur(2px);">
             </div>
@@ -1072,23 +1081,23 @@
                             <span class="text-xs uppercase tracking-[0.2em] text-[#e5c088] font-semibold block mb-4"
                                 style="letter-spacing: 0.2em; display: block; margin-bottom: 1rem;">Akad Nikah</span>
                             <h3 class="font-heading text-2xl font-bold mb-2"
-                                style="font-weight: 700; margin-bottom: 0.5rem;">08.00 - 10.00 WIB</h3>
+                                style="font-weight: 700; margin-bottom: 0.5rem;">{{ $akad->waktu_mulai ? \Carbon\Carbon::parse($akad->waktu_mulai)->format('H:i') : '' }} - {{ $akad->waktu_selesai ? \Carbon\Carbon::parse($akad->waktu_selesai)->format('H:i') : 'Selesai' }} {{ $akad->zona_waktu ?? 'WIB' }}</h3>
                             <p class="text-xs tracking-wider text-white/60 mb-6 font-body uppercase"
                                 style="letter-spacing: 0.05em; margin-bottom: 1.5rem; opacity: 0.6;">
-                                {{ $pengaturan->tanggal_pernikahan ? $pengaturan->tanggal_pernikahan->translatedFormat('l, d F Y') : '' }}
+                                {{ $akad && $akad->tgl_acara ? \Carbon\Carbon::parse($akad->tgl_acara)->translatedFormat('l, d F Y') : '' }}
                             </p>
                             <div
                                 style="width: 100%; height: 1px; background-color: rgba(255,255,255,0.15); margin: 1rem 0;">
                             </div>
                             <h4 class="font-semibold text-base mb-1"
                                 style="font-weight: 600; margin-bottom: 0.25rem;">
-                                {{ $pengaturan->lokasi_akad ?? 'Lokasi Akad' }}</h4>
+                                {{ $akad->lokasi ?? 'Lokasi Akad' }}</h4>
                             <p class="text-xs md:text-sm text-white/70 leading-relaxed mb-6 font-body"
                                 style="opacity: 0.7; line-height: 1.5; margin-bottom: 1.5rem; font-size: 0.8rem;">
-                                {{ $pengaturan->alamat_akad ?? 'Alamat Akad' }}</p>
+                                {{ $akad->alamat ?? 'Alamat Akad' }}</p>
                         </div>
                         <div style="display: flex; flex-direction: column; width: 100%;">
-                            <a href="{{ $pengaturan->google_maps_url ?? '#' }}" target="_blank" class="btn-gold"
+                            <a href="{{ $akad->gmaps_link ?? '#' }}" target="_blank" class="btn-gold"
                                 style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.8rem; padding: 0.6rem 1.5rem;">
                                 <svg viewBox="0 0 24 24" width="16" height="16"
                                     style="width: 16px; height: 16px;" fill="none" stroke="currentColor"
@@ -1108,23 +1117,23 @@
                                 style="letter-spacing: 0.2em; display: block; margin-bottom: 1rem;">Resepsi
                                 Pernikahan</span>
                             <h3 class="font-heading text-2xl font-bold mb-2"
-                                style="font-weight: 700; margin-bottom: 0.5rem;">11.00 - 15.00 WIB</h3>
+                                style="font-weight: 700; margin-bottom: 0.5rem;">{{ $resepsi->waktu_mulai ? \Carbon\Carbon::parse($resepsi->waktu_mulai)->format('H:i') : '' }} - {{ $resepsi->waktu_selesai ? \Carbon\Carbon::parse($resepsi->waktu_selesai)->format('H:i') : 'Selesai' }} {{ $resepsi->zona_waktu ?? 'WIB' }}</h3>
                             <p class="text-xs tracking-wider text-white/60 mb-6 font-body uppercase"
                                 style="letter-spacing: 0.05em; margin-bottom: 1.5rem; opacity: 0.6;">
-                                {{ $pengaturan->tanggal_pernikahan ? $pengaturan->tanggal_pernikahan->translatedFormat('l, d F Y') : '' }}
+                                {{ $resepsi && $resepsi->tgl_acara ? \Carbon\Carbon::parse($resepsi->tgl_acara)->translatedFormat('l, d F Y') : '' }}
                             </p>
                             <div
                                 style="width: 100%; height: 1px; background-color: rgba(255,255,255,0.15); margin: 1rem 0;">
                             </div>
                             <h4 class="font-semibold text-base mb-1"
                                 style="font-weight: 600; margin-bottom: 0.25rem;">
-                                {{ $pengaturan->lokasi_resepsi ?? 'Lokasi Resepsi' }}</h4>
+                                {{ $resepsi->lokasi ?? 'Lokasi Resepsi' }}</h4>
                             <p class="text-xs md:text-sm text-white/70 leading-relaxed mb-6 font-body"
                                 style="opacity: 0.7; line-height: 1.5; margin-bottom: 1.5rem; font-size: 0.8rem;">
-                                {{ $pengaturan->alamat_resepsi ?? 'Alamat Resepsi' }}</p>
+                                {{ $resepsi->alamat ?? 'Alamat Resepsi' }}</p>
                         </div>
                         <div style="display: flex; flex-direction: column; width: 100%;">
-                            <a href="{{ $pengaturan->google_maps_url ?? '#' }}" target="_blank" class="btn-gold"
+                            <a href="{{ $resepsi->gmaps_link ?? '#' }}" target="_blank" class="btn-gold"
                                 style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.8rem; padding: 0.6rem 1.5rem;">
                                 <svg viewBox="0 0 24 24" width="16" height="16"
                                     style="width: 16px; height: 16px;" fill="none" stroke="currentColor"
@@ -1141,6 +1150,7 @@
         </section>
 
         <!-- Digital Gift Section -->
+        @if($invitation->is_kado_aktif && ($kados->count() > 0 || $invitation->alamat_kado))
         <section id="gift" class="py-24 px-6 bg-[#faf6f0] text-center relative overflow-hidden"
             style="padding: 6rem 1.5rem;">
             <div class="max-w-[720px] mx-auto relative z-10">
@@ -1156,13 +1166,13 @@
                     terindah bagi kami. Namun, apabila Anda ingin memberikan tanda kasih secara digital, Anda dapat
                     menyalurkannya melalui rekening berikut:</p>
                 <div class="gift-grid">
-                    @if ($pengaturan->rekening_1_nama || $pengaturan->rekening_1_nomor)
-                        <div data-aos="flip-left" class="glass-card-gold text-[#2c3930]"
+                    @forelse ($kados as $kado)
+                        <div data-aos="flip-up" class="glass-card-gold text-[#2c3930]"
                             style="width: 100%; max-width: 280px; border-radius: 24px; padding: 1.5rem; text-align: left;">
                             <div
                                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                                 <span
-                                    style="font-weight: 700; font-size: 1.125rem; letter-spacing: 0.05em; color: #1d3226;">{{ $pengaturan->rekening_1_bank ?? 'BANK' }}</span>
+                                    style="font-weight: 700; font-size: 1.125rem; letter-spacing: 0.05em; color: #1d3226;">{{ $kado->nama_bank }}</span>
                                 <div
                                     style="width: 32px; height: 24px; background-color: rgba(197, 168, 128, 0.2); border-radius: 6px; border: 1px solid rgba(197, 168, 128, 0.4); display: flex; align-items: center; justify-content: center;">
                                 </div>
@@ -1171,12 +1181,12 @@
                                 style="font-size: 10px; opacity: 0.6;">Nomor Rekening</p>
                             <h4 class="font-heading text-xl font-semibold tracking-widest text-[#1d3226] mb-4"
                                 style="font-weight: 600; letter-spacing: 0.1em; margin-bottom: 1rem;">
-                                {{ $pengaturan->rekening_1_nomor }}</h4>
+                                {{ $kado->no_rekening }}</h4>
                             <p class="text-[9px] uppercase tracking-wider text-[#2c3930]/60 mb-4"
                                 style="font-size: 9px; opacity: 0.6; margin-bottom: 1rem;">A.N.
-                                {{ $pengaturan->rekening_1_nama }}</p>
+                                {{ $kado->nama_pemilik }}</p>
                             <button
-                                onclick="copyToClipboard('{{ $pengaturan->rekening_1_nomor }}', '{{ $pengaturan->rekening_1_bank ?? 'bank' }}')"
+                                onclick="copyToClipboard('{{ $kado->no_rekening }}', '{{ $kado->nama_bank }}')"
                                 class="btn-gold"
                                 style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.75rem; padding: 0.5rem 1rem;">
                                 <svg viewBox="0 0 24 24" width="14" height="14"
@@ -1189,43 +1199,10 @@
                                 Salin Rekening
                             </button>
                         </div>
-                    @endif
-                    @if ($pengaturan->rekening_2_nama || $pengaturan->rekening_2_nomor)
-                        <div data-aos="flip-right" class="glass-card-gold text-[#2c3930]"
-                            style="width: 100%; max-width: 280px; border-radius: 24px; padding: 1.5rem; text-align: left;">
-                            <div
-                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                                <span
-                                    style="font-weight: 700; font-size: 1.125rem; letter-spacing: 0.05em; color: #1d3226;">{{ $pengaturan->rekening_2_bank ?? 'BANK' }}</span>
-                                <div
-                                    style="width: 32px; height: 24px; background-color: rgba(197, 168, 128, 0.2); border-radius: 6px; border: 1px solid rgba(197, 168, 128, 0.4); display: flex; align-items: center; justify-content: center;">
-                                </div>
-                            </div>
-                            <p class="text-[10px] uppercase tracking-widest text-[#2c3930]/60 mb-1"
-                                style="font-size: 10px; opacity: 0.6;">Nomor Rekening</p>
-                            <h4 class="font-heading text-xl font-semibold tracking-widest text-[#1d3226] mb-4"
-                                style="font-weight: 600; letter-spacing: 0.1em; margin-bottom: 1rem;">
-                                {{ $pengaturan->rekening_2_nomor }}</h4>
-                            <p class="text-[9px] uppercase tracking-wider text-[#2c3930]/60 mb-4"
-                                style="font-size: 9px; opacity: 0.6; margin-bottom: 1rem;">A.N.
-                                {{ $pengaturan->rekening_2_nama }}</p>
-                            <button
-                                onclick="copyToClipboard('{{ $pengaturan->rekening_2_nomor }}', '{{ $pengaturan->rekening_2_bank ?? 'bank' }}')"
-                                class="btn-gold"
-                                style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.75rem; padding: 0.5rem 1rem;">
-                                <svg viewBox="0 0 24 24" width="14" height="14"
-                                    style="width: 14px; height: 14px;" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2">
-                                    </rect>
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                </svg>
-                                Salin Rekening
-                            </button>
-                        </div>
-                    @endif
+                    @empty
+                    @endforelse
                 </div>
-                @if ($pengaturan->alamat_pengiriman)
+                @if ($invitation->alamat_kado)
                     <div data-aos="fade-up" class="glass-card"
                         style="margin-top: 3rem; padding: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto; border-radius: 16px; text-align: left;">
                         <h4 class="font-heading text-lg font-bold text-[#1d3226] mb-2"
@@ -1243,8 +1220,8 @@
                         </h4>
                         <p id="alamat-pengiriman" class="text-xs text-[#5a6b5d] mb-4 leading-relaxed font-body"
                             style="line-height: 1.5; margin-bottom: 1rem; font-size: 0.8rem;">
-                            {{ $pengaturan->alamat_pengiriman }}</p>
-                        <button onclick="copyAddressToClipboard('{{ $pengaturan->alamat_pengiriman }}')"
+                            {{ $invitation->alamat_kado }}</p>
+                        <button onclick="copyAddressToClipboard('{{ $invitation->alamat_kado }}')"
                             class="btn-outline-gold"
                             style="padding: 0.5rem 1rem; font-size: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
                             <svg viewBox="0 0 24 24" width="14" height="14"
@@ -1260,10 +1237,11 @@
                 @endif
             </div>
         </section>
+        @endif
 
         <!-- RSVP & Wishes Wall Section -->
         <section id="rsvp" class="py-24 px-6 text-center relative overflow-hidden"
-            style="background-image: url('{{ $pengaturan->foto_hero }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('themes/aufilla-green/images/bg-hero.svg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div
                 style="position: absolute; inset: 0; background-color: rgba(250, 246, 240, 0.92); backdrop-filter: blur(2px);">
             </div>
@@ -1407,18 +1385,18 @@
                     WASSALAMU'ALAIKUM WARAHMATULLAHI WABARAKATUH</p>
                 <h2 class="font-heading text-3xl md:text-4xl text-[#faf6f0] font-bold mb-2"
                     style="font-weight: 700; margin-bottom: 0.5rem; letter-spacing: 0.05em;">
-                    {{ $pengaturan->nama_mempelai_wanita }} & {{ $pengaturan->nama_mempelai_pria }}
+                    {{ $invitation->wanita_nama_lengkap }} & {{ $invitation->pria_nama_lengkap }}
                 </h2>
                 <div style="width: 80px; height: 1px; background-color: rgba(197,168,128,0.3); margin: 1rem auto;">
                 </div>
                 <p
                     style="font-size: 0.75rem; letter-spacing: 0.25em; color: #c5a880; font-weight: 600; margin-bottom: 2rem;">
-                    {{ $pengaturan->tanggal_pernikahan ? $pengaturan->tanggal_pernikahan->format('d F Y') : '' }}
+                    {{ $akad ? \Carbon\Carbon::parse($akad->tgl_acara)->format('d F Y') : '' }}
                 </p>
                 <div
                     style="margin-top: 3rem; font-size: 9px; opacity: 0.4; letter-spacing: 0.1em; text-transform: uppercase;">
-                    &copy; {{ date('Y') }} {{ $pengaturan->nama_mempelai_wanita }} &
-                    {{ $pengaturan->nama_mempelai_pria }} Wedding. All Rights Reserved.
+                    &copy; {{ date('Y') }} {{ $invitation->wanita_nama_lengkap }} &
+                    {{ $invitation->pria_nama_lengkap }} Wedding. All Rights Reserved.
                 </div>
             </div>
         </section>
@@ -1489,7 +1467,7 @@
 
         // Countdown
         const weddingDate = new Date(
-            '{{ $pengaturan->tanggal_pernikahan ? $pengaturan->tanggal_pernikahan->format('Y-m-d') : '2026-05-26' }}T08:00:00'
+            '{{ $akad && $akad->tgl_acara ? \Carbon\Carbon::parse($akad->tgl_acara)->format("Y-m-d") : "2026-05-26" }}T{{ $akad && $akad->waktu_mulai ? \Carbon\Carbon::parse($akad->waktu_mulai)->format("H:i:s") : "08:00:00" }}'
             ).getTime();
         setInterval(function() {
             const now = new Date().getTime();
