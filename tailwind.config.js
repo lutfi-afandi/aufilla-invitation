@@ -22,6 +22,18 @@ export default {
                     accent: '#c5a880',
                     'accent-dark': '#b39265',
                     bg: '#fdfbf7',
+                },
+                admin: {
+                    dark: '#0f172a',
+                    medium: '#1e293b',
+                    light: '#334155',
+                    accent: '#818cf8',
+                    'accent-dark': '#6366f1',
+                    bg: '#f8fafc',
+                    muted: '#94a3b8',
+                    success: '#22c55e',
+                    warning: '#f59e0b',
+                    danger: '#ef4444',
                 }
             },
         },

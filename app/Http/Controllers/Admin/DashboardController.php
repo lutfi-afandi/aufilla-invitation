@@ -3,17 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Invitation;
+use App\Models\Tamu;
+use App\Models\Ucapan;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // Lean Controller: Hanya mengambil data via service atau eloquent ringan dan memanggil view
-        // $stats = $this->adminService->getDashboardStats();
-        
         return view('admin.dashboard', [
-            // 'stats' => $stats
+            'totalClients'       => User::where('role', 'client')->count(),
+            'activeInvitations'  => Invitation::where('status', 'aktif')->count(),
+            'trialInvitations'   => Invitation::where('status', 'trial')->count(),
+            'draftInvitations'   => Invitation::where('status', 'draft')->count(),
+            'nonaktifInvitations'=> Invitation::where('status', 'nonaktif')->count(),
+            'totalGuests'        => Tamu::count(),
+            'totalUcapan'        => Ucapan::count(),
+            'recentUcapans'      => Ucapan::with('invitation')->latest()->take(5)->get(),
         ]);
     }
 }

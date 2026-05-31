@@ -21,6 +21,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Admin Routes
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+
+        // Clients
+        Route::get('/clients', [\App\Http\Controllers\Admin\ClientController::class, 'index'])->name('clients.index');
+        Route::post('/clients', [\App\Http\Controllers\Admin\ClientController::class, 'store'])->name('clients.store');
+        Route::get('/clients/{id}', [\App\Http\Controllers\Admin\ClientController::class, 'show'])->name('clients.show');
+        Route::put('/clients/{id}', [\App\Http\Controllers\Admin\ClientController::class, 'update'])->name('clients.update');
+        Route::delete('/clients/{id}', [\App\Http\Controllers\Admin\ClientController::class, 'destroy'])->name('clients.destroy');
+        Route::patch('/clients/{id}/status', [\App\Http\Controllers\Admin\ClientController::class, 'updateStatus'])->name('clients.status');
+        Route::get('/clients/{id}/impersonate', [\App\Http\Controllers\Admin\ClientController::class, 'impersonate'])->name('clients.impersonate');
+
+        // Themes
+        Route::get('/themes', [\App\Http\Controllers\Admin\ThemeController::class, 'index'])->name('themes.index');
+        Route::post('/themes', [\App\Http\Controllers\Admin\ThemeController::class, 'store'])->name('themes.store');
+        Route::put('/themes/{id}', [\App\Http\Controllers\Admin\ThemeController::class, 'update'])->name('themes.update');
+        Route::patch('/themes/{id}/toggle', [\App\Http\Controllers\Admin\ThemeController::class, 'toggleActive'])->name('themes.toggle');
+        Route::delete('/themes/{id}', [\App\Http\Controllers\Admin\ThemeController::class, 'destroy'])->name('themes.destroy');
+
+        // Receptionists
+        Route::get('/receptionists', [\App\Http\Controllers\Admin\ReceptionistController::class, 'index'])->name('receptionists.index');
+        Route::post('/receptionists', [\App\Http\Controllers\Admin\ReceptionistController::class, 'store'])->name('receptionists.store');
+        Route::put('/receptionists/{id}', [\App\Http\Controllers\Admin\ReceptionistController::class, 'update'])->name('receptionists.update');
+        Route::delete('/receptionists/{id}', [\App\Http\Controllers\Admin\ReceptionistController::class, 'destroy'])->name('receptionists.destroy');
     });
 
     // Client Routes
@@ -67,6 +89,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Receptionist\DashboardController::class, 'index'])->name('dashboard');
     });
 
+    // Stop Impersonation (admin returning from client session)
+    Route::get('/admin/impersonate/stop', function () {
+        $adminId = session()->pull('admin_impersonate_id');
+        if ($adminId) {
+            auth()->loginUsingId($adminId);
+        }
+        return redirect()->route('admin.dashboard');
+    })->name('admin.impersonate.stop');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -75,5 +106,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 require __DIR__.'/auth.php';
 
 // --- PUBLIC INVITATION ROUTE (Must be at the very bottom, after all other routes including auth) ---
+Route::get('/preview/theme/{theme_code}', [\App\Http\Controllers\PublicInvitationController::class, 'preview'])->name('theme.preview');
 Route::post('/{slug}/ucapan', [\App\Http\Controllers\PublicInvitationController::class, 'storeUcapan'])->name('public.ucapan.store');
 Route::get('/{slug}', [\App\Http\Controllers\PublicInvitationController::class, 'show'])->name('public.invitation');

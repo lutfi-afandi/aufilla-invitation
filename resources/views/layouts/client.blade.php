@@ -19,6 +19,13 @@
 </head>
 <body class="font-sans antialiased text-gray-900 bg-brand-bg flex h-screen overflow-hidden">
     
+    @if(session('admin_impersonate_id'))
+    <div class="fixed top-0 left-0 right-0 z-[100] bg-admin-accent-dark text-white text-center py-2 text-sm font-semibold shadow-md">
+        Anda sedang login sebagai <strong>{{ Auth::user()->username }}</strong>.
+        <a href="{{ route('admin.impersonate.stop') }}" class="underline ml-2 hover:text-indigo-200">← Kembali ke Admin</a>
+    </div>
+    @endif
+
     @include('partials.client_sidebar')
 
     <!-- Main Content Area -->
