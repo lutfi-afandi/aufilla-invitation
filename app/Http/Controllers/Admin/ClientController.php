@@ -35,7 +35,7 @@ class ClientController extends Controller
     {
         $validated = $request->validate([
             'username' => 'required|string|max:50|unique:users,username',
-            'email'    => 'required|email|max:100|unique:users,email',
+            'email'    => 'nullable|email|max:100|unique:users,email',
             'password' => 'required|string|min:6|max:50',
             'theme_id' => 'required|exists:themes,id',
         ]);
@@ -54,7 +54,13 @@ class ClientController extends Controller
             'trial_habis_at' => now()->addDays(3),
         ]);
 
-        return response()->json(['message' => 'Klien berhasil dibuat.']);
+        $user->load('invitation.theme');
+        $html = view('admin.clients.partials.row', ['client' => $user])->render();
+
+        return response()->json([
+            'message' => 'Klien berhasil dibuat.',
+            'html' => $html
+        ]);
     }
 
     public function show($id)
@@ -63,9 +69,10 @@ class ClientController extends Controller
             ->with(['invitation.theme', 'invitation.tamus', 'invitation.ucapans', 'invitation.galeris', 'invitation.ceritas', 'invitation.kados', 'invitation.acaras'])
             ->findOrFail($id);
 
-        $themes = Theme::where('is_active', true)->get();
-
-        return view('admin.clients.show', compact('client', 'themes'));
+        return response()->json([
+            'client' => $client,
+            'invitation' => $client->invitation
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -74,8 +81,10 @@ class ClientController extends Controller
 
         $validated = $request->validate([
             'username' => ['required', 'string', 'max:50', Rule::unique('users', 'username')->ignore($client->id)],
-            'email'    => ['required', 'email', 'max:100', Rule::unique('users', 'email')->ignore($client->id)],
+            'email'    => ['nullable', 'email', 'max:100', Rule::unique('users', 'email')->ignore($client->id)],
             'password' => 'nullable|string|min:6|max:50',
+            'status'   => 'required|in:trial,active,expired',
+            'theme_id' => 'required|exists:themes,id',
         ]);
 
         $client->username = $validated['username'];
@@ -85,7 +94,25 @@ class ClientController extends Controller
         }
         $client->save();
 
-        return response()->json(['message' => 'Data klien berhasil diperbarui.']);
+        if ($invitation = $client->invitation) {
+            $invitation->status = $validated['status'];
+            $invitation->theme_id = $validated['theme_id'];
+            
+            if ($validated['status'] === 'active') {
+                $invitation->trial_habis_at = null;
+            } elseif ($validated['status'] === 'trial' && !$invitation->trial_habis_at) {
+                $invitation->trial_habis_at = now()->addDays(3);
+            }
+            $invitation->save();
+        }
+
+        $client->load('invitation.theme');
+        $html = view('admin.clients.partials.row', ['client' => $client])->render();
+
+        return response()->json([
+            'message' => 'Data klien berhasil diperbarui.',
+            'html' => $html
+        ]);
     }
 
     public function updateStatus(Request $request, $id)

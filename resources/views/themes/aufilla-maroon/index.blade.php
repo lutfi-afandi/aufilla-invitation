@@ -643,7 +643,14 @@
               <div class="bg-white/80 p-6 rounded-2xl border border-gold-500/20 shadow-md flex-1 mb-10">
                 <div class="flex items-center justify-between mb-2">
                   <h3 class="font-serif text-lg font-bold text-maroon-800">{{ $cerita->judul }}</h3>
-                  <span class="text-[10px] text-amber-600 bg-gold-100 font-semibold px-2.5 py-1 rounded-full uppercase">{{ \Carbon\Carbon::parse($cerita->tanggal)->translatedFormat('F Y') }}</span>
+                  @php
+                      try {
+                          $formattedDate = \Carbon\Carbon::parse($cerita->tanggal)->translatedFormat('F Y');
+                      } catch (\Exception $e) {
+                          $formattedDate = $cerita->tanggal;
+                      }
+                  @endphp
+                  <span class="text-[10px] text-amber-600 bg-gold-100 font-semibold px-2.5 py-1 rounded-full uppercase">{{ $formattedDate }}</span>
                 </div>
                 <p class="text-xs text-stone-600 leading-relaxed mt-2">
                   {{ $cerita->deskripsi }}
