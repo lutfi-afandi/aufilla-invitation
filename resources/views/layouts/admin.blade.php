@@ -10,12 +10,23 @@
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
+    <link href="{{ asset('assets/css/bunny-inter-admin.css') }}" rel="stylesheet" />
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
+    <style>
+        /* Fix: SweetAlert2 menambah height:auto dan padding ke html/body yang merusak layout flex h-screen */
+        html.swal2-shown,
+        body.swal2-shown,
+        html.swal2-height-auto,
+        body.swal2-height-auto {
+            height: 100% !important;
+            overflow: hidden !important;
+            padding-right: 0 !important;
+        }
+    </style>
 </head>
 <body class="font-sans antialiased text-gray-900 bg-admin-bg flex h-screen overflow-hidden" style="font-family: 'Inter', sans-serif;">
     <!-- Mobile Sidebar Backdrop -->

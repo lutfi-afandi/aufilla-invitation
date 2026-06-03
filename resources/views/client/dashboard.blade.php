@@ -9,11 +9,29 @@
         <div class="relative z-10">
             <h2 class="text-3xl sm:text-4xl font-bold text-brand-accent mb-3" style="font-family: 'Playfair Display', serif;">Selamat Datang di Aufilla!</h2>
             <p class="text-white/85 max-w-2xl text-lg leading-relaxed mb-6">
-                Lengkapi data undangan Anda melalui menu di samping. Anda saat ini sedang dalam masa trial. Aktifkan undangan Anda agar dapat disebar tanpa batasan waktu.
+                @if($invitation->status === 'trial')
+                    @if($invitation->trial_habis_at && $invitation->trial_habis_at->isPast())
+                        Masa trial Anda telah habis. Beberapa fitur kini terkunci dan undangan Anda mungkin tidak dapat diakses secara publik. Silakan lakukan aktivasi agar undangan dapat digunakan tanpa batas.
+                    @else
+                        Anda saat ini sedang dalam masa trial (Kedaluwarsa: <strong>{{ $invitation->trial_habis_at ? $invitation->trial_habis_at->format('d M Y, H:i') : '-' }}</strong>). Segera lakukan aktivasi agar undangan dapat disebar tanpa batasan waktu.
+                    @endif
+                @elseif($invitation->status === 'aktif' && $invitation->package)
+                    Selamat! Paket <strong>{{ $invitation->package->name }}</strong> Anda aktif hingga {{ $invitation->package->active_days > 10000 ? 'selamanya' : $invitation->created_at->addDays($invitation->package->active_days)->format('d M Y') }}. 
+                    @if($invitation->package->name === 'Basic')
+                        Tingkatkan ke paket Premium atau VIP untuk membuka fitur Cerita Cinta dan Musik Latar.
+                    @elseif($invitation->package->name === 'Premium')
+                        Nikmati fitur Cerita Cinta dan Musik Latar. Tingkatkan ke VIP untuk foto galeri tanpa batas.
+                    @else
+                        Anda kini menikmati fitur VIP tanpa batas. Sebarkan momen kebahagiaan Anda!
+                    @endif
+                @else
+                    Undangan Anda saat ini berstatus {{ $invitation->status }}. Silakan hubungi Admin untuk informasi lebih lanjut.
+                @endif
             </p>
-            <button class="bg-gradient-to-r from-brand-accent to-brand-accent-dark hover:from-brand-accent-dark hover:to-[#a28056] text-white font-semibold py-2.5 px-6 rounded-xl shadow-[0_4px_15px_rgba(197,168,128,0.3)] hover:shadow-[0_6px_20px_rgba(197,168,128,0.4)] transition-all duration-300 transform hover:-translate-y-0.5">
-                Aktivasi via WhatsApp
-            </button>
+            <a href="https://wa.me/{{ config('app.activation_wa') }}?text={{ urlencode('Halo Admin Aufilla, saya ingin aktivasi undangan atas nama username: ' . Auth::user()->username) }}" target="_blank" class="inline-flex items-center gap-2 bg-gradient-to-r from-brand-accent to-brand-accent-dark hover:from-brand-accent-dark hover:to-[#a28056] text-white font-semibold py-2.5 px-6 rounded-xl shadow-[0_4px_15px_rgba(197,168,128,0.3)] hover:shadow-[0_6px_20px_rgba(197,168,128,0.4)] transition-all duration-300 transform hover:-translate-y-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                Hubungi WhatsApp
+            </a>
         </div>
         <!-- Ornament Pattern (Simulated with absolute div/svg) -->
         <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-brand-accent opacity-5 rounded-full blur-3xl pointer-events-none"></div>

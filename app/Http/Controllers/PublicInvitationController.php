@@ -23,6 +23,11 @@ class PublicInvitationController extends Controller
             }
         }
 
+        // If trial expired, blocked completely for everyone
+        if ($invitation->status === 'trial' && $invitation->trial_habis_at && $invitation->trial_habis_at->isPast()) {
+            abort(403, 'Masa trial undangan ini telah habis. Silakan hubungi Admin untuk aktivasi.');
+        }
+
         // If nonaktif
         if ($invitation->status === 'nonaktif') {
             abort(404, 'Undangan ini sedang tidak aktif.');
@@ -37,7 +42,7 @@ class PublicInvitationController extends Controller
 
         // Dynamically load the view based on the theme code
         $viewPath = 'themes.' . $invitation->theme->code . '.index';
-        
+
         if (!view()->exists($viewPath)) {
             abort(500, 'File tema (' . $invitation->theme->code . ') tidak ditemukan di server.');
         }
@@ -59,6 +64,16 @@ class PublicInvitationController extends Controller
 
     public function storeUcapan(Request $request, $slug)
     {
+        if ($slug === 'preview') {
+            return response()->json([
+                'message' => 'Konfirmasi berhasil dikirim (Mode Preview)!',
+                'wish' => [
+                    'nama' => $request->name,
+                    'created_at' => \Carbon\Carbon::now()
+                ]
+            ]);
+        }
+
         $invitation = Invitation::where('slug', $slug)->firstOrFail();
 
         $request->validate([
@@ -85,7 +100,7 @@ class PublicInvitationController extends Controller
     public function preview($themeCode)
     {
         $theme = \App\Models\Theme::where('code', $themeCode)->firstOrFail();
-        
+
         $viewPath = 'themes.' . $theme->code . '.index';
         if (!view()->exists($viewPath)) {
             abort(500, 'File tema (' . $theme->code . ') tidak ditemukan di server.');
@@ -108,7 +123,7 @@ class PublicInvitationController extends Controller
             'alamat_kado' => 'Jl. Cinta Sejati No. 12, Verona City',
             'music_file' => null,
         ]);
-        
+
         // Relationship mock (this might not be perfect for all eloquent relations but works for standard property access)
         $invitation->setRelation('theme', $theme);
 
@@ -134,19 +149,27 @@ class PublicInvitationController extends Controller
 
         $wish1 = new \App\Models\Ucapan(['nama' => 'Admin Aufilla', 'kehadiran' => 'hadir', 'pesan' => 'Selamat menempuh hidup baru!']);
         $wish1->created_at = now();
-        $wish2 = new \App\Models\Ucapan(['nama' => 'John Doe', 'kehadiran' => 'hadir', 'pesan' => 'Semoga samawa ya!']);
+        $wish2 = new \App\Models\Ucapan(['nama' => 'Fulan', 'kehadiran' => 'hadir', 'pesan' => 'Semoga samawa ya!']);
         $wish2->created_at = now()->subHours(2);
-        
+
         $wishes = collect([$wish1, $wish2]);
-        
-        $galeris = collect([]);
+
+        $galeris = collect([
+            new \App\Models\Galeri(['image_path' => 'assets/default/default-pasangan.jpg']),
+            new \App\Models\Galeri(['image_path' => 'assets/default/default_pria.jpg']),
+            new \App\Models\Galeri(['image_path' => 'assets/default/default_wanita.jpg']),
+            new \App\Models\Galeri(['image_path' => 'assets/default/default-pasangan2.jpg']),
+            new \App\Models\Galeri(['image_path' => 'assets/default/default_pria2.jpg']),
+            new \App\Models\Galeri(['image_path' => 'assets/default/default_wanita2.jpg']),
+        ]);
         $ceritas = collect([
             new \App\Models\Cerita(['judul' => 'Pertama Bertemu', 'tanggal' => '2023-01-10', 'deskripsi' => 'Kami pertama kali bertemu di sebuah cafe.']),
             new \App\Models\Cerita(['judul' => 'Lamaran', 'tanggal' => '2024-05-20', 'deskripsi' => 'Dia melamar saya di pantai.'])
         ]);
-        
+
         $kados = collect([
-            new \App\Models\Kado(['nama_bank' => 'BCA', 'nomor_rekening' => '1234567890', 'atas_nama' => 'Romeo Montague'])
+            new \App\Models\Kado(['nama_bank' => 'BCA', 'nomor_rekening' => '1234567890', 'atas_nama' => 'Romeo Montague']),
+            new \App\Models\Kado(['nama_bank' => 'Muamalat', 'nomor_rekening' => '089345092832', 'atas_nama' => 'Juliet Capulet']),
         ]);
 
         $tamu = new \App\Models\Tamu(['nama_tamu' => 'Tamu Spesial', 'kode_qr' => 'PREVIEW-QR-123']);

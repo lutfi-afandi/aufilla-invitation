@@ -9,24 +9,51 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="{{ asset('assets/css/bunny-inter-playfair.css') }}" rel="stylesheet" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-brand-bg relative overflow-hidden">
-            <!-- Decorative background blob (optional elegance) -->
-            <div class="absolute top-0 left-0 w-full h-96 bg-brand-light opacity-20 rounded-b-[100%] z-0 pointer-events-none transform -translate-y-24"></div>
-
-            <div class="relative z-10 mb-4 transition-transform hover:scale-105 duration-300">
-                <a href="/" class="focus:outline-none">
-                    <x-application-logo />
-                </a>
+    <body class="font-sans text-brand-dark antialiased bg-brand-bg">
+        <div class="min-h-screen flex flex-col sm:justify-center items-center p-6 relative overflow-hidden">
+            
+            <!-- Aesthetic Background Overlay -->
+            <div class="absolute inset-0 z-0 pointer-events-none">
+                <!-- Base Image from Hero (Grayscale) -->
+                <img src="{{ asset('assets/img/wedding-aesthetic-bg.jpg') }}" alt="Background" class="w-full h-full object-cover grayscale opacity-[0.08] mix-blend-multiply">
+                
+                <!-- Dual Tone Gradient Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-br from-brand-bg/95 via-brand-bg/90 to-[#EAD9B8]/40 backdrop-blur-[1px]"></div>
+                
+                <!-- Floating Ornaments -->
+                <div class="absolute -right-40 top-0 w-[600px] h-[600px] rounded-full bg-brand-accent/[.06] blur-[100px] pointer-events-none z-0"></div>
+                <div class="absolute -left-20 bottom-0 w-[500px] h-[500px] rounded-full bg-brand-dark/[.03] blur-[100px] pointer-events-none z-0"></div>
             </div>
 
-            <div class="w-full sm:max-w-md px-6 py-8 bg-white shadow-xl overflow-hidden sm:rounded-2xl border-t-4 border-brand-dark relative z-10">
-                @yield('content')
+            <!-- Content Container -->
+            <div class="relative z-10 w-full sm:max-w-[420px]">
+                <!-- Logo Header -->
+                <div class="mb-8 text-center flex flex-col items-center justify-center group">
+                    <a href="/" class="flex flex-col items-center gap-3 focus:outline-none transform transition-transform duration-500 group-hover:scale-105">
+                        <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Aufilla" class="h-14 w-auto object-contain drop-shadow-md">
+                        <div class="flex flex-col items-center">
+                            <span class="text-[26px] font-serif text-brand-dark tracking-tight leading-none">
+                                Aufilla<span class="italic text-brand-accent">Invitation</span>
+                            </span>
+                            <span class="text-[9px] font-sans font-bold tracking-[0.3em] uppercase text-brand-dark/50 mt-2">
+                                Undangan Digital
+                            </span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Form Card -->
+                <div class="bg-white/80 backdrop-blur-xl px-8 py-10 shadow-2xl shadow-brand-dark/10 sm:rounded-[2rem] border border-brand-dark/5 relative">
+                    <!-- Subtle top glow -->
+                    <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-brand-accent/50 to-transparent opacity-50"></div>
+                    
+                    @yield('content')
+                </div>
             </div>
         </div>
     </body>

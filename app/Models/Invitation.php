@@ -73,4 +73,38 @@ class Invitation extends Model
     {
         return $this->hasMany(Ucapan::class);
     }
+
+    /**
+     * Get feature access based on status and package.
+     */
+    public function getFeatureAccess(): array
+    {
+        // Default (Basic / expired)
+        $access = [
+            'can_cerita' => false,
+            'can_music' => false,
+            'max_galeri' => 5, // Basic default
+        ];
+
+        // Jika status trial, berikan semua akses (layaknya VIP) hanya jika belum kedaluwarsa
+        if ($this->status === 'trial') {
+            if ($this->trial_habis_at && $this->trial_habis_at->isPast()) {
+                return $access; // Kedaluwarsa -> kembali ke default (Basic/terkunci)
+            }
+            
+            $access['can_cerita'] = true;
+            $access['can_music'] = true;
+            $access['max_galeri'] = 999;
+            return $access;
+        }
+
+        // Jika status aktif atau nonaktif tapi kita butuh ngecek paket (UI view), baca dari package
+        if ($this->package) {
+            $access['can_cerita'] = $this->package->has_love_story;
+            $access['can_music'] = $this->package->can_custom_music;
+            $access['max_galeri'] = $this->package->max_gallery_photos;
+        }
+
+        return $access;
+    }
 }

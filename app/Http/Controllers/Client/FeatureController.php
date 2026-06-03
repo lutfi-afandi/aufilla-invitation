@@ -23,6 +23,12 @@ class FeatureController extends Controller
 
         $invitation = Auth::user()->invitation;
         
+        $access = $invitation->getFeatureAccess();
+        $currentPhotoCount = $invitation->galeris()->count();
+        if ($currentPhotoCount >= $access['max_galeri']) {
+            return response()->json(['error' => 'Anda telah mencapai batas maksimal unggahan galeri untuk paket ini ('.$access['max_galeri'].' foto).'], 403);
+        }
+
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('galeri', 'public');
             
@@ -66,6 +72,11 @@ class FeatureController extends Controller
         ]);
 
         $invitation = Auth::user()->invitation;
+        $access = $invitation->getFeatureAccess();
+        
+        if (!$access['can_cerita']) {
+            return response()->json(['error' => 'Paket Anda tidak mendukung fitur Cerita Cinta.'], 403);
+        }
 
         $cerita = $invitation->ceritas()->create([
             'tanggal' => $request->tanggal,

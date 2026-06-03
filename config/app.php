@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Activation WhatsApp Number
+    |--------------------------------------------------------------------------
+    |
+    | The WhatsApp number used by clients to contact admin for package activation.
+    | Format should be international without '+' symbol (e.g. 62851...).
+    |
+    */
+
+    'activation_wa' => env('ACTIVATION_WA_NUMBER', '6285171097138'),
+
 ];

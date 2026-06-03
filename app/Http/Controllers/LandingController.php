@@ -36,8 +36,16 @@ class LandingController extends Controller
             'role' => 'client',
         ]);
 
+        $baseSlug = Str::slug($validated['username']);
+        $slug = $baseSlug;
+        $count = 1;
+        while (\App\Models\Invitation::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $count;
+            $count++;
+        }
+
         $user->invitation()->create([
-            'slug' => Str::slug($validated['username']) . '-' . Str::random(6),
+            'slug' => $slug,
             'theme_id' => $validated['theme_id'],
             'status' => 'trial',
             'trial_habis_at' => now()->addDay(),

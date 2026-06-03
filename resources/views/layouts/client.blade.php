@@ -10,12 +10,12 @@
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+    <link href="{{ asset('assets/css/bunny-figtree.css') }}" rel="stylesheet" />
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
 </head>
 <body class="font-sans antialiased text-gray-900 bg-brand-bg flex h-screen overflow-hidden">
     

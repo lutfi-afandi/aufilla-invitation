@@ -3,6 +3,9 @@
 @section('title', 'Pengaturan Tema - Aufilla Invitation')
 
 @section('content')
+@php
+    $access = $invitation->getFeatureAccess();
+@endphp
 <div class="max-w-7xl mx-auto w-full">
     
     <div class="bg-white border border-brand-accent/15 rounded-[20px] shadow-[0_10px_30px_rgba(10,34,20,0.03)] overflow-hidden">
@@ -36,22 +39,32 @@
                                 
                                 <div>
                                     <label class="block font-medium text-brand-dark mb-2 text-sm">Status Undangan</label>
-                                    <div class="w-full bg-gray-100 border-1.5 border-brand-accent/30 rounded-xl px-4 py-2.5 text-sm text-gray-600 font-medium cursor-not-allowed uppercase">
-                                        {{ $invitation->status }}
+                                    <div class="w-full bg-gray-100 border-1.5 border-brand-accent/30 rounded-xl px-4 py-2.5 text-sm text-gray-600 font-medium cursor-not-allowed uppercase flex justify-between items-center">
+                                        <span>{{ $invitation->status }}</span>
+                                        @if($invitation->status === 'trial' && $invitation->trial_habis_at && $invitation->trial_habis_at->isPast())
+                                            <span class="text-xs font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded">EXPIRED</span>
+                                        @endif
                                     </div>
                                     <p class="text-xs text-gray-500 mt-1">*Status mutlak hak akses Admin.</p>
                                 </div>
                                 
                                 <div>
                                     <label class="block font-medium text-brand-dark mb-2 text-sm">Musik Latar (MP3/WAV)</label>
-                                    <div class="flex items-center gap-3 mb-2">
-                                        <audio id="audio-preview" controls class="w-full h-10" style="border-radius: 0.75rem;">
-                                            <source id="audio-source" src="{{ $invitation->music_url }}" type="audio/mpeg">
-                                            Browser Anda tidak mendukung elemen audio.
-                                        </audio>
-                                    </div>
-                                    <input type="file" id="music_file" name="music_file" accept=".mp3,.wav,audio/*" class="w-full bg-white border-1.5 border-brand-accent/30 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/20 transition-all outline-none">
-                                    <p class="text-[11px] text-gray-500 mt-1">Kosongkan jika tidak ingin mengganti lagu. (Maks 10MB)</p>
+                                    @if($access['can_music'])
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <audio id="audio-preview" controls class="w-full h-10" style="border-radius: 0.75rem;">
+                                                <source id="audio-source" src="{{ $invitation->music_url }}" type="audio/mpeg">
+                                                Browser Anda tidak mendukung elemen audio.
+                                            </audio>
+                                        </div>
+                                        <input type="file" id="music_file" name="music_file" accept=".mp3,.wav,audio/*" class="w-full bg-white border-1.5 border-brand-accent/30 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/20 transition-all outline-none">
+                                        <p class="text-[11px] text-gray-500 mt-1">Kosongkan jika tidak ingin mengganti lagu. (Maks 10MB)</p>
+                                    @else
+                                        <div class="w-full bg-gray-100 border-1.5 border-brand-accent/30 rounded-xl px-4 py-3 text-sm text-gray-500 flex items-center gap-2 cursor-not-allowed">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                            Tidak tersedia di paket Anda
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -80,15 +93,22 @@
                                 </label>
 
                                 <!-- Toggle Cerita Cinta -->
-                                <label class="flex items-center justify-between cursor-pointer p-3 hover:bg-brand-accent/5 rounded-xl transition-colors">
+                                <label class="flex items-center justify-between {{ $access['can_cerita'] ? 'cursor-pointer hover:bg-brand-accent/5' : 'cursor-not-allowed opacity-60' }} p-3 rounded-xl transition-colors">
                                     <div>
-                                        <span class="block font-semibold text-brand-dark text-sm">Cerita Cinta</span>
-                                        <span class="block text-xs text-gray-500">Tampilkan linimasa perjalanan cinta Anda.</span>
+                                        <span class="block font-semibold text-brand-dark text-sm flex items-center gap-2">
+                                            Cerita Cinta
+                                            @if(!$access['can_cerita'])
+                                                <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                            @endif
+                                        </span>
+                                        <span class="block text-xs text-gray-500">
+                                            {{ $access['can_cerita'] ? 'Tampilkan linimasa perjalanan cinta Anda.' : 'Tidak tersedia di paket Anda.' }}
+                                        </span>
                                     </div>
                                     <div class="relative">
-                                        <input type="checkbox" name="is_cerita_aktif" class="sr-only" {{ $invitation->is_cerita_aktif ? 'checked' : '' }}>
-                                        <div class="block bg-gray-200 w-12 h-7 rounded-full transition-colors duration-300 toggle-bg"></div>
-                                        <div class="dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition transform duration-300"></div>
+                                        <input type="checkbox" name="is_cerita_aktif" class="sr-only" {{ $invitation->is_cerita_aktif ? 'checked' : '' }} {{ !$access['can_cerita'] ? 'disabled' : '' }}>
+                                        <div class="block {{ $access['can_cerita'] ? 'bg-gray-200' : 'bg-gray-100 border border-gray-200' }} w-12 h-7 rounded-full transition-colors duration-300 toggle-bg"></div>
+                                        <div class="dot absolute left-1 top-1 {{ $access['can_cerita'] ? 'bg-white' : 'bg-gray-300' }} w-5 h-5 rounded-full transition transform duration-300"></div>
                                     </div>
                                 </label>
 

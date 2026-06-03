@@ -26,9 +26,11 @@
                 <thead>
                     <tr class="bg-slate-50 border-b border-slate-200">
                         <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Username</th>
+                        <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Paket</th>
                         <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Tema</th>
                         <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Status</th>
                         <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Terdaftar</th>
+                        <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Expired</th>
                         <th class="text-center px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Aksi</th>
                     </tr>
                 </thead>
@@ -37,7 +39,7 @@
                         @include('admin.clients.partials.row', ['client' => $client])
                     @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-16 text-center text-slate-400">
+                        <td colspan="7" class="px-6 py-16 text-center text-slate-400">
                             <svg class="w-12 h-12 mx-auto mb-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                             Belum ada klien terdaftar.
                         </td>
@@ -106,9 +108,10 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Status <span class="text-red-500">*</span></label>
                     <select name="status" id="edit-status" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-admin-accent/30 focus:border-admin-accent transition-all">
+                        <option value="draft">Draft</option>
                         <option value="trial">Trial</option>
-                        <option value="active">Active</option>
-                        <option value="expired">Expired</option>
+                        <option value="aktif">Aktif</option>
+                        <option value="nonaktif">Nonaktif</option>
                     </select>
                 </div>
                 <div>
@@ -119,6 +122,15 @@
                         <svg class="w-4 h-4 text-slate-400 group-hover:text-admin-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                 </div>
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1.5">Paket</label>
+                <select name="package_id" id="edit-package" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-admin-accent/30 focus:border-admin-accent transition-all">
+                    <option value="">-- Trial / Belum Memiliki Paket --</option>
+                    @foreach($packages as $pkg)
+                        <option value="{{ $pkg->id }}">{{ $pkg->name }}</option>
+                    @endforeach
+                </select>
             </div>
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1.5">Password Baru <span class="text-slate-400 font-normal">(opsional)</span></label>
@@ -200,6 +212,7 @@ function openEditModal(client) {
     
     if (client.invitation) {
         $('#edit-status').val(client.invitation.status);
+        $('#edit-package').val(client.invitation.package_id || '');
         if (client.invitation.theme) {
             $('#edit-theme-id').val(client.invitation.theme_id);
             $('#edit-theme-name').text(client.invitation.theme.name).removeClass('text-slate-600').addClass('text-slate-800 font-bold');
@@ -209,6 +222,7 @@ function openEditModal(client) {
         }
     } else {
         $('#edit-status').val('trial');
+        $('#edit-package').val('');
         $('#edit-theme-id').val('');
         $('#edit-theme-name').text('Belum memilih tema').removeClass('text-slate-800 font-bold').addClass('text-slate-600');
     }

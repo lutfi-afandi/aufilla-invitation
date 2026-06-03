@@ -25,10 +25,11 @@ class ClientController extends Controller
             });
         }
 
-        $clients = $query->latest()->paginate(15)->withQueryString();
-        $themes  = Theme::where('is_active', true)->get();
+        $clients  = $query->latest()->paginate(15)->withQueryString();
+        $themes   = Theme::where('is_active', true)->get();
+        $packages = \App\Models\Package::all();
 
-        return view('admin.clients.index', compact('clients', 'themes'));
+        return view('admin.clients.index', compact('clients', 'themes', 'packages'));
     }
 
     public function store(Request $request)
@@ -47,8 +48,16 @@ class ClientController extends Controller
             'role'     => 'client',
         ]);
 
+        $baseSlug = Str::slug($validated['username']);
+        $slug = $baseSlug;
+        $count = 1;
+        while (\App\Models\Invitation::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $count;
+            $count++;
+        }
+
         $user->invitation()->create([
-            'slug'           => Str::slug($validated['username']) . '-' . Str::random(6),
+            'slug'           => $slug,
             'theme_id'       => $validated['theme_id'],
             'status'         => 'trial',
             'trial_habis_at' => now()->addDay(),
@@ -80,11 +89,12 @@ class ClientController extends Controller
         $client = User::where('role', 'client')->findOrFail($id);
 
         $validated = $request->validate([
-            'username' => ['required', 'string', 'max:50', Rule::unique('users', 'username')->ignore($client->id)],
-            'email'    => ['nullable', 'email', 'max:100', Rule::unique('users', 'email')->ignore($client->id)],
-            'password' => 'nullable|string|min:6|max:50',
-            'status'   => 'required|in:trial,active,expired',
-            'theme_id' => 'required|exists:themes,id',
+            'username'   => ['required', 'string', 'max:50', Rule::unique('users', 'username')->ignore($client->id)],
+            'email'      => ['nullable', 'email', 'max:100', Rule::unique('users', 'email')->ignore($client->id)],
+            'password'   => 'nullable|string|min:6|max:50',
+            'status'     => 'required|in:draft,trial,aktif,nonaktif',
+            'theme_id'   => 'required|exists:themes,id',
+            'package_id' => 'nullable|exists:packages,id',
         ]);
 
         $client->username = $validated['username'];
@@ -97,11 +107,14 @@ class ClientController extends Controller
         if ($invitation = $client->invitation) {
             $invitation->status = $validated['status'];
             $invitation->theme_id = $validated['theme_id'];
+            if (array_key_exists('package_id', $validated)) {
+                $invitation->package_id = $validated['package_id'];
+            }
             
-            if ($validated['status'] === 'active') {
+            if ($validated['status'] === 'aktif') {
                 $invitation->trial_habis_at = null;
             } elseif ($validated['status'] === 'trial' && !$invitation->trial_habis_at) {
-                $invitation->trial_habis_at = now()->addDay();
+                $invitation->trial_habis_at = $invitation->created_at->copy()->addDay();
             }
             $invitation->save();
         }
@@ -134,7 +147,7 @@ class ClientController extends Controller
         if ($validated['status'] === 'aktif') {
             $invitation->trial_habis_at = null;
         } elseif ($validated['status'] === 'trial') {
-            $invitation->trial_habis_at = now()->addDays(3);
+            $invitation->trial_habis_at = $invitation->created_at->copy()->addDay();
         }
 
         if (!empty($validated['theme_id'])) {

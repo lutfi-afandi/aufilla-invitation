@@ -9,16 +9,16 @@
             'nama_ayah_wanita' => $invitation->wanita_ayah ?? 'Bapak Wanita',
             'nama_ibu_wanita' => $invitation->wanita_ibu ?? 'Ibu Wanita',
             'instagram_wanita' => null,
-            'foto_wanita' => asset('themes/aufilla-green/images/bride.png'),
+            'foto_wanita' => $invitation->wanita_foto ? asset('storage/' . $invitation->wanita_foto) : asset('assets/default/default_wanita.jpg'),
 
             'nama_mempelai_pria' => $invitation->pria_nama_lengkap ?? 'Nama Pria Lengkap',
             'nama_panggilan_pria' => $invitation->pria_nama ?? 'Pria',
             'nama_ayah_pria' => $invitation->pria_ayah ?? 'Bapak Pria',
             'nama_ibu_pria' => $invitation->pria_ibu ?? 'Ibu Pria',
             'instagram_pria' => null,
-            'foto_pria' => asset('themes/aufilla-green/images/groom.png'),
+            'foto_pria' => $invitation->pria_foto ? asset('storage/' . $invitation->pria_foto) : asset('assets/default/default_pria.jpg'),
             
-            'foto_hero' => $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('themes/aufilla-green/images/wedding_bg.png'),
+            'foto_hero' => $invitation->pasangan_foto ? asset('storage/' . $invitation->pasangan_foto) : asset('assets/default/default-pasangan.jpg'),
 
             'tanggal_pernikahan' => $akad && $akad->tgl_acara ? \Carbon\Carbon::parse($akad->tgl_acara) : now(),
             'lokasi_akad' => $akad->lokasi ?? 'Lokasi Akad',
@@ -27,7 +27,7 @@
             'alamat_resepsi' => $resepsi->alamat ?? 'Alamat lengkap resepsi',
             'google_maps_url' => $akad->gmaps_link ?? '#',
 
-            'musik_background' => $invitation->music_url,
+            'musik_background' => $invitation->music_file ? asset('storage/' . $invitation->music_file) : asset('assets/default/default-music.mp3'),
 
             'rekening_1_nama' => null,
             'rekening_1_nomor' => null,
@@ -72,7 +72,7 @@
     <link href="{{ asset('themes/aufilla-green/css/google-fonts.css') }}" rel="stylesheet" />
     <link href="{{ asset('themes/aufilla-green/css/aos.css') }}" rel="stylesheet" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;700&display=swap');
+        @import url('{{ asset("assets/css/google-theme.css") }}');
 
         body {
             font-family: 'Inter', 'DM Sans', sans-serif;
@@ -1463,7 +1463,7 @@
     </main>
 
     <script src="{{ asset('themes/aufilla-green/js/aos.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
     <script>
         // Initialize AOS
         AOS.init({
