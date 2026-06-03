@@ -16,12 +16,12 @@ export default {
             },
             colors: {
                 brand: {
-                    dark: '#0a2214',
-                    medium: '#143521',
-                    light: '#235235',
-                    accent: '#c5a880',
-                    'accent-dark': '#b39265',
-                    bg: '#fdfbf7',
+                    dark: '#154734', // Elegant Hunter Green (less black)
+                    medium: '#1E6348', // Medium rich green
+                    light: '#288761', // Lighter accent green
+                    accent: '#D4AF37', // Richer metallic gold
+                    'accent-dark': '#AA8C2C', // Deeper gold
+                    bg: '#F5F0E6', // Warmer, richer beige/ivory
                 },
                 admin: {
                     dark: '#0f172a',

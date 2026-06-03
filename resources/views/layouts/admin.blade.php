@@ -18,6 +18,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="font-sans antialiased text-gray-900 bg-admin-bg flex h-screen overflow-hidden" style="font-family: 'Inter', sans-serif;">
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 z-20 lg:hidden hidden backdrop-blur-sm transition-all" onclick="toggleSidebar()"></div>
     
     @include('partials.admin_sidebar')
 
@@ -37,5 +39,11 @@
     </div>
 
     @stack('scripts')
+    <script>
+        function toggleSidebar() {
+            $('#admin-sidebar').toggleClass('-translate-x-full');
+            $('#sidebar-backdrop').toggleClass('hidden');
+        }
+    </script>
 </body>
 </html>

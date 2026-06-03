@@ -7,12 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Invitation extends Model
 {
     protected $fillable = [
-        'user_id', 'theme_id', 'slug', 'status', 'trial_habis_at',
+        'user_id', 'theme_id', 'package_id', 'slug', 'status', 'trial_habis_at',
         'pria_nama', 'pria_nama_lengkap', 'pria_ayah', 'pria_ibu',
         'wanita_nama', 'wanita_nama_lengkap', 'wanita_ayah', 'wanita_ibu',
         'cover_img', 'music_file', 'is_galeri_aktif', 'is_cerita_aktif', 'is_kado_aktif', 'alamat_kado',
         'pria_foto', 'wanita_foto'
     ];
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }
 
     protected $casts = [
         'trial_habis_at' => 'datetime',

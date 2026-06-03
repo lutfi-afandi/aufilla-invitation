@@ -51,7 +51,7 @@ class ClientController extends Controller
             'slug'           => Str::slug($validated['username']) . '-' . Str::random(6),
             'theme_id'       => $validated['theme_id'],
             'status'         => 'trial',
-            'trial_habis_at' => now()->addDays(3),
+            'trial_habis_at' => now()->addDay(),
         ]);
 
         $user->load('invitation.theme');
@@ -101,7 +101,7 @@ class ClientController extends Controller
             if ($validated['status'] === 'active') {
                 $invitation->trial_habis_at = null;
             } elseif ($validated['status'] === 'trial' && !$invitation->trial_habis_at) {
-                $invitation->trial_habis_at = now()->addDays(3);
+                $invitation->trial_habis_at = now()->addDay();
             }
             $invitation->save();
         }

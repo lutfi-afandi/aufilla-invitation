@@ -1,7 +1,7 @@
 <!-- Admin Top Navbar -->
 <header class="h-[70px] bg-white border-b border-slate-200/80 px-8 flex items-center justify-between shadow-sm z-20">
     <!-- Mobile Menu Toggle -->
-    <button class="lg:hidden text-admin-dark hover:text-admin-accent transition-colors" onclick="$('#admin-sidebar').toggleClass('-translate-x-full');">
+    <button class="lg:hidden text-admin-dark hover:text-admin-accent transition-colors" onclick="toggleSidebar()">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
         </svg>
