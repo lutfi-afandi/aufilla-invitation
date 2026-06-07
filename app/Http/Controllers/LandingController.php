@@ -16,7 +16,7 @@ class LandingController extends Controller
     {
         $themes = Theme::withCount('invitations')->where('is_active', true)->take(6)->get();
         $packages = Package::orderBy('price', 'asc')->get();
-        
+
         return view('landing.index', compact('themes', 'packages'));
     }
 
@@ -48,6 +48,7 @@ class LandingController extends Controller
             'slug' => $slug,
             'theme_id' => $validated['theme_id'],
             'status' => 'trial',
+            'package_id' => 3,
             'trial_habis_at' => now()->addDay(),
         ]);
 

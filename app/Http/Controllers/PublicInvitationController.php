@@ -23,6 +23,11 @@ class PublicInvitationController extends Controller
             }
         }
 
+        // Cek apakah data pengantin sudah lengkap
+        if (!$invitation->isDataPengantinComplete()) {
+            abort(403, 'Undangan belum bisa diakses karena Data Pengantin belum lengkap. Jika Anda pemilik undangan, silakan lengkapi profil mempelai melalui Panel Klien.');
+        }
+
         // If trial expired, blocked completely for everyone
         if ($invitation->status === 'trial' && $invitation->trial_habis_at && $invitation->trial_habis_at->isPast()) {
             abort(403, 'Masa trial undangan ini telah habis. Silakan hubungi Admin untuk aktivasi.');
@@ -36,8 +41,14 @@ class PublicInvitationController extends Controller
         $akad = $invitation->acaras->where('tipe_acara', 'akad')->first();
         $resepsi = $invitation->acaras->where('tipe_acara', 'resepsi')->first();
         $wishes = $invitation->ucapans()->orderBy('created_at', 'desc')->get(); // Fetch wishes
-        $galeris = $invitation->galeris()->orderBy('created_at', 'desc')->get();
-        $ceritas = $invitation->ceritas()->orderBy('tanggal', 'asc')->get();
+        $maxGaleris = \App\Helpers\PackageHelper::getMaxGalleryPhotos($invitation);
+        $galeris = $invitation->galeris()->orderBy('created_at', 'desc')->limit($maxGaleris)->get();
+        
+        if (\App\Helpers\PackageHelper::canAccessLoveStory($invitation)) {
+            $ceritas = $invitation->ceritas()->orderBy('created_at', 'asc')->get();
+        } else {
+            $ceritas = collect([]);
+        }
         $kados = $invitation->kados()->orderBy('created_at', 'asc')->get();
 
         // Dynamically load the view based on the theme code
@@ -130,7 +141,7 @@ class PublicInvitationController extends Controller
         $akad = new \App\Models\Acara([
             'tipe_acara' => 'akad',
             'nama_acara' => 'Akad Nikah',
-            'tanggal' => now()->addDays(14)->format('Y-m-d'),
+            'tgl_acara' => now()->addDays(14)->format('Y-m-d'),
             'waktu_mulai' => '08:00',
             'waktu_selesai' => '10:00',
             'tempat' => 'Masjid Raya Verona',
@@ -140,7 +151,7 @@ class PublicInvitationController extends Controller
         $resepsi = new \App\Models\Acara([
             'tipe_acara' => 'resepsi',
             'nama_acara' => 'Resepsi Pernikahan',
-            'tanggal' => now()->addDays(14)->format('Y-m-d'),
+            'tgl_acara' => now()->addDays(14)->format('Y-m-d'),
             'waktu_mulai' => '11:00',
             'waktu_selesai' => '14:00',
             'tempat' => 'Gedung Serbaguna',
@@ -163,8 +174,8 @@ class PublicInvitationController extends Controller
             new \App\Models\Galeri(['image_path' => 'assets/default/default_wanita2.jpg']),
         ]);
         $ceritas = collect([
-            new \App\Models\Cerita(['judul' => 'Pertama Bertemu', 'tanggal' => '2023-01-10', 'deskripsi' => 'Kami pertama kali bertemu di sebuah cafe.']),
-            new \App\Models\Cerita(['judul' => 'Lamaran', 'tanggal' => '2024-05-20', 'deskripsi' => 'Dia melamar saya di pantai.'])
+            new \App\Models\Cerita(['judul' => 'Pertama Bertemu', 'tanggal' => '2023-01-10', 'isi_cerita' => 'Kami pertama kali bertemu di sebuah cafe.']),
+            new \App\Models\Cerita(['judul' => 'Lamaran', 'tanggal' => '2024-05-20', 'isi_cerita' => 'Dia melamar saya di pantai.'])
         ]);
 
         $kados = collect([

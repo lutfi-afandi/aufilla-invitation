@@ -48,7 +48,7 @@ class Invitation extends Model
 
     public function ceritas()
     {
-        return $this->hasMany(Cerita::class)->orderBy('tanggal', 'asc');
+        return $this->hasMany(Cerita::class);
     }
 
     public function getMusicUrlAttribute()
@@ -106,5 +106,36 @@ class Invitation extends Model
         }
 
         return $access;
+    }
+
+    /**
+     * Mengecek apakah data pengantin sudah lengkap (nama, ortu, foto).
+     */
+    public function isDataPengantinComplete(): bool
+    {
+        return !empty($this->pria_nama) && $this->pria_nama !== 'Pria' &&
+               !empty($this->pria_nama_lengkap) &&
+               !empty($this->pria_ayah) &&
+               !empty($this->pria_ibu) &&
+               !empty($this->pria_foto) &&
+               !empty($this->wanita_nama) && $this->wanita_nama !== 'Wanita' &&
+               !empty($this->wanita_nama_lengkap) &&
+               !empty($this->wanita_ayah) &&
+               !empty($this->wanita_ibu) &&
+               !empty($this->wanita_foto);
+    }
+
+    /**
+     * Mengecek apakah undangan sudah kedaluwarsa.
+     */
+    public function isExpired(): bool
+    {
+        if ($this->status === 'expired' || $this->status === 'nonaktif') {
+            return true;
+        }
+        if ($this->status === 'trial' && $this->trial_habis_at && $this->trial_habis_at->isPast()) {
+            return true;
+        }
+        return false;
     }
 }

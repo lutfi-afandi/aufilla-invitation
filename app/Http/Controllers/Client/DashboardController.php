@@ -67,7 +67,7 @@ class DashboardController extends Controller
     public function cerita()
     {
         $invitation = $this->getInvitation();
-        $ceritas = $invitation->ceritas()->orderBy('tanggal', 'asc')->get();
+        $ceritas = $invitation->ceritas()->orderBy('created_at', 'asc')->get();
         return view('client.cerita', compact('invitation', 'ceritas'));
     }
 

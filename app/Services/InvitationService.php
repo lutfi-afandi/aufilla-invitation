@@ -38,9 +38,14 @@ class InvitationService
                 $count++;
             }
 
+            // Cari ID Paket VIP untuk Trial
+            $vipPackage = \App\Models\Package::where('name', 'VIP')->first();
+            $packageId = $vipPackage ? $vipPackage->id : null;
+
             $invitation = Invitation::create([
                 'user_id' => $user->id,
                 'theme_id' => $data['theme_id'] ?? null,
+                'package_id' => $packageId,
                 'slug' => $slug,
                 'status' => 'trial',
                 'trial_habis_at' => Carbon::now()->addDay(),

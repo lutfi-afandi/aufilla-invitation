@@ -11,31 +11,48 @@
         <!-- Card Header -->
         <div class="bg-gradient-to-r from-brand-dark/5 to-transparent border-b border-brand-accent/15 px-7 py-5 flex justify-between items-center">
             <h3 class="text-[1.15rem] font-semibold text-brand-dark" style="font-family: 'Playfair Display', serif;">Galeri Pre-Wedding</h3>
-            <span class="text-xs bg-brand-light/20 text-brand-dark px-3 py-1 rounded-full font-medium">{{ $galeris->count() }} Foto</span>
+            <span id="photo-counter" class="text-xs bg-brand-light/20 text-brand-dark px-3 py-1 rounded-full font-medium">{{ $galeris->count() }} / {{ \App\Helpers\PackageHelper::getMaxGalleryPhotos(Auth::user()->invitation) }} Foto</span>
         </div>
         
         <!-- Card Body -->
         <div class="p-7">
             
             <!-- Upload Area -->
-            <div class="mb-8 bg-brand-bg/30 border-2 border-dashed border-brand-accent/40 rounded-2xl p-8 text-center transition-all hover:border-brand-accent/70 hover:bg-brand-bg/60" id="drop-zone">
-                <form id="form-upload-galeri" enctype="multipart/form-data">
-                    @csrf
-                    <input type="file" id="file-upload" name="image" class="hidden" accept="image/jpeg, image/png, image/jpg">
-                    
-                    <div class="cursor-pointer" onclick="document.getElementById('file-upload').click()">
-                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-brand-accent">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <!-- Upload Area -->
+            <div id="upload-wrapper" class="{{ \App\Helpers\PackageHelper::canAddGalleryPhoto(Auth::user()->invitation) ? '' : 'hidden' }}">
+                <div class="mb-8 bg-brand-bg/30 border-2 border-dashed border-brand-accent/40 rounded-2xl p-8 text-center transition-all hover:border-brand-accent/70 hover:bg-brand-bg/60" id="drop-zone">
+                    <form id="form-upload-galeri" enctype="multipart/form-data">
+                        @csrf
+                        <input type="file" id="file-upload" name="image" class="hidden" accept="image/jpeg, image/png, image/jpg">
+                        
+                        <div class="cursor-pointer" onclick="document.getElementById('file-upload').click()">
+                            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-brand-accent">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <h4 class="font-semibold text-brand-dark text-lg mb-1">Unggah Foto Baru</h4>
+                            <p class="text-sm text-gray-500 mb-4">Klik area ini untuk memilih foto. (Maks 2MB, Format: JPG, PNG)</p>
                         </div>
-                        <h4 class="font-semibold text-brand-dark text-lg mb-1">Unggah Foto Baru</h4>
-                        <p class="text-sm text-gray-500 mb-4">Klik area ini untuk memilih foto. (Maks 2MB, Format: JPG, PNG)</p>
-                    </div>
-                </form>
+                    </form>
 
-                <!-- Loading State -->
-                <div id="upload-loading" class="hidden flex-col items-center justify-center py-4">
-                    <svg class="animate-spin h-8 w-8 text-brand-accent mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    <p class="text-sm font-medium text-brand-dark">Mengunggah Foto...</p>
+                    <!-- Loading State -->
+                    <div id="upload-loading" class="hidden flex-col items-center justify-center py-4">
+                        <svg class="animate-spin h-8 w-8 text-brand-accent mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        <p class="text-sm font-medium text-brand-dark">Mengunggah Foto...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="limit-wrapper" class="{{ \App\Helpers\PackageHelper::canAddGalleryPhoto(Auth::user()->invitation) ? 'hidden' : '' }}">
+                <div class="mb-8 bg-red-50 border border-red-200 rounded-2xl p-6 text-center shadow-sm">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3 text-red-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <h4 class="font-semibold text-red-800 text-lg mb-1">Kuota Galeri Penuh</h4>
+                    <p class="text-sm text-red-600 mb-4">Anda telah mencapai batas maksimal <strong>{{ \App\Helpers\PackageHelper::getMaxGalleryPhotos(Auth::user()->invitation) }} foto</strong> untuk paket Anda saat ini.</p>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Admin%2C%20saya%20ingin%20upgrade%20paket%20undangan%20saya." target="_blank" class="inline-flex items-center gap-2 bg-red-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-red-700 transition-colors shadow-md">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        Upgrade Paket Sekarang
+                    </a>
                 </div>
             </div>
 
@@ -113,7 +130,7 @@
                 `;
                 $('#gallery-grid').prepend(newCard);
                 
-                // Update counter logic could be added here
+                checkPhotoLimit();
             },
             error: function(xhr) {
                 $('#file-upload').val('');
@@ -121,8 +138,12 @@
                 $('#form-upload-galeri > div').removeClass('hidden');
                 
                 let errMsg = 'Gagal mengunggah foto.';
-                if(xhr.responseJSON && xhr.responseJSON.errors) {
-                    errMsg = Object.values(xhr.responseJSON.errors)[0][0];
+                if(xhr.responseJSON) {
+                    if (xhr.responseJSON.error) {
+                        errMsg = xhr.responseJSON.error;
+                    } else if (xhr.responseJSON.errors) {
+                        errMsg = Object.values(xhr.responseJSON.errors)[0][0];
+                    }
                 }
                 Swal.fire({ icon: 'error', title: 'Oops...', text: errMsg });
             }
@@ -148,7 +169,10 @@
                         _token: "{{ csrf_token() }}"
                     },
                     success: function(response) {
-                        $('#galeri-' + id).fadeOut(300, function() { $(this).remove(); });
+                        $('#galeri-' + id).fadeOut(300, function() { 
+                            $(this).remove(); 
+                            checkPhotoLimit();
+                        });
                         Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Foto dihapus', showConfirmButton: false, timer: 2000 });
                     },
                     error: function(xhr) {
@@ -157,6 +181,21 @@
                 });
             }
         });
+    }
+
+    function checkPhotoLimit() {
+        const maxPhotos = {{ \App\Helpers\PackageHelper::getMaxGalleryPhotos(Auth::user()->invitation) }};
+        const currentCount = $('#gallery-grid > div.relative').length;
+        
+        $('#photo-counter').text(currentCount + ' / ' + maxPhotos + ' Foto');
+
+        if (currentCount >= maxPhotos) {
+            $('#upload-wrapper').addClass('hidden');
+            $('#limit-wrapper').removeClass('hidden');
+        } else {
+            $('#limit-wrapper').addClass('hidden');
+            $('#upload-wrapper').removeClass('hidden');
+        }
     }
 </script>
 @endpush

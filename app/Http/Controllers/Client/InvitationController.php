@@ -133,19 +133,23 @@ class InvitationController extends Controller
             return response()->json(['error' => 'Data undangan tidak ditemukan.'], 404);
         }
 
-        $access = $invitation->getFeatureAccess();
+        $canCerita = \App\Helpers\PackageHelper::canAccessLoveStory($invitation);
+        $canMusic = \App\Helpers\PackageHelper::canAccessCustomMusic($invitation);
 
-        if ($request->has('is_cerita_aktif') && !$access['can_cerita']) {
+        if ($request->has('is_cerita_aktif') && !$canCerita) {
             return response()->json(['error' => 'Paket Anda tidak mendukung fitur Cerita Cinta.'], 403);
         }
 
-        if ($request->hasFile('music_file') && !$access['can_music']) {
+        if ($request->hasFile('music_file') && !$canMusic) {
+            if (\App\Helpers\PackageHelper::isTrial($invitation)) {
+                return response()->json(['error' => 'Anda tidak dapat mengubah musik latar dalam mode Trial.'], 403);
+            }
             return response()->json(['error' => 'Paket Anda tidak mendukung kustomisasi musik latar.'], 403);
         }
 
         $updateData = [
             'is_galeri_aktif' => $request->has('is_galeri_aktif'),
-            'is_cerita_aktif' => $access['can_cerita'] ? $request->has('is_cerita_aktif') : false,
+            'is_cerita_aktif' => $canCerita ? $request->has('is_cerita_aktif') : false,
             'is_kado_aktif' => $request->has('is_kado_aktif'),
         ];
 

@@ -18,7 +18,7 @@
             'instagram_pria' => null,
             'foto_pria' => $invitation->pria_foto ? asset('storage/' . $invitation->pria_foto) : asset('assets/default/default_pria.jpg'),
             
-            'foto_hero' => $invitation->pasangan_foto ? asset('storage/' . $invitation->pasangan_foto) : asset('assets/default/default-pasangan.jpg'),
+            'foto_hero' => $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg'),
 
             'tanggal_pernikahan' => $akad && $akad->tgl_acara ? \Carbon\Carbon::parse($akad->tgl_acara) : now(),
             'lokasi_akad' => $akad->lokasi ?? 'Lokasi Akad',
@@ -859,7 +859,7 @@
                             </h2>
                             <p class="text-xs uppercase tracking-[0.22em] text-[#e5c088] mt-2 font-semibold"
                                 style="letter-spacing: 0.22em; margin-top: 0.5rem;">
-                                {{ $akad ? \Carbon\Carbon::parse($akad->tanggal)->format('d F Y') : '' }}
+                                {{ $akad ? \Carbon\Carbon::parse($akad->tgl_acara)->format('d F Y') : '' }}
                             </p>
                         </div>
                     </div>
@@ -872,7 +872,7 @@
                     style="width: 180px; margin-top: 1rem; margin-bottom: 1rem;">&#10022;</div>
                 <p class="text-xs md:text-sm font-semibold text-[#c5a880] tracking-[0.3em] font-body mb-6"
                     style="letter-spacing: 0.3em; margin-bottom: 1.5rem;">
-                    {{ $akad ? strtoupper(\Carbon\Carbon::parse($akad->tanggal)->translatedFormat('l, d F Y')) : '' }}
+                    {{ $akad ? strtoupper(\Carbon\Carbon::parse($akad->tgl_acara)->translatedFormat('l, d F Y')) : '' }}
                 </p>
                 <div class="max-w-[500px] mx-auto py-4 px-6 rounded-2xl glass-card border border-[#c5a880]/20 shadow-sm"
                     style="max-w: 500px; padding: 1rem 1.5rem; border-radius: 16px;">

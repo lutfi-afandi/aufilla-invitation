@@ -12,15 +12,22 @@
     </td>
     <td class="px-6 py-4 whitespace-nowrap">
         @if($client->invitation && $client->invitation->package)
-        <span class="text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
-            {{ $client->invitation->package->name }}
-        </span>
+            <div class="flex flex-col gap-1">
+                <span class="text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 w-fit">
+                    {{ $client->invitation->package->name }}
+                </span>
+                @if($client->invitation->status === 'trial')
+                <span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 w-fit">
+                    Trial Limit
+                </span>
+                @endif
+            </div>
         @elseif($client->invitation && $client->invitation->status === 'trial')
-        <span class="text-xs font-bold text-amber-700 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200">
-            Trial
-        </span>
+            <span class="text-xs font-bold text-amber-700 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200">
+                Trial
+            </span>
         @else
-        <span class="text-xs text-slate-400">—</span>
+            <span class="text-xs text-slate-400">—</span>
         @endif
     </td>
     <td class="px-6 py-4 whitespace-nowrap">

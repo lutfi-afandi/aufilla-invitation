@@ -11,10 +11,17 @@
         <!-- Card Header -->
         <div class="bg-gradient-to-r from-brand-dark/5 to-transparent border-b border-brand-accent/15 px-7 py-5 flex justify-between items-center">
             <h3 class="text-[1.15rem] font-semibold text-brand-dark" style="font-family: 'Playfair Display', serif;">Linimasa Cerita Cinta</h3>
+            @if(\App\Helpers\PackageHelper::canAccessLoveStory(Auth::user()->invitation))
             <button onclick="$('#add-cerita-modal').removeClass('hidden')" class="bg-brand-accent hover:bg-brand-accent-dark text-white text-sm font-semibold py-1.5 px-4 rounded-xl shadow-sm transition-colors flex items-center gap-1.5">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                 Tambah Cerita
             </button>
+            @else
+            <span class="text-xs bg-red-100 text-red-600 px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1 border border-red-200">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                Fitur Terkunci
+            </span>
+            @endif
         </div>
         
         <!-- Card Body -->

@@ -39,6 +39,11 @@ class TamuController extends Controller
 
         $invitation = Auth::user()->invitation;
         
+        if (!\App\Helpers\PackageHelper::canAddGuest($invitation)) {
+            $max = \App\Helpers\PackageHelper::getMaxGuests($invitation);
+            return response()->json(['error' => 'Anda telah mencapai batas maksimal tamu untuk paket ini ('.$max.' tamu).'], 403);
+        }
+        
         $tamu = $invitation->tamus()->create([
             'nama_tamu' => $request->nama_tamu,
             'no_wa' => $this->sanitizeWaNumber($request->no_wa),
@@ -109,6 +114,11 @@ class TamuController extends Controller
         $collection = (new \Rap2hpoutre\FastExcel\FastExcel)->import($request->file('excel_file'));
         
         foreach ($collection as $row) {
+            if (!\App\Helpers\PackageHelper::canAddGuest($invitation)) {
+                // Berhenti mengimpor jika limit tercapai
+                break;
+            }
+
             // Support both exact name and variation
             $nama_tamu = $row['Nama Tamu'] ?? $row['nama tamu'] ?? $row['nama_tamu'] ?? '';
             $no_wa = $row['No WhatsApp'] ?? $row['no whatsapp'] ?? $row['no_wa'] ?? '';

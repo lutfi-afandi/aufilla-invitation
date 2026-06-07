@@ -47,38 +47,41 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Client Routes
     Route::middleware(['role:client'])->prefix('client')->name('client.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
-        Route::get('/pengantin', [\App\Http\Controllers\Client\DashboardController::class, 'pengantin'])->name('pengantin');
-        Route::get('/acara', [\App\Http\Controllers\Client\DashboardController::class, 'acara'])->name('acara');
         Route::get('/tamu', [\App\Http\Controllers\Client\DashboardController::class, 'tamu'])->name('tamu');
-        Route::get('/pengaturan', [\App\Http\Controllers\Client\DashboardController::class, 'pengaturan'])->name('pengaturan');
-        Route::get('/galeri', [\App\Http\Controllers\Client\DashboardController::class, 'galeri'])->name('galeri');
-        Route::get('/cerita', [\App\Http\Controllers\Client\DashboardController::class, 'cerita'])->name('cerita');
-        Route::get('/kado', [\App\Http\Controllers\Client\DashboardController::class, 'kado'])->name('kado');
-
-        // Form Data endpoints (AJAX Submissions)
-        Route::post('/mempelai', [\App\Http\Controllers\Client\InvitationController::class, 'updateMempelai'])->name('mempelai.update');
-        Route::post('/acara', [\App\Http\Controllers\Client\InvitationController::class, 'updateAcara'])->name('acara.update');
-        Route::post('/pengaturan', [\App\Http\Controllers\Client\InvitationController::class, 'updateSettings'])->name('pengaturan.update');
-
-        // Feature endpoints
-        Route::post('/galeri', [\App\Http\Controllers\Client\FeatureController::class, 'storeGaleri'])->name('galeri.store');
-        Route::delete('/galeri/{id}', [\App\Http\Controllers\Client\FeatureController::class, 'destroyGaleri'])->name('galeri.destroy');
-
-        Route::post('/cerita', [\App\Http\Controllers\Client\FeatureController::class, 'storeCerita'])->name('cerita.store');
-        Route::delete('/cerita/{id}', [\App\Http\Controllers\Client\FeatureController::class, 'destroyCerita'])->name('cerita.destroy');
-
-        Route::post('/kado/alamat', [\App\Http\Controllers\Client\FeatureController::class, 'updateAlamatKado'])->name('kado.alamat.update');
-        Route::post('/kado', [\App\Http\Controllers\Client\FeatureController::class, 'storeKado'])->name('kado.store');
-        Route::delete('/kado/{id}', [\App\Http\Controllers\Client\FeatureController::class, 'destroyKado'])->name('kado.destroy');
-
-        // Tamu Management endpoints
         Route::get('/tamu/data', [\App\Http\Controllers\Client\TamuController::class, 'index'])->name('tamu.data');
-        Route::post('/tamu', [\App\Http\Controllers\Client\TamuController::class, 'store'])->name('tamu.store');
-        Route::delete('/tamu/{id}', [\App\Http\Controllers\Client\TamuController::class, 'destroy'])->name('tamu.destroy');
-        Route::post('/tamu/{id}/toggle-wa', [\App\Http\Controllers\Client\TamuController::class, 'toggleWa'])->name('tamu.toggleWa');
         Route::get('/tamu/export-excel', [\App\Http\Controllers\Client\TamuController::class, 'exportExcel'])->name('tamu.export');
-        Route::post('/tamu/import-excel', [\App\Http\Controllers\Client\TamuController::class, 'importExcel'])->name('tamu.import');
         Route::get('/tamu/template-excel', [\App\Http\Controllers\Client\TamuController::class, 'downloadTemplate'])->name('tamu.template');
+
+        Route::middleware([\App\Http\Middleware\CheckClientExpired::class])->group(function () {
+            Route::get('/pengantin', [\App\Http\Controllers\Client\DashboardController::class, 'pengantin'])->name('pengantin');
+            Route::get('/acara', [\App\Http\Controllers\Client\DashboardController::class, 'acara'])->name('acara');
+            Route::get('/pengaturan', [\App\Http\Controllers\Client\DashboardController::class, 'pengaturan'])->name('pengaturan');
+            Route::get('/galeri', [\App\Http\Controllers\Client\DashboardController::class, 'galeri'])->name('galeri');
+            Route::get('/cerita', [\App\Http\Controllers\Client\DashboardController::class, 'cerita'])->name('cerita');
+            Route::get('/kado', [\App\Http\Controllers\Client\DashboardController::class, 'kado'])->name('kado');
+
+            // Form Data endpoints (AJAX Submissions)
+            Route::post('/mempelai', [\App\Http\Controllers\Client\InvitationController::class, 'updateMempelai'])->name('mempelai.update');
+            Route::post('/acara', [\App\Http\Controllers\Client\InvitationController::class, 'updateAcara'])->name('acara.update');
+            Route::post('/pengaturan', [\App\Http\Controllers\Client\InvitationController::class, 'updateSettings'])->name('pengaturan.update');
+
+            // Feature endpoints
+            Route::post('/galeri', [\App\Http\Controllers\Client\FeatureController::class, 'storeGaleri'])->name('galeri.store');
+            Route::delete('/galeri/{id}', [\App\Http\Controllers\Client\FeatureController::class, 'destroyGaleri'])->name('galeri.destroy');
+
+            Route::post('/cerita', [\App\Http\Controllers\Client\FeatureController::class, 'storeCerita'])->name('cerita.store');
+            Route::delete('/cerita/{id}', [\App\Http\Controllers\Client\FeatureController::class, 'destroyCerita'])->name('cerita.destroy');
+
+            Route::post('/kado/alamat', [\App\Http\Controllers\Client\FeatureController::class, 'updateAlamatKado'])->name('kado.alamat.update');
+            Route::post('/kado', [\App\Http\Controllers\Client\FeatureController::class, 'storeKado'])->name('kado.store');
+            Route::delete('/kado/{id}', [\App\Http\Controllers\Client\FeatureController::class, 'destroyKado'])->name('kado.destroy');
+
+            // Tamu Management endpoints
+            Route::post('/tamu', [\App\Http\Controllers\Client\TamuController::class, 'store'])->name('tamu.store');
+            Route::delete('/tamu/{id}', [\App\Http\Controllers\Client\TamuController::class, 'destroy'])->name('tamu.destroy');
+            Route::post('/tamu/{id}/toggle-wa', [\App\Http\Controllers\Client\TamuController::class, 'toggleWa'])->name('tamu.toggleWa');
+            Route::post('/tamu/import-excel', [\App\Http\Controllers\Client\TamuController::class, 'importExcel'])->name('tamu.import');
+        });
     });
 
 

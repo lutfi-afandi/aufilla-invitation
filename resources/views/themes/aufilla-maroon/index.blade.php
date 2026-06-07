@@ -191,7 +191,7 @@
 
     <!-- 2. COVER SCREEN OVERLAY (FADE OUT UPON CLICKING "BUKA UNDANGAN") -->
     <div id="cover-screen" class="fixed lg:absolute inset-0 lg:left-auto lg:w-[480px] lg:right-0 z-50 flex items-center justify-center transition-all duration-1000 ease-in-out bg-cover bg-center"
-      style="background-image: linear-gradient(to bottom, rgba(61,21,24,0.85) 0%, rgba(90,31,36,0.9) 60%, rgba(37,11,13,0.95) 100%), url('{{ $invitation->pasangan_foto ? asset('storage/' . $invitation->pasangan_foto) : asset('assets/default/default-pasangan.jpg') }}');">
+      style="background-image: linear-gradient(to bottom, rgba(61,21,24,0.85) 0%, rgba(90,31,36,0.9) 60%, rgba(37,11,13,0.95) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
       <!-- Ornaments -->
       <div class="absolute inset-0 bg-wedding-foliage opacity-20"></div>
 
@@ -219,7 +219,7 @@
 
         @if($akad)
         <p class="text-stone-200 text-xs md:text-sm tracking-wide mt-2 mb-8 font-semibold uppercase tracking-widest bg-black/10 px-4 py-1.5 rounded-full backdrop-blur-xs">
-          {{ \Carbon\Carbon::parse($akad->tanggal)->translatedFormat('l, d F Y') }}
+          {{ \Carbon\Carbon::parse($akad->tgl_acara)->translatedFormat('l, d F Y') }}
         </p>
         @endif
 
@@ -244,7 +244,7 @@
 
     <!-- LEFT COLUMN: Desktop Premium Backdrop Static (Only visible on lg screens) -->
     <div class="hidden lg:flex lg:flex-1 lg:h-full bg-gradient-to-br from-[#3D1518] to-[#5A1F24] p-16 flex-col justify-between relative bg-cover bg-center overflow-hidden"
-      style="background-image: linear-gradient(135deg, rgba(61,21,24,0.92) 0%, rgba(90,31,36,0.85) 100%), url('{{ $invitation->pasangan_foto ? asset('storage/' . $invitation->pasangan_foto) : asset('assets/default/default-pasangan.jpg') }}');">
+      style="background-image: linear-gradient(135deg, rgba(61,21,24,0.92) 0%, rgba(90,31,36,0.85) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
 
       <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
@@ -297,12 +297,11 @@
         <div>
           @if($resepsi)
           <p class="font-serif text-amber-200 text-base">{{ $resepsi->tempat }}</p>
-          <p class="text-xs text-stone-300">{{ \Carbon\Carbon::parse($resepsi->tanggal)->translatedFormat('l, d F Y') }}</p>
+          <p class="text-xs text-stone-300">{{ \Carbon\Carbon::parse($resepsi->tgl_acara)->translatedFormat('l, d F Y') }}</p>
           @endif
         </div>
         <div class="text-right text-stone-400 text-xs">
-          <span class="text-[10px] text-amber-200 block mb-1">Lagu Pengiring</span>
-          <span class="text-white"><i class="fa-solid fa-music mr-1 text-gold-500"></i> Wedding Piano Loop</span>
+          <span class="text-white"><i class="fa-solid fa-music mr-1 text-gold-500"></i> From Aufilla</span>
         </div>
       </div>
 
@@ -335,7 +334,7 @@
 
           <!-- Standard round portrait mask -->
           <div class="w-full h-full rounded-full overflow-hidden shadow-2xl gold-border-glow select-none bg-white">
-            <img src="{{ $invitation->pasangan_foto ? asset('storage/' . $invitation->pasangan_foto) : asset('assets/default/default-pasangan.jpg') }}"
+            <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}"
               alt="{{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}"
               class="w-full h-full object-cover scale-105 hover:scale-110 transition-transform duration-700"
               referrerpolicy="no-referrer">
@@ -352,9 +351,9 @@
           <h2 class="font-serif text-4xl md:text-5xl font-bold text-maroon-800 leading-none">{{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}</h2>
           @if($akad)
           <div class="flex items-center justify-center gap-2 mt-4 text-stone-500 text-xs md:text-sm">
-            <span class="uppercase">{{ \Carbon\Carbon::parse($akad->tanggal)->translatedFormat('l') }}</span>
+            <span class="uppercase">{{ \Carbon\Carbon::parse($akad->tgl_acara)->translatedFormat('l') }}</span>
             <span class="w-1.5 h-1.5 rounded-full bg-gold-500"></span>
-            <span class="uppercase">{{ \Carbon\Carbon::parse($akad->tanggal)->translatedFormat('d F Y') }}</span>
+            <span class="uppercase">{{ \Carbon\Carbon::parse($akad->tgl_acara)->translatedFormat('d F Y') }}</span>
             <span class="w-1.5 h-1.5 rounded-full bg-gold-500"></span>
             <span class="uppercase">Di Tempat</span>
           </div>
@@ -551,7 +550,7 @@
                   <div class="text-gold-600 mt-1"><i class="fa-solid fa-calendar-days"></i></div>
                   <div>
                     <p class="font-semibold text-stone-800">Hari &amp; Tanggal</p>
-                    <p>{{ \Carbon\Carbon::parse($akad->tanggal)->translatedFormat('l, d F Y') }}</p>
+                    <p>{{ \Carbon\Carbon::parse($akad->tgl_acara)->translatedFormat('l, d F Y') }}</p>
                   </div>
                 </div>
 
@@ -608,7 +607,7 @@
                   <div class="text-gold-600 mt-1"><i class="fa-solid fa-calendar-days"></i></div>
                   <div>
                     <p class="font-semibold text-stone-800">Hari &amp; Tanggal</p>
-                    <p>{{ \Carbon\Carbon::parse($resepsi->tanggal)->translatedFormat('l, d F Y') }}</p>
+                    <p>{{ \Carbon\Carbon::parse($resepsi->tgl_acara)->translatedFormat('l, d F Y') }}</p>
                   </div>
                 </div>
 
@@ -676,17 +675,10 @@
             <div class="bg-white/80 p-6 rounded-2xl border border-gold-500/20 shadow-md flex-1 mb-10">
               <div class="flex items-center justify-between mb-2">
                 <h3 class="font-serif text-lg font-bold text-maroon-800">{{ $cerita->judul }}</h3>
-                @php
-                try {
-                $formattedDate = \Carbon\Carbon::parse($cerita->tanggal)->translatedFormat('F Y');
-                } catch (\Exception $e) {
-                $formattedDate = $cerita->tanggal;
-                }
-                @endphp
-                <span class="text-[10px] text-amber-600 bg-gold-100 font-semibold px-2.5 py-1 rounded-full uppercase">{{ $formattedDate }}</span>
+                <span class="text-[10px] text-amber-600 bg-gold-100 font-semibold px-2.5 py-1 rounded-full uppercase">{{ $cerita->tanggal }}</span>
               </div>
               <p class="text-xs text-stone-600 leading-relaxed mt-2">
-                {{ $cerita->deskripsi }}
+                {{ $cerita->isi_cerita }}
               </p>
             </div>
           </div>
@@ -717,7 +709,7 @@
 
           @foreach($galeris as $galeri)
           @php
-            $galeriUrl = str_starts_with($galeri->image_path, 'assets/') ? asset($galeri->image_path) : asset('storage/' . $galeri->image_path);
+          $galeriUrl = str_starts_with($galeri->image_path, 'assets/') ? asset($galeri->image_path) : asset('storage/' . $galeri->image_path);
           @endphp
           <div class="break-inside-avoid relative overflow-hidden rounded-2xl border border-gold-500/20 shadow-md group cursor-pointer gallery-trigger"
             data-aos="zoom-in" data-aos-duration="1200"
@@ -869,39 +861,7 @@
         <div class="max-w-md mx-auto" data-aos="fade-up" data-aos-duration="1200">
           <div class="space-y-4 max-h-[400px] overflow-y-auto pr-2 overscroll-contain relative pointer-events-auto" id="wishes-scroll-box">
             <div id="wishes-list" class="space-y-4">
-              @php
-              $displayWishes = $wishes;
-              if(count($displayWishes) === 0) {
-              $displayWishes = collect([
-              (object)[
-              'nama' => 'Bapak Budi & Keluarga',
-              'created_at' => now()->subHours(2),
-              'kehadiran' => 'hadir',
-              'pesan' => 'Selamat menempuh hidup baru. Semoga menjadi keluarga yang sakinah, mawaddah, warahmah. Aamiin.'
-              ],
-              (object)[
-              'nama' => 'Rina Melati',
-              'created_at' => now()->subHours(5),
-              'kehadiran' => 'hadir',
-              'pesan' => 'Happy wedding! Lancar terus yaa acaranya, gak sabar buat dateng dan ngerayain bareng kalian.'
-              ],
-              (object)[
-              'nama' => 'Dimas Anggara',
-              'created_at' => now()->subDays(1),
-              'kehadiran' => 'tidak',
-              'pesan' => 'Mohon maaf belum bisa hadir karena ada urusan pekerjaan di luar kota. Selamat menikah, doa terbaik untuk kalian berdua.'
-              ],
-              (object)[
-              'nama' => 'Siti Nurhaliza',
-              'created_at' => now()->subDays(2),
-              'kehadiran' => 'ragu',
-              'pesan' => 'InsyaAllah kalau tidak ada halangan saya usahakan hadir ya. Happy Wedding!'
-              ]
-              ]);
-              }
-              @endphp
-
-              @forelse($displayWishes as $wish)
+              @forelse($wishes as $wish)
               <div class="bg-white p-5 rounded-2xl border border-stone-100 shadow-sm flex gap-4 transition-all hover:shadow-md">
                 <div class="w-10 h-10 rounded-full bg-maroon-800 text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-gold-500/25">
                   {{ strtoupper(substr($wish->nama, 0, 2)) }}
@@ -1112,7 +1072,7 @@
 
       // ================= WEDDING TARGET DATE REALTIME COUNTDOWN =================
       @if($akad)
-      const targetDate = new Date("{{ \Carbon\Carbon::parse($akad->tanggal . ' ' . $akad->waktu_mulai)->format('F d, Y H:i:s') }}").getTime();
+      const targetDate = new Date("{{ \Carbon\Carbon::parse(substr($akad->tgl_acara, 0, 10) . ' ' . $akad->waktu_mulai)->format('F d, Y H:i:s') }}").getTime();
 
       function runCountdown() {
         const now = new Date().getTime();
@@ -1176,7 +1136,7 @@
             once: true,
             offset: 80
           });
-          
+
           // Use IntersectionObserver to manually trigger animations inside the custom scroll container.
           const observer = new IntersectionObserver(function(entries) {
             entries.forEach(function(entry) {
