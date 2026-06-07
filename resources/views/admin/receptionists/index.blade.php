@@ -7,7 +7,11 @@
 <div class="max-w-7xl mx-auto w-full space-y-6">
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <p class="text-sm text-slate-500">Kelola akun resepsionis yang bertugas melakukan check-in tamu.</p>
+        <div class="relative max-w-sm w-full">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <input type="text" id="search-receptionist" placeholder="Cari username / email..." value="{{ request('search') }}" 
+                   class="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-admin-accent/30 focus:border-admin-accent transition-all bg-white">
+        </div>
         <button onclick="openCreateReceptionist()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-admin-accent-dark hover:bg-admin-accent text-white font-semibold text-sm rounded-xl shadow-sm hover:shadow-md transition-all">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
             Tambah Resepsionis
@@ -15,51 +19,9 @@
     </div>
 
     <!-- Table -->
-    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="bg-slate-50 border-b border-slate-200">
-                        <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Username</th>
-                        <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Email</th>
-                        <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Terdaftar</th>
-                        <th class="text-center px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                    @forelse($receptionists as $r)
-                    <tr class="hover:bg-slate-50/50 transition-colors" id="receptionist-row-{{ $r->id }}">
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold text-xs">
-                                    {{ strtoupper(substr($r->username, 0, 2)) }}
-                                </div>
-                                <span class="font-semibold text-slate-700">{{ $r->username }}</span>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 text-slate-500">{{ $r->email }}</td>
-                        <td class="px-6 py-4 text-slate-400 text-xs">{{ $r->created_at->format('d M Y') }}</td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center justify-center gap-1">
-                                <button onclick="openEditReceptionist({{ json_encode($r) }})" class="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Edit">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                </button>
-                                <button onclick="deleteReceptionist({{ $r->id }})" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Hapus">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="4" class="px-6 py-16 text-center text-slate-400">
-                            <svg class="w-12 h-12 mx-auto mb-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
-                            Belum ada resepsionis terdaftar.
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden" id="receptionists-table-container">
+        <div class="overflow-x-auto" id="table-content-wrapper">
+            @include('admin.receptionists.partials.table-content', ['receptionists' => $receptionists])
         </div>
     </div>
 </div>
@@ -138,7 +100,14 @@ $('#create-r-form').on('submit', function(e) {
     $.post("{{ route('admin.receptionists.store') }}", $(this).serialize())
         .done(function(res) {
             Swal.fire({ icon: 'success', title: 'Berhasil', text: res.message, timer: 1500, showConfirmButton: false });
-            setTimeout(() => location.reload(), 1500);
+            $('#create-r-modal').hide();
+            $('#create-r-form')[0].reset();
+            
+            const tbody = $('#table-content-wrapper tbody');
+            if(tbody.find('tr').length === 1 && tbody.find('tr td').attr('colspan') === '4') {
+                tbody.empty();
+            }
+            if(res.html) tbody.prepend(res.html);
         })
         .fail(function(xhr) {
             const errors = xhr.responseJSON?.errors;
@@ -157,10 +126,60 @@ $('#edit-r-form').on('submit', function(e) {
     $.ajax({ url: "/admin/receptionists/" + id, type: 'PUT', data: $(this).serialize() })
         .done(function(res) {
             Swal.fire({ icon: 'success', title: 'Berhasil', text: res.message, timer: 1500, showConfirmButton: false });
-            setTimeout(() => location.reload(), 1500);
+            $('#edit-r-modal').hide();
+            
+            if(res.html && id) {
+                $('#receptionist-row-' + id).replaceWith(res.html);
+            }
         })
         .fail(function(xhr) { Swal.fire({ icon: 'error', title: 'Gagal', text: xhr.responseJSON?.message || 'Terjadi kesalahan.' }); })
         .always(() => btn.prop('disabled', false).text('Simpan'));
+});
+
+// Fetch receptionists via AJAX
+function fetchReceptionists(page_url) {
+    const search = $('#search-receptionist').val();
+    const url = page_url || "{{ route('admin.receptionists.index') }}";
+    
+    $('#table-content-wrapper').css('opacity', '0.5');
+
+    $.ajax({
+        url: url,
+        data: { search: search },
+        success: function(res) {
+            $('#table-content-wrapper').html(res.html).css('opacity', '1');
+            
+            if (history.pushState) {
+                const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?search=' + encodeURIComponent(search);
+                window.history.pushState({path:newurl}, '', newurl);
+            }
+        }
+    });
+}
+
+// Live Search
+let searchTimeout;
+$('#search-receptionist').on('input', function() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        fetchReceptionists();
+    }, 600);
+});
+
+// Auto-focus search input
+$(document).ready(function() {
+    const searchInput = $('#search-receptionist');
+    if (searchInput.val()) {
+        const len = searchInput.val().length;
+        searchInput.focus();
+        searchInput[0].setSelectionRange(len, len);
+    }
+});
+
+// Pagination Clicks
+$(document).on('click', '.pagination-container a', function(e) {
+    e.preventDefault();
+    fetchReceptionists($(this).attr('href'));
 });
 
 function deleteReceptionist(id) {
@@ -174,7 +193,13 @@ function deleteReceptionist(id) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            $.ajax({ url: "/admin/receptionists/" + id, type: 'DELETE' })
+            $.ajax({ 
+                url: "/admin/receptionists/" + id, 
+                type: 'DELETE',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                }
+            })
                 .done(function(res) {
                     $('#receptionist-row-' + id).fadeOut(400, function() { $(this).remove(); });
                     Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: res.message, showConfirmButton: false, timer: 2000 });

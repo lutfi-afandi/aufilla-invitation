@@ -1,12 +1,18 @@
 <!-- Sidebar -->
 <aside class="w-64 bg-gradient-to-b from-brand-dark to-brand-medium text-white flex-shrink-0 flex flex-col h-full border-r border-brand-accent/20 shadow-[4px_0_25px_rgba(10,34,20,0.15)] transition-all duration-300 z-30 fixed lg:relative -translate-x-full lg:translate-x-0" id="client-sidebar">
     <!-- Brand -->
-    <div class="p-6 border-b border-brand-accent/10">
-        <a href="{{ route('client.dashboard') }}" class="flex items-center gap-3 decoration-transparent">
+    <div class="p-6 border-b border-brand-accent/10 bg-brand-dark/50">
+        <a href="{{ route('client.dashboard') }}" class="flex items-center gap-3 decoration-transparent hover:-translate-y-0.5 transition-transform duration-300">
             <!-- Icon Logo -->
-            <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Aufilla Icon" class="w-8 h-8 object-contain">
-            <!-- Text Logo -->
-            <img src="{{ asset('assets/img/logo-text.png') }}" alt="Aufilla Text" class="h-6 object-contain">
+            <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Aufilla Logo" class="h-10 w-auto object-contain drop-shadow-md">
+            <div class="flex flex-col justify-center">
+                <span class="text-[20px] font-serif text-white tracking-tight leading-none drop-shadow-sm">
+                    Aufilla<span class="italic text-brand-accent">Invitation</span>
+                </span>
+                <span class="text-[8px] font-sans font-bold tracking-[0.3em] uppercase text-white/60 mt-1 pl-0.5">
+                    Panel Klien
+                </span>
+            </div>
         </a>
     </div>
 

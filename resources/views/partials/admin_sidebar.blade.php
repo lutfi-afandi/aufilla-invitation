@@ -1,12 +1,17 @@
 <!-- Admin Sidebar -->
 <aside class="w-64 bg-gradient-to-b from-admin-dark to-admin-medium text-white flex-shrink-0 flex flex-col h-full border-r border-white/5 shadow-[4px_0_25px_rgba(15,23,42,0.25)] transition-all duration-300 z-30 fixed lg:relative -translate-x-full lg:translate-x-0" id="admin-sidebar">
     <!-- Brand -->
-    <div class="p-6 border-b border-white/10">
-        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 decoration-transparent">
-            <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Aufilla Icon" class="w-8 h-8 object-contain">
-            <div class="flex flex-col leading-tight">
-                <span class="text-white font-bold text-base tracking-tight">Aufilla</span>
-                <span class="text-admin-accent text-[10px] font-semibold uppercase tracking-widest">Admin Panel</span>
+    <div class="p-6 border-b border-white/10 bg-admin-dark/50">
+        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 decoration-transparent hover:-translate-y-0.5 transition-transform duration-300">
+            <!-- Icon Logo -->
+            <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Aufilla Logo" class="h-10 w-auto object-contain drop-shadow-md">
+            <div class="flex flex-col justify-center">
+                <span class="text-[20px] font-serif text-white tracking-tight leading-none drop-shadow-sm">
+                    Aufilla<span class="italic text-admin-accent">Invitation</span>
+                </span>
+                <span class="text-[8px] font-sans font-bold tracking-[0.3em] uppercase text-white/60 mt-1 pl-0.5">
+                    Admin Panel
+                </span>
             </div>
         </a>
     </div>

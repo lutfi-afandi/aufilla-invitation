@@ -41,7 +41,7 @@ class DashboardController extends Controller
         $invitation = $this->getInvitation();
         $akad = $invitation->acaras()->where('tipe_acara', 'akad')->first();
         $resepsi = $invitation->acaras()->where('tipe_acara', 'resepsi')->first();
-        
+
         return view('client.acara', compact('invitation', 'akad', 'resepsi'));
     }
 

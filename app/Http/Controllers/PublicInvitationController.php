@@ -43,7 +43,7 @@ class PublicInvitationController extends Controller
         $wishes = $invitation->ucapans()->orderBy('created_at', 'desc')->get(); // Fetch wishes
         $maxGaleris = \App\Helpers\PackageHelper::getMaxGalleryPhotos($invitation);
         $galeris = $invitation->galeris()->orderBy('created_at', 'desc')->limit($maxGaleris)->get();
-        
+
         if (\App\Helpers\PackageHelper::canAccessLoveStory($invitation)) {
             $ceritas = $invitation->ceritas()->orderBy('created_at', 'asc')->get();
         } else {

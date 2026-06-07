@@ -29,39 +29,54 @@ class ClientController extends Controller
         $themes   = Theme::where('is_active', true)->get();
         $packages = \App\Models\Package::all();
 
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admin.clients.partials.table-content', compact('clients'))->render()
+            ]);
+        }
+
         return view('admin.clients.index', compact('clients', 'themes', 'packages'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'username' => 'required|string|max:50|unique:users,username',
-            'email'    => 'nullable|email|max:100|unique:users,email',
-            'password' => 'required|string|min:6|max:50',
-            'theme_id' => 'required|exists:themes,id',
+            'username'   => 'required|string|max:50|unique:users,username',
+            'email'      => 'nullable|email|max:100|unique:users,email',
+            'password'   => 'required|string|min:6|max:50',
+            'theme_id'   => 'required|exists:themes,id',
+            'package_id' => 'required|exists:packages,id',
         ]);
 
-        $user = User::create([
-            'username' => $validated['username'],
-            'email'    => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role'     => 'client',
-        ]);
+        $user = \Illuminate\Support\Facades\DB::transaction(function () use ($validated) {
+            $user = User::create([
+                'username' => $validated['username'],
+                'email'    => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'role'     => 'client',
+            ]);
 
-        $baseSlug = Str::slug($validated['username']);
-        $slug = $baseSlug;
-        $count = 1;
-        while (\App\Models\Invitation::where('slug', $slug)->exists()) {
-            $slug = $baseSlug . '-' . $count;
-            $count++;
-        }
+            $baseSlug = Str::slug($validated['username']);
+            $slug = $baseSlug;
+            $count = 1;
+            while (\App\Models\Invitation::where('slug', $slug)->exists()) {
+                $slug = $baseSlug . '-' . $count;
+                $count++;
+            }
 
-        $user->invitation()->create([
-            'slug'           => $slug,
-            'theme_id'       => $validated['theme_id'],
-            'status'         => 'trial',
-            'trial_habis_at' => now()->addDay(),
-        ]);
+            $package = \App\Models\Package::find($validated['package_id']);
+            $activeDays = $package ? $package->active_days : 90;
+
+            $user->invitation()->create([
+                'slug'           => $slug,
+                'theme_id'       => $validated['theme_id'],
+                'package_id'     => $validated['package_id'],
+                'status'         => 'active',
+                'trial_habis_at' => now()->addDays($activeDays),
+            ]);
+
+            return $user;
+        });
 
         $user->load('invitation.theme');
         $html = view('admin.clients.partials.row', ['client' => $user])->render();
@@ -75,7 +90,7 @@ class ClientController extends Controller
     public function show($id)
     {
         $client = User::where('role', 'client')
-            ->with(['invitation.theme', 'invitation.tamus', 'invitation.ucapans', 'invitation.galeris', 'invitation.ceritas', 'invitation.kados', 'invitation.acaras'])
+            ->with(['invitation.theme', 'invitation.package', 'invitation.tamus', 'invitation.ucapans', 'invitation.galeris', 'invitation.ceritas', 'invitation.kados', 'invitation.acaras'])
             ->findOrFail($id);
 
         return response()->json([
@@ -92,7 +107,7 @@ class ClientController extends Controller
             'username'   => ['required', 'string', 'max:50', Rule::unique('users', 'username')->ignore($client->id)],
             'email'      => ['nullable', 'email', 'max:100', Rule::unique('users', 'email')->ignore($client->id)],
             'password'   => 'nullable|string|min:6|max:50',
-            'status'     => 'required|in:draft,trial,aktif,nonaktif',
+            'status'     => 'required|in:trial,active,expired',
             'theme_id'   => 'required|exists:themes,id',
             'package_id' => 'nullable|exists:packages,id',
         ]);
@@ -110,12 +125,16 @@ class ClientController extends Controller
             if (array_key_exists('package_id', $validated)) {
                 $invitation->package_id = $validated['package_id'];
             }
-            
-            if ($validated['status'] === 'aktif') {
-                $invitation->trial_habis_at = null;
+                
+            if ($validated['status'] === 'active') {
+                $package = \App\Models\Package::find($invitation->package_id);
+                $activeDays = $package ? $package->active_days : 90;
+                // Only update the expiration date if it was trial, or recalculate from now if it was already active
+                $invitation->trial_habis_at = now()->addDays($activeDays);
             } elseif ($validated['status'] === 'trial' && !$invitation->trial_habis_at) {
                 $invitation->trial_habis_at = $invitation->created_at->copy()->addDay();
             }
+            
             $invitation->save();
         }
 
@@ -138,15 +157,17 @@ class ClientController extends Controller
         }
 
         $validated = $request->validate([
-            'status'   => 'required|in:draft,trial,aktif,nonaktif',
+            'status'   => 'required|in:trial,active,expired',
             'theme_id' => 'nullable|exists:themes,id',
         ]);
 
         $invitation->status = $validated['status'];
 
-        if ($validated['status'] === 'aktif') {
-            $invitation->trial_habis_at = null;
-        } elseif ($validated['status'] === 'trial') {
+        if ($validated['status'] === 'active') {
+            $package = \App\Models\Package::find($invitation->package_id);
+            $activeDays = $package ? $package->active_days : 90;
+            $invitation->trial_habis_at = now()->addDays($activeDays);
+        } elseif ($validated['status'] === 'trial' && !$invitation->trial_habis_at) {
             $invitation->trial_habis_at = $invitation->created_at->copy()->addDay();
         }
 

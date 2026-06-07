@@ -3,7 +3,7 @@
         <div class="relative group cursor-pointer border-2 border-transparent rounded-xl overflow-hidden hover:border-admin-accent transition-all duration-300 theme-card" 
              data-id="{{ $theme->id }}" 
              data-name="{{ $theme->name }}" 
-             onclick="selectTheme({{ $theme->id }}, '{{ addslashes($theme->name) }}', this)">
+             onclick="selectTheme({{ $theme->id }}, '{{ addslashes($theme->name) }}', '{{ $theme->thumbnail ? asset('storage/' . $theme->thumbnail) : '' }}', this)">
             
             <div class="h-32 bg-slate-100 relative overflow-hidden">
                 @if($theme->thumbnail)

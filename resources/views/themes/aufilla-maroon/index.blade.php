@@ -1072,7 +1072,7 @@
 
       // ================= WEDDING TARGET DATE REALTIME COUNTDOWN =================
       @if($akad)
-      const targetDate = new Date("{{ \Carbon\Carbon::parse(substr($akad->tgl_acara, 0, 10) . ' ' . $akad->waktu_mulai)->format('F d, Y H:i:s') }}").getTime();
+      const targetDate = new Date("{{ \Carbon\Carbon::parse(substr($akad->tgl_acara, 0, 10) . ' ' . $akad->waktu_mulai)->format('Y-m-d\TH:i:sP') }}").getTime();
 
       function runCountdown() {
         const now = new Date().getTime();

@@ -11,13 +11,26 @@ use Illuminate\Validation\Rule;
 
 class ReceptionistController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $receptionists = User::where('role', 'resepsionis')
-            ->latest()
-            ->get();
+        $query = User::where('role', 'resepsionis');
 
-        $invitations = Invitation::with('user')->where('status', 'aktif')->get();
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('username', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        $receptionists = $query->latest()->paginate(10)->withQueryString();
+
+        $invitations = Invitation::with('user')->where('status', 'active')->get();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admin.receptionists.partials.table-content', compact('receptionists'))->render()
+            ]);
+        }
 
         return view('admin.receptionists.index', compact('receptionists', 'invitations'));
     }
@@ -30,14 +43,19 @@ class ReceptionistController extends Controller
             'password' => 'required|string|min:6|max:50',
         ]);
 
-        User::create([
+        $user = User::create([
             'username' => $validated['username'],
             'email'    => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role'     => 'resepsionis',
         ]);
 
-        return response()->json(['message' => 'Resepsionis berhasil dibuat.']);
+        $html = view('admin.receptionists.partials.row', ['r' => $user])->render();
+
+        return response()->json([
+            'message' => 'Resepsionis berhasil dibuat.',
+            'html' => $html
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -57,7 +75,12 @@ class ReceptionistController extends Controller
         }
         $user->save();
 
-        return response()->json(['message' => 'Resepsionis berhasil diperbarui.']);
+        $html = view('admin.receptionists.partials.row', ['r' => $user])->render();
+
+        return response()->json([
+            'message' => 'Resepsionis berhasil diperbarui.',
+            'html' => $html
+        ]);
     }
 
     public function destroy($id)
