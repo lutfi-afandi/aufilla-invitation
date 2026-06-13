@@ -126,6 +126,19 @@ class Invitation extends Model
     }
 
     /**
+     * Mengecek apakah data acara utama (akad & resepsi) sudah lengkap.
+     */
+    public function isDataAcaraComplete(): bool
+    {
+        $akad = $this->acaras()->where('tipe_acara', 'akad')->first();
+        $resepsi = $this->acaras()->where('tipe_acara', 'resepsi')->first();
+
+        return $akad && $resepsi &&
+               !empty($akad->tgl_acara) && !empty($akad->waktu_mulai) && !empty($akad->lokasi) &&
+               !empty($resepsi->tgl_acara) && !empty($resepsi->waktu_mulai) && !empty($resepsi->lokasi);
+    }
+
+    /**
      * Mengecek apakah undangan sudah kedaluwarsa.
      */
     public function isExpired(): bool

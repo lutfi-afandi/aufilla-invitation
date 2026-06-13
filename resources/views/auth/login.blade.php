@@ -58,7 +58,7 @@
         </div>
         
         <div class="mt-8 text-center border-t border-brand-dark/5 pt-6">
-            <p class="text-[12px] text-brand-dark/60 font-medium">Belum memiliki akun? <a href="{{ route('register') }}" class="font-bold text-brand-dark hover:text-brand-accent transition-colors ml-1 uppercase tracking-wider text-[11px]">Daftar Sekarang</a></p>
+            <p class="text-[12px] text-brand-dark/60 font-medium">Belum memiliki akun? <a href="/" class="font-bold text-brand-dark hover:text-brand-accent transition-colors ml-1 uppercase tracking-wider text-[11px]">Buat Undangan Sekarang</a></p>
         </div>
     </form>
 @endsection

@@ -378,9 +378,9 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lp-reveal lp-delay-1">
                 @foreach($themes as $theme)
                 <div class="bg-white rounded-2xl shadow-sm border border-brand-dark/5 overflow-hidden group hover:shadow-xl transition-all duration-300 flex flex-col">
-                    <div class="relative bg-brand-bg/30 pt-8 px-5 aspect-[3/4] flex items-end justify-center overflow-hidden">
+                    <div class="relative bg-brand-bg/30 aspect-[3/4] flex items-center justify-center overflow-hidden">
                         {{-- Theme Thumbnail --}}
-                        <img src="{{ $theme->thumbnail ? asset('storage/' . $theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png') }}" onerror="this.src=`{{ asset('assets/img/thumbnail-tema/demo1.png') }}`" alt="{{ $theme->name }}" class="w-full h-auto object-contain group-hover:scale-[1.03] transition-transform duration-500 origin-bottom relative z-0">
+                        <img src="{{ $theme->thumbnail ? asset('storage/' . $theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png') }}" onerror="this.src=`{{ asset('assets/img/thumbnail-tema/demo1.png') }}`" alt="{{ $theme->name }}" class="w-full h-full object-cover scale-[1.15] group-hover:scale-[1.20] transition-transform duration-500 origin-center relative z-0">
 
                         {{-- Tag Label --}}
                         <div class="absolute top-0 left-0 bg-brand-dark text-white text-[11px] font-bold px-4 py-2 rounded-br-2xl shadow-sm z-10">

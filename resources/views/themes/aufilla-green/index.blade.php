@@ -3,45 +3,45 @@
 
 <head>
     @php
-        $pengaturan = (object) [
-            'nama_mempelai_wanita' => $invitation->wanita_nama_lengkap ?? 'Nama Wanita Lengkap',
-            'nama_panggilan_wanita' => $invitation->wanita_nama ?? 'Wanita',
-            'nama_ayah_wanita' => $invitation->wanita_ayah ?? 'Bapak Wanita',
-            'nama_ibu_wanita' => $invitation->wanita_ibu ?? 'Ibu Wanita',
-            'instagram_wanita' => null,
-            'foto_wanita' => $invitation->wanita_foto ? asset('storage/' . $invitation->wanita_foto) : asset('assets/default/default_wanita.jpg'),
+    $pengaturan = (object) [
+    'nama_mempelai_wanita' => $invitation->wanita_nama_lengkap ?? 'Nama Wanita Lengkap',
+    'nama_panggilan_wanita' => $invitation->wanita_nama ?? 'Wanita',
+    'nama_ayah_wanita' => $invitation->wanita_ayah ?? 'Bapak Wanita',
+    'nama_ibu_wanita' => $invitation->wanita_ibu ?? 'Ibu Wanita',
+    'instagram_wanita' => null,
+    'foto_wanita' => $invitation->wanita_foto ? asset('storage/' . $invitation->wanita_foto) : asset('assets/default/default_wanita.jpg'),
 
-            'nama_mempelai_pria' => $invitation->pria_nama_lengkap ?? 'Nama Pria Lengkap',
-            'nama_panggilan_pria' => $invitation->pria_nama ?? 'Pria',
-            'nama_ayah_pria' => $invitation->pria_ayah ?? 'Bapak Pria',
-            'nama_ibu_pria' => $invitation->pria_ibu ?? 'Ibu Pria',
-            'instagram_pria' => null,
-            'foto_pria' => $invitation->pria_foto ? asset('storage/' . $invitation->pria_foto) : asset('assets/default/default_pria.jpg'),
-            
-            'foto_hero' => $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg'),
+    'nama_mempelai_pria' => $invitation->pria_nama_lengkap ?? 'Nama Pria Lengkap',
+    'nama_panggilan_pria' => $invitation->pria_nama ?? 'Pria',
+    'nama_ayah_pria' => $invitation->pria_ayah ?? 'Bapak Pria',
+    'nama_ibu_pria' => $invitation->pria_ibu ?? 'Ibu Pria',
+    'instagram_pria' => null,
+    'foto_pria' => $invitation->pria_foto ? asset('storage/' . $invitation->pria_foto) : asset('assets/default/default_pria.jpg'),
 
-            'tanggal_pernikahan' => $akad && $akad->tgl_acara ? \Carbon\Carbon::parse($akad->tgl_acara) : now(),
-            'lokasi_akad' => $akad->lokasi ?? 'Lokasi Akad',
-            'alamat_akad' => $akad->alamat ?? 'Alamat lengkap akad',
-            'lokasi_resepsi' => $resepsi->lokasi ?? 'Lokasi Resepsi',
-            'alamat_resepsi' => $resepsi->alamat ?? 'Alamat lengkap resepsi',
-            'google_maps_url' => $akad->gmaps_link ?? '#',
+    'foto_hero' => $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg'),
 
-            'musik_background' => $invitation->music_file ? asset('storage/' . $invitation->music_file) : asset('assets/default/default-music.mp3'),
+    'tanggal_pernikahan' => $akad && $akad->tgl_acara ? \Carbon\Carbon::parse($akad->tgl_acara) : now(),
+    'lokasi_akad' => $akad->lokasi ?? 'Lokasi Akad',
+    'alamat_akad' => $akad->alamat ?? 'Alamat lengkap akad',
+    'lokasi_resepsi' => $resepsi->lokasi ?? 'Lokasi Resepsi',
+    'alamat_resepsi' => $resepsi->alamat ?? 'Alamat lengkap resepsi',
+    'google_maps_url' => $akad->gmaps_link ?? '#',
 
-            'rekening_1_nama' => null,
-            'rekening_1_nomor' => null,
-            'rekening_1_bank' => null,
-            'rekening_2_nama' => null,
-            'rekening_2_nomor' => null,
-            'rekening_2_bank' => null,
-            'alamat_pengiriman' => null,
-        ];
+    'musik_background' => $invitation->music_file ? asset('storage/' . $invitation->music_file) : asset('assets/default/default-music.mp3'),
 
-        $meta_title = "The Wedding of " . $pengaturan->nama_panggilan_wanita . " & " . $pengaturan->nama_panggilan_pria;
-        $meta_desc = "Kami mengundang Anda untuk hadir di acara pernikahan kami pada " . $pengaturan->tanggal_pernikahan->translatedFormat('l, d F Y') . ".";
-        
-        $nama_tamu_display = $tamu ? $tamu->nama_tamu : request('to', 'Bapak/Ibu/Saudara/i');
+    'rekening_1_nama' => null,
+    'rekening_1_nomor' => null,
+    'rekening_1_bank' => null,
+    'rekening_2_nama' => null,
+    'rekening_2_nomor' => null,
+    'rekening_2_bank' => null,
+    'alamat_pengiriman' => null,
+    ];
+
+    $meta_title = "The Wedding of " . $pengaturan->nama_panggilan_wanita . " & " . $pengaturan->nama_panggilan_pria;
+    $meta_desc = "Kami mengundang Anda untuk hadir di acara pernikahan kami pada " . $pengaturan->tanggal_pernikahan->translatedFormat('l, d F Y') . ".";
+
+    $nama_tamu_display = $tamu ? $tamu->nama_tamu : request('to', 'Bapak/Ibu/Saudara/i');
     @endphp
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -49,14 +49,14 @@
     <title>{{ $meta_title }}</title>
     <meta name="title" content="{{ $meta_title }}">
     <meta name="description" content="{{ $meta_desc }}">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="{{ $meta_title }}">
     <meta property="og:description" content="{{ $meta_desc }}">
     <meta property="og:image" content="{{ $pengaturan->foto_hero }}">
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
@@ -66,7 +66,7 @@
 
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
-    
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="{{ asset('themes/aufilla-green/css/tailwind.css') }}" rel="stylesheet" />
     <link href="{{ asset('themes/aufilla-green/css/google-fonts.css') }}" rel="stylesheet" />
@@ -729,7 +729,9 @@
     <!-- Floating QR Button (100% inline styles) -->
     <button id="qr-btn" onclick="document.getElementById('qr-modal').style.display='flex'"
         style="position: fixed; bottom: 84px; right: 24px; width: 48px; height: 48px; z-index: 9999; background-color: #1d3226; color: #e5c088; border: 1px solid rgba(197,168,128,0.3); border-radius: 9999px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); padding: 0;">
-        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+        </svg>
     </button>
 
     <!-- QR Modal (100% inline styles) -->
@@ -740,7 +742,9 @@
                 <h3 class="font-heading" style="font-size: 1.125rem; font-weight: 700; color: #e5c088; margin: 0;">Tiket Akses Masuk</h3>
                 <button onclick="document.getElementById('qr-modal').style.display='none'"
                     style="background: none; border: none; color: #fff; cursor: pointer; padding: 4px;">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
                 </button>
             </div>
             <div style="padding: 2rem; display: flex; flex-direction: column; align-items: center;">
@@ -754,7 +758,9 @@
                 <div style="margin-top: 1.5rem;">
                     <a href="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data={{ $tamu->kode_qr }}" download="QR_{{ $tamu->nama_tamu }}.png" target="_blank"
                         style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.5rem; background-color: #1d3226; color: #e5c088; border-radius: 9999px; text-decoration: none; font-size: 0.875rem; font-weight: 600;">
-                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
                         Simpan Tiket (PNG)
                     </a>
                 </div>
@@ -927,7 +933,8 @@
                         </h3>
                         <p class="text-xs tracking-widest text-[#c5a880] uppercase font-semibold mb-3"
                             style="letter-spacing: 0.15em; margin-bottom: 0.75rem;">
-                            {{ $invitation->wanita_nama }}</p>
+                            {{ $invitation->wanita_nama }}
+                        </p>
                         <p class="text-xs md:text-sm text-[#5a6b5d] mb-4 font-serif leading-relaxed"
                             style="margin-bottom: 1rem; line-height: 1.5;">
                             Putri terkasih dari <br><span class="font-semibold"
@@ -936,18 +943,18 @@
                                 style="font-weight: 600;">{{ $invitation->wanita_ibu ?? 'Ibu' }}</span>
                         </p>
                         @if ($pengaturan && $pengaturan->instagram_wanita)
-                            <a href="https://instagram.com/{{ $pengaturan->instagram_wanita }}" target="_blank"
-                                class="inline-flex items-center gap-2 text-xs text-[#faf6f0] bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-colors border border-white/20"
-                                style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: #faf6f0; background-color: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.2); text-decoration: none;">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none"
-                                    stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
-                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5">
-                                    </rect>
-                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                                </svg>
-                                @{{ $pengaturan->instagram_wanita }}
-                            </a>
+                        <a href="https://instagram.com/{{ $pengaturan->instagram_wanita }}" target="_blank"
+                            class="inline-flex items-center gap-2 text-xs text-[#faf6f0] bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-colors border border-white/20"
+                            style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: #faf6f0; background-color: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.2); text-decoration: none;">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none"
+                                stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5">
+                                </rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                            @{{ $pengaturan->instagram_wanita }}
+                        </a>
                         @endif
                     </div>
 
@@ -972,7 +979,8 @@
                         </h3>
                         <p class="text-xs tracking-widest text-[#c5a880] uppercase font-semibold mb-3"
                             style="letter-spacing: 0.15em; margin-bottom: 0.75rem;">
-                            {{ $invitation->pria_nama }}</p>
+                            {{ $invitation->pria_nama }}
+                        </p>
                         <p class="text-xs md:text-sm text-[#5a6b5d] mb-4 font-serif leading-relaxed"
                             style="margin-bottom: 1rem; line-height: 1.5;">
                             Putra tercinta dari <br><span class="font-semibold"
@@ -981,18 +989,18 @@
                                 style="font-weight: 600;">{{ $invitation->pria_ibu ?? 'Ibu' }}</span>
                         </p>
                         @if ($pengaturan && $pengaturan->instagram_pria)
-                            <a href="https://instagram.com/{{ $pengaturan->instagram_pria }}" target="_blank"
-                                class="inline-flex items-center gap-2 text-xs text-[#faf6f0] bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-colors border border-white/20"
-                                style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: #faf6f0; background-color: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.2); text-decoration: none;">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none"
-                                    stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
-                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5">
-                                    </rect>
-                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                                </svg>
-                                @{{ $pengaturan->instagram_pria }}
-                            </a>
+                        <a href="https://instagram.com/{{ $pengaturan->instagram_pria }}" target="_blank"
+                            class="inline-flex items-center gap-2 text-xs text-[#faf6f0] bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-colors border border-white/20"
+                            style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: #faf6f0; background-color: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.2); text-decoration: none;">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none"
+                                stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5">
+                                </rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                            @{{ $pengaturan->instagram_pria }}
+                        </a>
                         @endif
                     </div>
                 </div>
@@ -1040,48 +1048,48 @@
                 <div class="relative" style="position: relative;">
                     <div class="timeline-line"></div>
                     @forelse ($ceritas as $index => $cerita)
-                        <div class="relative flex flex-wrap md:flex-nowrap md:justify-between items-center mb-12 md:mb-16"
-                            style="position: relative; display: flex; align-items: center; margin-bottom: 3rem;">
-                            
-                            @if($index % 2 == 0)
-                                <div class="w-full md:w-[45%] md:text-right md:pr-8 mb-4 md:mb-0 order-2 md:order-1"
-                                    data-aos="fade-right" style="width: 100%;">
-                                    <div class="glass-card p-6 rounded-2xl border border-white shadow-sm inline-block text-left w-full"
-                                        style="padding: 1.5rem; border-radius: 16px;">
-                                        <span class="text-xs uppercase tracking-widest text-[#c5a880] font-semibold block mb-1"
-                                            style="letter-spacing: 0.1em; display: block; margin-bottom: 0.25rem;">{{ $cerita->tanggal }}</span>
-                                        <h4 class="font-heading text-xl text-[#1d3226] font-bold mb-2"
-                                            style="font-weight: 700; margin-bottom: 0.5rem;">{{ $cerita->judul }}</h4>
-                                        <p class="text-xs md:text-sm text-[#5a6b5d] font-body leading-relaxed"
-                                            style="margin: 0; line-height: 1.6;">{{ $cerita->isi_cerita }}</p>
-                                    </div>
-                                </div>
-                                <div class="absolute left-0 md:left-1/2 transform -translate-x-[11px] md:-translate-x-1/2 w-6 h-6 rounded-full bg-[#faf6f0] border-4 border-[#c5a880] flex items-center justify-center z-10 order-1 md:order-2"
-                                    style="position: absolute; left: 0; transform: translateX(-11px); width: 24px; height: 24px; border-radius: 50%; border: 4px solid #c5a880; background-color: #faf6f0; z-index: 10;">
-                                    <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #1d3226;"></div>
-                                </div>
-                                <div class="w-full md:w-[45%] md:pl-8 order-3" data-aos="fade-left"></div>
-                            @else
-                                <div class="w-full md:w-[45%] md:pr-8 mb-4 md:mb-0 order-2 md:order-1" data-aos="fade-right"
-                                    style="width: 100%;"></div>
-                                <div class="absolute left-0 md:left-1/2 transform -translate-x-[11px] md:-translate-x-1/2 w-6 h-6 rounded-full bg-[#faf6f0] border-4 border-[#c5a880] flex items-center justify-center z-10 order-1 md:order-2"
-                                    style="position: absolute; left: 0; transform: translateX(-11px); width: 24px; height: 24px; border-radius: 50%; border: 4px solid #c5a880; background-color: #faf6f0; z-index: 10;">
-                                    <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #1d3226;"></div>
-                                </div>
-                                <div class="w-full md:w-[45%] md:pl-8 order-3" data-aos="fade-left" style="width: 100%;">
-                                    <div class="glass-card p-6 rounded-2xl border border-white shadow-sm w-full"
-                                        style="padding: 1.5rem; border-radius: 16px;">
-                                        <span class="text-xs uppercase tracking-widest text-[#c5a880] font-semibold block mb-1"
-                                            style="letter-spacing: 0.1em; display: block; margin-bottom: 0.25rem;">{{ $cerita->tanggal }}</span>
-                                        <h4 class="font-heading text-xl text-[#1d3226] font-bold mb-2"
-                                            style="font-weight: 700; margin-bottom: 0.5rem;">{{ $cerita->judul }}</h4>
-                                        <p class="text-xs md:text-sm text-[#5a6b5d] font-body leading-relaxed"
-                                            style="margin: 0; line-height: 1.6;">{{ $cerita->isi_cerita }}</p>
-                                    </div>
-                                </div>
-                            @endif
-                            
+                    <div class="relative flex flex-wrap md:flex-nowrap md:justify-between items-center mb-12 md:mb-16"
+                        style="position: relative; display: flex; align-items: center; margin-bottom: 3rem;">
+
+                        @if($index % 2 == 0)
+                        <div class="w-full md:w-[45%] md:text-right md:pr-8 mb-4 md:mb-0 order-2 md:order-1"
+                            data-aos="fade-right" style="width: 100%;">
+                            <div class="glass-card p-6 rounded-2xl border border-white shadow-sm inline-block text-left w-full"
+                                style="padding: 1.5rem; border-radius: 16px;">
+                                <span class="text-xs uppercase tracking-widest text-[#c5a880] font-semibold block mb-1"
+                                    style="letter-spacing: 0.1em; display: block; margin-bottom: 0.25rem;">{{ $cerita->tanggal }}</span>
+                                <h4 class="font-heading text-xl text-[#1d3226] font-bold mb-2"
+                                    style="font-weight: 700; margin-bottom: 0.5rem;">{{ $cerita->judul }}</h4>
+                                <p class="text-xs md:text-sm text-[#5a6b5d] font-body leading-relaxed"
+                                    style="margin: 0; line-height: 1.6;">{{ $cerita->isi_cerita }}</p>
+                            </div>
                         </div>
+                        <div class="absolute left-0 md:left-1/2 transform -translate-x-[11px] md:-translate-x-1/2 w-6 h-6 rounded-full bg-[#faf6f0] border-4 border-[#c5a880] flex items-center justify-center z-10 order-1 md:order-2"
+                            style="position: absolute; left: 0; transform: translateX(-11px); width: 24px; height: 24px; border-radius: 50%; border: 4px solid #c5a880; background-color: #faf6f0; z-index: 10;">
+                            <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #1d3226;"></div>
+                        </div>
+                        <div class="w-full md:w-[45%] md:pl-8 order-3" data-aos="fade-left"></div>
+                        @else
+                        <div class="w-full md:w-[45%] md:pr-8 mb-4 md:mb-0 order-2 md:order-1" data-aos="fade-right"
+                            style="width: 100%;"></div>
+                        <div class="absolute left-0 md:left-1/2 transform -translate-x-[11px] md:-translate-x-1/2 w-6 h-6 rounded-full bg-[#faf6f0] border-4 border-[#c5a880] flex items-center justify-center z-10 order-1 md:order-2"
+                            style="position: absolute; left: 0; transform: translateX(-11px); width: 24px; height: 24px; border-radius: 50%; border: 4px solid #c5a880; background-color: #faf6f0; z-index: 10;">
+                            <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #1d3226;"></div>
+                        </div>
+                        <div class="w-full md:w-[45%] md:pl-8 order-3" data-aos="fade-left" style="width: 100%;">
+                            <div class="glass-card p-6 rounded-2xl border border-white shadow-sm w-full"
+                                style="padding: 1.5rem; border-radius: 16px;">
+                                <span class="text-xs uppercase tracking-widest text-[#c5a880] font-semibold block mb-1"
+                                    style="letter-spacing: 0.1em; display: block; margin-bottom: 0.25rem;">{{ $cerita->tanggal }}</span>
+                                <h4 class="font-heading text-xl text-[#1d3226] font-bold mb-2"
+                                    style="font-weight: 700; margin-bottom: 0.5rem;">{{ $cerita->judul }}</h4>
+                                <p class="text-xs md:text-sm text-[#5a6b5d] font-body leading-relaxed"
+                                    style="margin: 0; line-height: 1.6;">{{ $cerita->isi_cerita }}</p>
+                            </div>
+                        </div>
+                        @endif
+
+                    </div>
                     @empty
                     @endforelse
                 </div>
@@ -1132,6 +1140,7 @@
                     </div>
                 </div>
                 <div class="venue-grid">
+                    @if($akad)
                     <div data-aos="fade-up" data-aos-delay="100"
                         class="glass-card-dark border border-white/15 p-8 rounded-[28px]"
                         style="padding: 2rem; border-radius: 28px; max-width: 360px; width: 100%; text-align: left;">
@@ -1149,10 +1158,12 @@
                             </div>
                             <h4 class="font-semibold text-base mb-1"
                                 style="font-weight: 600; margin-bottom: 0.25rem;">
-                                {{ $akad->lokasi ?? 'Lokasi Akad' }}</h4>
+                                {{ $akad->lokasi ?? 'Lokasi Akad' }}
+                            </h4>
                             <p class="text-xs md:text-sm text-white/70 leading-relaxed mb-6 font-body"
                                 style="opacity: 0.7; line-height: 1.5; margin-bottom: 1.5rem; font-size: 0.8rem;">
-                                {{ $akad->alamat ?? 'Alamat Akad' }}</p>
+                                {{ $akad->alamat ?? 'Alamat Akad' }}
+                            </p>
                         </div>
                         <div style="display: flex; flex-direction: column; width: 100%;">
                             <a href="{{ $akad->gmaps_link ?? '#' }}" target="_blank" class="btn-gold"
@@ -1167,6 +1178,8 @@
                             </a>
                         </div>
                     </div>
+                    @endif
+                    @if($resepsi)
                     <div data-aos="fade-up" data-aos-delay="200"
                         class="glass-card-dark border border-white/15 p-8 rounded-[28px]"
                         style="padding: 2rem; border-radius: 28px; max-width: 360px; width: 100%; text-align: left;">
@@ -1185,10 +1198,12 @@
                             </div>
                             <h4 class="font-semibold text-base mb-1"
                                 style="font-weight: 600; margin-bottom: 0.25rem;">
-                                {{ $resepsi->lokasi ?? 'Lokasi Resepsi' }}</h4>
+                                {{ $resepsi->lokasi ?? 'Lokasi Resepsi' }}
+                            </h4>
                             <p class="text-xs md:text-sm text-white/70 leading-relaxed mb-6 font-body"
                                 style="opacity: 0.7; line-height: 1.5; margin-bottom: 1.5rem; font-size: 0.8rem;">
-                                {{ $resepsi->alamat ?? 'Alamat Resepsi' }}</p>
+                                {{ $resepsi->alamat ?? 'Alamat Resepsi' }}
+                            </p>
                         </div>
                         <div style="display: flex; flex-direction: column; width: 100%;">
                             <a href="{{ $resepsi->gmaps_link ?? '#' }}" target="_blank" class="btn-gold"
@@ -1203,6 +1218,7 @@
                             </a>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         </section>
@@ -1225,63 +1241,30 @@
                     menyalurkannya melalui rekening berikut:</p>
                 <div class="gift-grid">
                     @forelse ($kados as $kado)
-                        <div data-aos="flip-up" class="glass-card-gold text-[#2c3930]"
-                            style="width: 100%; max-width: 280px; border-radius: 24px; padding: 1.5rem; text-align: left;">
+                    <div data-aos="flip-up" class="glass-card-gold text-[#2c3930]"
+                        style="width: 100%; max-width: 280px; border-radius: 24px; padding: 1.5rem; text-align: left;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <span
+                                style="font-weight: 700; font-size: 1.125rem; letter-spacing: 0.05em; color: #1d3226;">{{ $kado->nama_bank }}</span>
                             <div
-                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                                <span
-                                    style="font-weight: 700; font-size: 1.125rem; letter-spacing: 0.05em; color: #1d3226;">{{ $kado->nama_bank }}</span>
-                                <div
-                                    style="width: 32px; height: 24px; background-color: rgba(197, 168, 128, 0.2); border-radius: 6px; border: 1px solid rgba(197, 168, 128, 0.4); display: flex; align-items: center; justify-content: center;">
-                                </div>
+                                style="width: 32px; height: 24px; background-color: rgba(197, 168, 128, 0.2); border-radius: 6px; border: 1px solid rgba(197, 168, 128, 0.4); display: flex; align-items: center; justify-content: center;">
                             </div>
-                            <p class="text-[10px] uppercase tracking-widest text-[#2c3930]/60 mb-1"
-                                style="font-size: 10px; opacity: 0.6;">Nomor Rekening</p>
-                            <h4 class="font-heading text-xl font-semibold tracking-widest text-[#1d3226] mb-4"
-                                style="font-weight: 600; letter-spacing: 0.1em; margin-bottom: 1rem;">
-                                {{ $kado->no_rekening }}</h4>
-                            <p class="text-[9px] uppercase tracking-wider text-[#2c3930]/60 mb-4"
-                                style="font-size: 9px; opacity: 0.6; margin-bottom: 1rem;">A.N.
-                                {{ $kado->nama_pemilik }}</p>
-                            <button
-                                onclick="copyToClipboard('{{ $kado->no_rekening }}', '{{ $kado->nama_bank }}')"
-                                class="btn-gold"
-                                style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.75rem; padding: 0.5rem 1rem;">
-                                <svg viewBox="0 0 24 24" width="14" height="14"
-                                    style="width: 14px; height: 14px;" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2">
-                                    </rect>
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                </svg>
-                                Salin Rekening
-                            </button>
                         </div>
-                    @empty
-                    @endforelse
-                </div>
-                @if ($invitation->alamat_kado)
-                    <div data-aos="fade-up" class="glass-card"
-                        style="margin-top: 3rem; padding: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto; border-radius: 16px; text-align: left;">
-                        <h4 class="font-heading text-lg font-bold text-[#1d3226] mb-2"
-                            style="font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <svg viewBox="0 0 24 24" width="20" height="20"
-                                style="width: 20px; height: 20px;" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <polyline points="20 12 20 22 4 22 4 12"></polyline>
-                                <rect x="2" y="7" width="20" height="5"></rect>
-                                <line x1="12" y1="22" x2="12" y2="7"></line>
-                                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
-                                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
-                            </svg>
-                            Kado Fisik (Alamat Pengiriman)
+                        <p class="text-[10px] uppercase tracking-widest text-[#2c3930]/60 mb-1"
+                            style="font-size: 10px; opacity: 0.6;">Nomor Rekening</p>
+                        <h4 class="font-heading text-xl font-semibold tracking-widest text-[#1d3226] mb-4"
+                            style="font-weight: 600; letter-spacing: 0.1em; margin-bottom: 1rem;">
+                            {{ $kado->no_rekening }}
                         </h4>
-                        <p id="alamat-pengiriman" class="text-xs text-[#5a6b5d] mb-4 leading-relaxed font-body"
-                            style="line-height: 1.5; margin-bottom: 1rem; font-size: 0.8rem;">
-                            {{ $invitation->alamat_kado }}</p>
-                        <button onclick="copyAddressToClipboard('{{ $invitation->alamat_kado }}')"
-                            class="btn-outline-gold"
-                            style="padding: 0.5rem 1rem; font-size: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <p class="text-[9px] uppercase tracking-wider text-[#2c3930]/60 mb-4"
+                            style="font-size: 9px; opacity: 0.6; margin-bottom: 1rem;">A.N.
+                            {{ $kado->nama_pemilik }}
+                        </p>
+                        <button
+                            onclick="copyToClipboard('{{ $kado->no_rekening }}', '{{ $kado->nama_bank }}')"
+                            class="btn-gold"
+                            style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.75rem; padding: 0.5rem 1rem;">
                             <svg viewBox="0 0 24 24" width="14" height="14"
                                 style="width: 14px; height: 14px;" fill="none" stroke="currentColor"
                                 stroke-width="2">
@@ -1289,9 +1272,45 @@
                                 </rect>
                                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                             </svg>
-                            Salin Alamat Kirim
+                            Salin Rekening
                         </button>
                     </div>
+                    @empty
+                    @endforelse
+                </div>
+                @if ($invitation->alamat_kado)
+                <div data-aos="fade-up" class="glass-card"
+                    style="margin-top: 3rem; padding: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto; border-radius: 16px; text-align: left;">
+                    <h4 class="font-heading text-lg font-bold text-[#1d3226] mb-2"
+                        style="font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg viewBox="0 0 24 24" width="20" height="20"
+                            style="width: 20px; height: 20px;" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                            <rect x="2" y="7" width="20" height="5"></rect>
+                            <line x1="12" y1="22" x2="12" y2="7"></line>
+                            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                        </svg>
+                        Kado Fisik (Alamat Pengiriman)
+                    </h4>
+                    <p id="alamat-pengiriman" class="text-xs text-[#5a6b5d] mb-4 leading-relaxed font-body"
+                        style="line-height: 1.5; margin-bottom: 1rem; font-size: 0.8rem;">
+                        {{ $invitation->alamat_kado }}
+                    </p>
+                    <button onclick="copyAddressToClipboard('{{ $invitation->alamat_kado }}')"
+                        class="btn-outline-gold"
+                        style="padding: 0.5rem 1rem; font-size: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg viewBox="0 0 24 24" width="14" height="14"
+                            style="width: 14px; height: 14px;" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2">
+                            </rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        Salin Alamat Kirim
+                    </button>
+                </div>
                 @endif
             </div>
         </section>
@@ -1385,24 +1404,25 @@
                             <div id="wishes-wall"
                                 style="display: flex; flex-direction: column; gap: 1rem; max-height: 320px; overflow-y: auto; padding-right: 0.5rem;">
                                 @forelse($wishes as $wish)
+                                <div
+                                    style="padding: 1rem; border-radius: 16px; background-color: rgba(255,255,255,0.6); border: 1px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
                                     <div
-                                        style="padding: 1rem; border-radius: 16px; background-color: rgba(255,255,255,0.6); border: 1px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                                        <div
-                                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                                            <div>
-                                                <h5 style="font-weight: 600; font-size: 0.85rem; margin: 0; color: #1d3226;">
-                                                    {{ $wish->nama }} <span class="text-xs text-[#c5a880] font-normal ml-1">({{ $wish->kehadiran == 'hadir' ? 'Hadir' : ($wish->kehadiran == 'tidak' ? 'Tidak Hadir' : 'Masih Ragu') }})</span></h5>
-                                            </div>
-                                            <span
-                                                style="font-size: 9px; color: #849687;">{{ $wish->created_at->diffForHumans() }}</span>
+                                        style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                                        <div>
+                                            <h5 style="font-weight: 600; font-size: 0.85rem; margin: 0; color: #1d3226;">
+                                                {{ $wish->nama }} <span class="text-xs text-[#c5a880] font-normal ml-1">({{ $wish->kehadiran == 'hadir' ? 'Hadir' : ($wish->kehadiran == 'tidak' ? 'Tidak Hadir' : 'Masih Ragu') }})</span>
+                                            </h5>
                                         </div>
-                                        <p
-                                            style="font-size: 0.8rem; color: #5a6b5d; font-style: italic; margin: 0; line-height: 1.4;">
-                                            "{{ $wish->pesan }}"</p>
+                                        <span
+                                            style="font-size: 9px; color: #849687;">{{ $wish->created_at->diffForHumans() }}</span>
                                     </div>
+                                    <p
+                                        style="font-size: 0.8rem; color: #5a6b5d; font-style: italic; margin: 0; line-height: 1.4;">
+                                        "{{ $wish->pesan }}"</p>
+                                </div>
                                 @empty
-                                    <p style="font-size: 0.8rem; color: #849687; text-align: center;">Belum ada ucapan.
-                                        Jadilah yang pertama!</p>
+                                <p style="font-size: 0.8rem; color: #849687; text-align: center;">Belum ada ucapan.
+                                    Jadilah yang pertama!</p>
                                 @endforelse
                             </div>
                             <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(197, 168, 128, 0.2); display: flex; justify-content: space-between; align-items: center;"
@@ -1481,7 +1501,7 @@
                 guestName = decodeURIComponent(guestName.replace(/\+/g, ' '));
                 let guestNameEl = document.getElementById('guest-name');
                 if (guestNameEl) guestNameEl.innerText = guestName;
-                
+
                 let rsvpNameEl = document.getElementById('rsvp-name');
                 if (rsvpNameEl) rsvpNameEl.value = guestName;
             }
@@ -1530,7 +1550,7 @@
         // Countdown
         const weddingDate = new Date(
             '{{ $akad && $akad->tgl_acara ? \Carbon\Carbon::parse($akad->tgl_acara)->format("Y-m-d") : "2026-05-26" }}T{{ $akad && $akad->waktu_mulai ? \Carbon\Carbon::parse($akad->waktu_mulai)->format("H:i:s") : "08:00:00" }}'
-            ).getTime();
+        ).getTime();
         setInterval(function() {
             const now = new Date().getTime();
             const distance = weddingDate - now;
@@ -1609,7 +1629,7 @@
                     $('#rsvp-status').val('');
                     $('#rsvp-guests').val('1');
                     $('#rsvp-message').val('');
-                    
+
                     // Prepend new wish
                     if (response.wish) {
                         const card = `
@@ -1622,7 +1642,7 @@
                             </div>
                         `;
                         $('#wishes-wall').prepend(card);
-                        
+
                         let countElem = $('#wishes-count');
                         if (countElem.length) {
                             countElem.text(parseInt(countElem.text()) + 1);
@@ -1635,7 +1655,6 @@
                 }
             });
         });
-
     </script>
 </body>
 

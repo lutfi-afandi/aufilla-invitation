@@ -5,7 +5,7 @@
              data-name="{{ $theme->name }}" 
              onclick="selectTheme({{ $theme->id }}, '{{ addslashes($theme->name) }}', '{{ $theme->thumbnail ? asset('storage/' . $theme->thumbnail) : '' }}', this)">
             
-            <div class="h-32 bg-slate-100 relative overflow-hidden">
+            <div class="aspect-[3/4] bg-slate-100 relative overflow-hidden">
                 @if($theme->thumbnail)
                     <img src="{{ asset('storage/' . $theme->thumbnail) }}" alt="{{ $theme->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                 @else

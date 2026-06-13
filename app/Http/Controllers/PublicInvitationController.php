@@ -28,6 +28,11 @@ class PublicInvitationController extends Controller
             abort(403, 'Undangan belum bisa diakses karena Data Pengantin belum lengkap. Jika Anda pemilik undangan, silakan lengkapi profil mempelai melalui Panel Klien.');
         }
 
+        // Cek apakah data acara sudah lengkap
+        if (!$invitation->isDataAcaraComplete()) {
+            abort(403, 'Undangan belum bisa diakses karena Data Acara belum lengkap. Jika Anda pemilik undangan, silakan lengkapi data acara (Akad & Resepsi) melalui Panel Klien.');
+        }
+
         // If trial expired, blocked completely for everyone
         if ($invitation->status === 'trial' && $invitation->trial_habis_at && $invitation->trial_habis_at->isPast()) {
             abort(403, 'Masa trial undangan ini telah habis. Silakan hubungi Admin untuk aktivasi.');
