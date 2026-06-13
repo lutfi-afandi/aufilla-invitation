@@ -31,11 +31,11 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('admin123'),
         ]);
 
-        \App\Models\Theme::create([
-            'name' => 'Demo Theme 1',
-            'code' => 'demo1',
-            'thumbnail' => '/assets/img/thumbnail-tema/demo1.png',
-            'is_active' => true,
-        ]);
+        // \App\Models\Theme::create([
+        //     'name' => 'Demo Theme 1',
+        //     'code' => 'demo1',
+        //     'thumbnail' => '/assets/img/thumbnail-tema/demo1.png',
+        //     'is_active' => true,
+        // ]);
     }
 }
