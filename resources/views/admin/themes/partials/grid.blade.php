@@ -1,8 +1,8 @@
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 xl:gap-8">
     @forelse($themes as $theme)
     <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden hover:-translate-y-1 hover:shadow-md transition-all duration-300 group" id="theme-card-{{ $theme->id }}">
         <!-- Thumbnail -->
-        <div class="h-44 bg-gradient-to-br from-slate-100 to-slate-50 relative overflow-hidden">
+        <div class="aspect-[3/4] bg-gradient-to-br from-slate-100 to-slate-50 relative overflow-hidden">
             @if($theme->thumbnail)
                 <img src="{{ asset('storage/' . $theme->thumbnail) }}" alt="{{ $theme->name }}" class="w-full h-full object-cover">
             @else
