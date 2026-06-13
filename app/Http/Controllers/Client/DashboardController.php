@@ -77,4 +77,10 @@ class DashboardController extends Controller
         $kados = $invitation->kados()->orderBy('created_at', 'asc')->get();
         return view('client.kado', compact('invitation', 'kados'));
     }
+
+    public function tutorial()
+    {
+        $invitation = $this->getInvitation();
+        return view('client.tutorial', compact('invitation'));
+    }
 }

@@ -178,7 +178,7 @@
         <div class="absolute inset-0 border-2 border-rosegold-500/30 border-t-rosegold-500 rounded-full animate-spin"></div>
         <span class="font-serif text-3xl font-bold text-rosegold-500 relative z-10 leading-none">{{ strtoupper(substr($invitation->pria_nama, 0, 1)) }}&amp;{{ strtoupper(substr($invitation->wanita_nama, 0, 1)) }}</span>
       </div>
-      <p class="font-serif text-rosegold-200 mt-6 tracking-widest uppercase text-sm animate-pulse-gentle">Memuat Serenade Indah...</p>
+      <p class="font-serif text-rosegold-200 mt-6 tracking-widest uppercase text-sm animate-pulse-gentle">Bahagia Marayakan Cinta...</p>
     </div>
   </div>
 

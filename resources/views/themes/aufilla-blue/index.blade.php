@@ -5,14 +5,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Undangan Pernikahan — {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}</title>
+  <title>Undangan Pernikahan: {{ $invitation->pria_nama }} & {{ $invitation->wanita_nama }}</title>
 
-  <!-- SEO & Social Media Meta Tags -->
-  <meta name="description" content="Kami mengundang Anda untuk hadir dan memberikan doa restu pada acara pernikahan kami: {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}">
-  <meta property="og:title" content="Undangan Pernikahan — {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}">
-  <meta property="og:description" content="Kami mengundang Anda untuk hadir dan memberikan doa restu pada acara pernikahan kami.">
+  <!-- Meta Data & Open Graph untuk WhatsApp / Sosmed -->
+  <meta name="description" content="Kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami.">
+  <meta property="og:title" content="Undangan Pernikahan: {{ $invitation->pria_nama }} & {{ $invitation->wanita_nama }}">
+  <meta property="og:description" content="Kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami.">
+  <meta property="og:image" content="{{ route('og-image', $invitation->id) }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="{{ url()->current() }}">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="{{ asset('assets/default/default-pasangan.jpg') }}">
+  <meta name="twitter:card" content="summary_large_image">
 
   <!-- Favicon -->
   <link rel="icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
@@ -178,7 +182,7 @@
         <div class="absolute inset-0 border-2 border-gold-500/30 border-t-gold-500 rounded-full animate-spin"></div>
         <span class="font-serif text-3xl font-bold text-gold-500 relative z-10 leading-none">{{ strtoupper(substr($invitation->pria_nama, 0, 1)) }}&amp;{{ strtoupper(substr($invitation->wanita_nama, 0, 1)) }}</span>
       </div>
-      <p class="font-serif text-amber-200 mt-6 tracking-widest uppercase text-sm animate-pulse-gentle">Memuat Serenade Indah...</p>
+      <p class="font-serif text-amber-200 mt-6 tracking-widest uppercase text-sm animate-pulse-gentle">Bahagia Marayakan Cinta...</p>
     </div>
   </div>
 

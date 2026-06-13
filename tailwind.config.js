@@ -34,6 +34,14 @@ export default {
                     success: '#22c55e',
                     warning: '#f59e0b',
                     danger: '#ef4444',
+                },
+                recept: {
+                    dark: '#0f172a',    // Slate 900
+                    base: '#f4f4f5',    // Zinc 100 for bg
+                    card: '#ffffff',    // White
+                    primary: '#4f46e5', // Indigo 600
+                    'primary-hover': '#4338ca', // Indigo 700
+                    border: '#e4e4e7',  // Zinc 200
                 }
             },
         },

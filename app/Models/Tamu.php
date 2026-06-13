@@ -12,10 +12,12 @@ class Tamu extends Model
         'no_wa',
         'is_wa_sent',
         'kode_qr',
+        'waktu_hadir',
     ];
 
     protected $casts = [
         'is_wa_sent' => 'boolean',
+        'waktu_hadir' => 'datetime',
     ];
 
     public function invitation()

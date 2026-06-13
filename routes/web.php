@@ -47,6 +47,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Client Routes
     Route::middleware(['role:client'])->prefix('client')->name('client.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/tutorial', [\App\Http\Controllers\Client\DashboardController::class, 'tutorial'])->name('tutorial');
         Route::get('/tamu', [\App\Http\Controllers\Client\DashboardController::class, 'tamu'])->name('tamu');
         Route::get('/tamu/data', [\App\Http\Controllers\Client\TamuController::class, 'index'])->name('tamu.data');
         Route::get('/tamu/export-excel', [\App\Http\Controllers\Client\TamuController::class, 'exportExcel'])->name('tamu.export');
@@ -89,6 +90,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Receptionist Routes
     Route::middleware(['role:resepsionis'])->prefix('receptionist')->name('receptionist.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Receptionist\DashboardController::class, 'index'])->name('dashboard');
+
+        // Buku Tamu (Reception Desk)
+        Route::get('/buku-tamu/{id}', [\App\Http\Controllers\Receptionist\BukuTamuController::class, 'index'])->name('buku-tamu');
+        Route::get('/buku-tamu/{id}/search', [\App\Http\Controllers\Receptionist\BukuTamuController::class, 'search'])->name('buku-tamu.search');
+        Route::post('/buku-tamu/{id}/check-in', [\App\Http\Controllers\Receptionist\BukuTamuController::class, 'checkIn'])->name('buku-tamu.check-in');
+        Route::post('/buku-tamu/{id}/add-guest', [\App\Http\Controllers\Receptionist\BukuTamuController::class, 'addGuest'])->name('buku-tamu.add-guest');
+        Route::post('/buku-tamu/{id}/upload-bg', [\App\Http\Controllers\Receptionist\BukuTamuController::class, 'uploadBg'])->name('buku-tamu.upload-bg');
+
+        // Welcome Screen (Dual Screen Display)
+        Route::get('/welcome-screen/{id}', [\App\Http\Controllers\Receptionist\BukuTamuController::class, 'welcomeScreen'])->name('welcome-screen');
     });
 
     // Stop Impersonation (admin returning from client session)
@@ -107,7 +118,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 require __DIR__.'/auth.php';
 
-// --- PUBLIC INVITATION ROUTE (Must be at the very bottom, after all other routes including auth) ---
+// ==========================================
+// OPEN GRAPH IMAGE GENERATOR
+// ==========================================
+Route::get('/og-image/{id}', [\App\Http\Controllers\Client\OgImageController::class, 'generate'])->name('og-image');
+
+// ==========================================
+// PUBLIC INVITATION ROUTE (Must be at the very bottom, after all other routes including auth) ---
 Route::get('/preview/theme/{theme_code}', [\App\Http\Controllers\PublicInvitationController::class, 'preview'])->name('theme.preview');
 Route::post('/{slug}/ucapan', [\App\Http\Controllers\PublicInvitationController::class, 'storeUcapan'])->name('public.ucapan.store');
 Route::get('/{slug}', [\App\Http\Controllers\PublicInvitationController::class, 'show'])->name('public.invitation');

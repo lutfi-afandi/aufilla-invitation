@@ -185,7 +185,7 @@
         let currentPage = 1;
         let currentSearch = '';
 
-        function loadTamu(page = 1, search = '') {
+        window.loadTamu = function(page = 1, search = '') {
             currentPage = page;
             currentSearch = search;
             $('#tamu-list').html('<tr><td colspan="4" class="px-7 py-8 text-center text-gray-500 italic">Memuat data...</td></tr>');
@@ -251,22 +251,32 @@
         function renderPagination(response) {
             let html = '';
             if (response.last_page > 1) {
-                html += '<div class="text-sm text-gray-500">Menampilkan ' + response.from + ' sampai ' + response.to + ' dari ' + response.total + ' tamu</div>';
-                html += '<div class="flex gap-1">';
+                html += '<div class="text-sm font-medium text-gray-500">Menampilkan <span class="text-brand-dark">' + response.from + '</span> - <span class="text-brand-dark">' + response.to + '</span> dari <span class="text-brand-dark">' + response.total + '</span></div>';
+                html += '<div class="flex gap-2">';
                 
                 // Prev button
-                if (response.current_page > 1) {
-                    html += `<button onclick="loadTamu(${response.current_page - 1}, '${currentSearch}')" class="px-3 py-1 border border-gray-200 rounded text-gray-600 hover:bg-gray-50 text-sm">Sebelummya</button>`;
-                }
+                let prevDisabled = response.current_page <= 1 
+                    ? 'disabled class="px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-gray-400 text-sm cursor-not-allowed flex items-center gap-1"' 
+                    : `onclick="loadTamu(${response.current_page - 1}, '${currentSearch}')" class="px-4 py-2 bg-white border border-gray-200 rounded-xl text-brand-dark hover:bg-gray-50 hover:border-gray-300 transition-all text-sm font-medium shadow-sm flex items-center gap-1"`;
+                
+                html += `<button ${prevDisabled}>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            Sebelumnya
+                        </button>`;
                 
                 // Next button
-                if (response.current_page < response.last_page) {
-                    html += `<button onclick="loadTamu(${response.current_page + 1}, '${currentSearch}')" class="px-3 py-1 border border-gray-200 rounded text-gray-600 hover:bg-gray-50 text-sm">Selanjutnya</button>`;
-                }
+                let nextDisabled = response.current_page >= response.last_page 
+                    ? 'disabled class="px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-gray-400 text-sm cursor-not-allowed flex items-center gap-1"' 
+                    : `onclick="loadTamu(${response.current_page + 1}, '${currentSearch}')" class="px-4 py-2 bg-white border border-gray-200 rounded-xl text-brand-dark hover:bg-gray-50 hover:border-gray-300 transition-all text-sm font-medium shadow-sm flex items-center gap-1"`;
+                
+                html += `<button ${nextDisabled}>
+                            Selanjutnya
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>`;
                 
                 html += '</div>';
             } else if (response.total > 0) {
-                html = `<div class="text-sm text-gray-500">Total ${response.total} tamu</div>`;
+                html = `<div class="text-sm font-medium text-gray-500">Total <span class="text-brand-dark">${response.total}</span> tamu</div>`;
             }
             $('#pagination-container').html(html);
         }
