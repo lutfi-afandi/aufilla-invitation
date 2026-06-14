@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Invitation;
 use App\Models\Tamu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BukuTamuController extends Controller
 {
@@ -119,20 +120,79 @@ class BukuTamuController extends Controller
         return view('receptionist.welcome-screen', compact('invitation'));
     }
 
-    /**
-     * Upload custom background sementara untuk layar penyambutan
-     */
     public function uploadBg(Request $request, $id)
     {
+        $invitation = Invitation::findOrFail($id);
+
         $request->validate([
-            'background' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120'
+            'background_image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        $path = $request->file('background')->store('welcome_bg', 'public');
+        if ($request->hasFile('background_image')) {
+            $path = $request->file('background_image')->store('welcome_screens', 'public');
+            
+            // Save to invitation settings
+            $invitation->update([
+                'welcome_bg_path' => $path
+            ]);
 
-        return response()->json([
-            'success' => true,
-            'url' => asset('storage/' . $path)
+            return response()->json([
+                'success' => true, 
+                'message' => 'Background berhasil diunggah!',
+                'path' => asset('storage/' . $path)
+            ]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Gagal mengunggah file.']);
+    }
+
+    public function importExcel(Request $request, $id)
+    {
+        $invitation = Invitation::findOrFail($id);
+
+        $request->validate([
+            'excel_file' => 'required|file|mimes:xlsx,xls,csv|max:2048',
         ]);
+
+        $collection = (new \Rap2hpoutre\FastExcel\FastExcel)->import($request->file('excel_file'));
+        
+        foreach ($collection as $row) {
+            if (!\App\Helpers\PackageHelper::canAddGuest($invitation)) {
+                break;
+            }
+
+            $nama_tamu = $row['Nama Tamu'] ?? $row['nama tamu'] ?? $row['nama_tamu'] ?? '';
+            $no_wa = $row['No WhatsApp'] ?? $row['no whatsapp'] ?? $row['no_wa'] ?? '';
+
+            if (!empty($nama_tamu)) {
+                $invitation->tamus()->create([
+                    'nama_tamu' => $nama_tamu,
+                    'no_wa' => $this->sanitizeWaNumber($no_wa)
+                ]);
+            }
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function downloadTemplate()
+    {
+        $templateData = [
+            ['Nama Tamu' => 'Budi Santoso', 'No WhatsApp' => '08123456789'],
+            ['Nama Tamu' => 'Ayu Lestari', 'No WhatsApp' => '08987654321']
+        ];
+        return (new \Rap2hpoutre\FastExcel\FastExcel(collect($templateData)))->download('template_tamu.xlsx');
+    }
+
+    private function sanitizeWaNumber($no_wa)
+    {
+        if (empty($no_wa)) return null;
+        $no_wa = preg_replace('/[^0-9+]/', '', $no_wa);
+        if (str_starts_with($no_wa, '+62')) {
+            return '0' . substr($no_wa, 3);
+        } elseif (str_starts_with($no_wa, '62')) {
+            return '0' . substr($no_wa, 2);
+        }
+        return $no_wa;
     }
 }

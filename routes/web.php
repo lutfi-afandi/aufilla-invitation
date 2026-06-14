@@ -91,12 +91,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware(['role:resepsionis'])->prefix('receptionist')->name('receptionist.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Receptionist\DashboardController::class, 'index'])->name('dashboard');
 
-        // Buku Tamu (Reception Desk)
+        // Buku Tamu (Scanner & Manual Check-in)
+        Route::get('/buku-tamu/template-excel', [\App\Http\Controllers\Receptionist\BukuTamuController::class, 'downloadTemplate'])->name('buku-tamu.template-excel');
         Route::get('/buku-tamu/{id}', [\App\Http\Controllers\Receptionist\BukuTamuController::class, 'index'])->name('buku-tamu');
         Route::get('/buku-tamu/{id}/search', [\App\Http\Controllers\Receptionist\BukuTamuController::class, 'search'])->name('buku-tamu.search');
         Route::post('/buku-tamu/{id}/check-in', [\App\Http\Controllers\Receptionist\BukuTamuController::class, 'checkIn'])->name('buku-tamu.check-in');
         Route::post('/buku-tamu/{id}/add-guest', [\App\Http\Controllers\Receptionist\BukuTamuController::class, 'addGuest'])->name('buku-tamu.add-guest');
         Route::post('/buku-tamu/{id}/upload-bg', [\App\Http\Controllers\Receptionist\BukuTamuController::class, 'uploadBg'])->name('buku-tamu.upload-bg');
+        Route::post('/buku-tamu/{id}/import-excel', [\App\Http\Controllers\Receptionist\BukuTamuController::class, 'importExcel'])->name('buku-tamu.import-excel');
 
         // Welcome Screen (Dual Screen Display)
         Route::get('/welcome-screen/{id}', [\App\Http\Controllers\Receptionist\BukuTamuController::class, 'welcomeScreen'])->name('welcome-screen');

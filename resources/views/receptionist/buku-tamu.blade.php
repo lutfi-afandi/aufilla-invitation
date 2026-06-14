@@ -53,10 +53,16 @@
 
                 <!-- Quick Add Guest Form -->
                 <div class="p-5 border-t border-recept-border bg-slate-50">
-                    <button type="button" id="btn-toggle-add" class="text-sm font-semibold text-recept-primary hover:text-recept-primary-hover flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
-                        Tamu Tidak Ditemukan? Tambah Baru
-                    </button>
+                    <div class="flex items-center justify-between">
+                        <button type="button" id="btn-toggle-add" class="text-sm font-semibold text-recept-primary hover:text-recept-primary-hover flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+                            Tamu Tidak Ditemukan? Tambah Baru
+                        </button>
+                        <button type="button" onclick="document.getElementById('import-modal').classList.remove('hidden')" class="text-sm font-semibold text-emerald-600 hover:text-emerald-700 flex items-center gap-2 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200 shadow-sm transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                            Import Excel
+                        </button>
+                    </div>
                     <form id="form-add-guest" class="mt-4 hidden animate-fade-in space-y-3">
                         <div class="flex gap-3">
                             <input type="text" name="nama_tamu" id="add-nama-tamu" required class="flex-1 px-4 py-2 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm" placeholder="Nama Lengkap Tamu">
@@ -142,6 +148,49 @@
             </div>
         </div>
 
+    </div>
+</div>
+
+<!-- Import Modal -->
+<div id="import-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="document.getElementById('import-modal').classList.add('hidden')"></div>
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                Import Data Tamu
+            </h3>
+            <button onclick="document.getElementById('import-modal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div class="p-6 space-y-6">
+            <!-- Download Template Box -->
+            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex items-center justify-between gap-4">
+                <div>
+                    <h4 class="text-sm font-semibold text-indigo-900">Format Import Excel</h4>
+                    <p class="text-xs text-indigo-600 mt-1">Unduh format tabel yang kami sediakan.</p>
+                </div>
+                <a href="{{ route('receptionist.buku-tamu.template-excel') }}" class="px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-semibold hover:bg-indigo-700 transition-colors flex shrink-0 items-center gap-1.5 shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Unduh Format
+                </a>
+            </div>
+
+            <!-- Upload Form -->
+            <form id="form-import" enctype="multipart/form-data" class="space-y-4">
+                @csrf
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Upload File Excel (Max 2MB)</label>
+                    <input type="file" id="excel_file" name="excel_file" accept=".xlsx, .xls, .csv" required
+                        class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 file:transition-colors file:cursor-pointer border border-slate-200 rounded-xl">
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-semibold hover:bg-emerald-700 transition-colors shadow-sm flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                    Mulai Import Data
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 @endsection
@@ -282,6 +331,47 @@
                 isProcessing = false;
             });
         });
+
+        // --- 2.5 IMPORT EXCEL LOGIC ---
+        const formImport = document.getElementById('form-import');
+        if(formImport) {
+            formImport.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const btnSubmit = this.querySelector('button[type="submit"]');
+                const originalText = btnSubmit.innerHTML;
+                
+                btnSubmit.innerHTML = `<svg class="w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Mengimpor...`;
+                btnSubmit.disabled = true;
+
+                let formData = new FormData(this);
+                fetch("{{ route('receptionist.buku-tamu.import-excel', $invitation->id) }}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(async res => {
+                    const data = await res.json();
+                    if(!res.ok) throw data;
+                    return data;
+                })
+                .then(res => {
+                    Swal.fire('Berhasil!', 'Data tamu berhasil diimpor.', 'success').then(() => {
+                        document.getElementById('import-modal').classList.add('hidden');
+                        formImport.reset();
+                        // Optional: refresh page or re-focus
+                        inputUniversal.focus();
+                    });
+                })
+                .catch(err => {
+                    const msg = err.error || err.message || 'Terjadi kesalahan saat impor data';
+                    Swal.fire('Error', msg, 'error');
+                })
+                .finally(() => {
+                    btnSubmit.innerHTML = originalText;
+                    btnSubmit.disabled = false;
+                });
+            });
+        }
 
         // --- 3. BACKGROUND SELECTOR ---
         document.querySelectorAll('.bg-selector').forEach(el => {
@@ -481,7 +571,7 @@
             
             recentLogs.prepend(li);
             if(recentLogs.children.length > 5) {
-                recentLogs.removeChild(recentLogs.lastChild);
+                recentLogs.lastElementChild.remove();
             }
         }
     });

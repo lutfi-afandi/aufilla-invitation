@@ -12,7 +12,9 @@
   <meta property="og:title" content="Undangan Pernikahan — {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}">
   <meta property="og:description" content="Kami mengundang Anda untuk hadir dan memberikan doa restu pada acara pernikahan kami.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="{{ asset('assets/default/default-pasangan.jpg') }}">
+  <meta property="og:image" content="{{ $invitation->id ? route('og-image', $invitation->id) : asset('assets/default/default-pasangan.jpg') }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
 
   <!-- Favicon -->
   <link rel="icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">

@@ -11,7 +11,7 @@
   <meta name="description" content="Kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami.">
   <meta property="og:title" content="Undangan Pernikahan: {{ $invitation->pria_nama }} & {{ $invitation->wanita_nama }}">
   <meta property="og:description" content="Kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami.">
-  <meta property="og:image" content="{{ route('og-image', $invitation->id) }}">
+  <meta property="og:image" content="{{ $invitation->id ? route('og-image', $invitation->id) : asset('assets/default/default-pasangan.jpg') }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="{{ url()->current() }}">

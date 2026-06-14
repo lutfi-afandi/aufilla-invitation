@@ -55,14 +55,16 @@
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="{{ $meta_title }}">
     <meta property="og:description" content="{{ $meta_desc }}">
-    <meta property="og:image" content="{{ $pengaturan->foto_hero }}">
+    <meta property="og:image" content="{{ $invitation->id ? route('og-image', $invitation->id) : $pengaturan->foto_hero }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
     <meta property="twitter:title" content="{{ $meta_title }}">
     <meta property="twitter:description" content="{{ $meta_desc }}">
-    <meta property="twitter:image" content="{{ $pengaturan->foto_hero }}">
+    <meta property="twitter:image" content="{{ $invitation->id ? route('og-image', $invitation->id) : $pengaturan->foto_hero }}">
 
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
