@@ -40,12 +40,38 @@ class ClientController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge([
+            'username' => Str::slug($request->username)
+        ]);
+
         $validated = $request->validate([
-            'username'   => 'required|string|max:50|unique:users,username',
+            'username'   => [
+                'required', 'string', 'max:50', 'unique:users,username', 'unique:invitations,slug',
+                function ($attribute, $value, $fail) {
+                    $reserved = ['admin', 'login', 'register', 'preview', 'receptionist', 'dashboard', 'api', 'welcome-screen', 'kado', 'tamu'];
+                    if (in_array(strtolower($value), $reserved)) {
+                        $fail('Username ini tidak bisa digunakan.');
+                    }
+                }
+            ],
             'email'      => 'nullable|email|max:100|unique:users,email',
             'password'   => 'required|string|min:6|max:50',
             'theme_id'   => 'required|exists:themes,id',
             'package_id' => 'required|exists:packages,id',
+        ], [
+            'username.required' => 'Username / Link Undangan wajib diisi.',
+            'username.max' => 'Username maksimal 50 karakter.',
+            'username.unique' => 'Username / Link Undangan sudah dipakai orang lain.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email maksimal 100 karakter.',
+            'email.unique' => 'Email ini sudah terdaftar.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min' => 'Password minimal 6 karakter.',
+            'password.max' => 'Password maksimal 50 karakter.',
+            'theme_id.required' => 'Anda harus memilih Tema Undangan.',
+            'theme_id.exists' => 'Tema yang dipilih tidak valid atau tidak ditemukan.',
+            'package_id.required' => 'Anda harus memilih Paket Undangan.',
+            'package_id.exists' => 'Paket yang dipilih tidak valid atau tidak ditemukan.',
         ]);
 
         $user = \Illuminate\Support\Facades\DB::transaction(function () use ($validated) {
@@ -56,23 +82,21 @@ class ClientController extends Controller
                 'role'     => 'client',
             ]);
 
-            $baseSlug = Str::slug($validated['username']);
-            $slug = $baseSlug;
-            $count = 1;
-            while (\App\Models\Invitation::where('slug', $slug)->exists()) {
-                $slug = $baseSlug . '-' . $count;
-                $count++;
-            }
-
             $package = \App\Models\Package::find($validated['package_id']);
             $activeDays = $package ? $package->active_days : 90;
+            $expireDate = now()->addDays($activeDays);
+            if ($expireDate->year > 2037) {
+                $expireDate = \Carbon\Carbon::create(2037, 12, 31, 23, 59, 59);
+            }
 
             $user->invitation()->create([
-                'slug'           => $slug,
+                'slug'           => $validated['username'],
                 'theme_id'       => $validated['theme_id'],
                 'package_id'     => $validated['package_id'],
                 'status'         => 'active',
-                'trial_habis_at' => now()->addDays($activeDays),
+                'trial_habis_at' => $expireDate,
+                'pria_nama'      => 'Pria',
+                'wanita_nama'    => 'Wanita',
             ]);
 
             return $user;
@@ -103,13 +127,41 @@ class ClientController extends Controller
     {
         $client = User::where('role', 'client')->findOrFail($id);
 
+        $request->merge([
+            'username' => Str::slug($request->username)
+        ]);
+
         $validated = $request->validate([
-            'username'   => ['required', 'string', 'max:50', Rule::unique('users', 'username')->ignore($client->id)],
+            'username'   => [
+                'required', 'string', 'max:50', 
+                Rule::unique('users', 'username')->ignore($client->id),
+                Rule::unique('invitations', 'slug')->ignore($client->invitation?->id),
+                function ($attribute, $value, $fail) {
+                    $reserved = ['admin', 'login', 'register', 'preview', 'receptionist', 'dashboard', 'api', 'welcome-screen', 'kado', 'tamu'];
+                    if (in_array(strtolower($value), $reserved)) {
+                        $fail('Username ini tidak bisa digunakan.');
+                    }
+                }
+            ],
             'email'      => ['nullable', 'email', 'max:100', Rule::unique('users', 'email')->ignore($client->id)],
             'password'   => 'nullable|string|min:6|max:50',
             'status'     => 'required|in:trial,active,expired',
             'theme_id'   => 'required|exists:themes,id',
             'package_id' => 'nullable|exists:packages,id',
+        ], [
+            'username.required' => 'Username / Link Undangan wajib diisi.',
+            'username.max' => 'Username maksimal 50 karakter.',
+            'username.unique' => 'Username / Link Undangan sudah dipakai orang lain.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email maksimal 100 karakter.',
+            'email.unique' => 'Email ini sudah terdaftar.',
+            'password.min' => 'Password minimal 6 karakter.',
+            'password.max' => 'Password maksimal 50 karakter.',
+            'status.required' => 'Status klien wajib dipilih.',
+            'status.in' => 'Pilihan status tidak valid.',
+            'theme_id.required' => 'Anda harus memilih Tema Undangan.',
+            'theme_id.exists' => 'Tema yang dipilih tidak valid atau tidak ditemukan.',
+            'package_id.exists' => 'Paket yang dipilih tidak valid atau tidak ditemukan.',
         ]);
 
         $client->username = $validated['username'];
@@ -129,12 +181,17 @@ class ClientController extends Controller
             if ($validated['status'] === 'active') {
                 $package = \App\Models\Package::find($invitation->package_id);
                 $activeDays = $package ? $package->active_days : 90;
+                $expireDate = now()->addDays($activeDays);
+                if ($expireDate->year > 2037) {
+                    $expireDate = \Carbon\Carbon::create(2037, 12, 31, 23, 59, 59);
+                }
                 // Only update the expiration date if it was trial, or recalculate from now if it was already active
-                $invitation->trial_habis_at = now()->addDays($activeDays);
+                $invitation->trial_habis_at = $expireDate;
             } elseif ($validated['status'] === 'trial' && !$invitation->trial_habis_at) {
                 $invitation->trial_habis_at = $invitation->created_at->copy()->addDay();
             }
             
+            $invitation->slug = $validated['username'];
             $invitation->save();
         }
 
@@ -166,7 +223,11 @@ class ClientController extends Controller
         if ($validated['status'] === 'active') {
             $package = \App\Models\Package::find($invitation->package_id);
             $activeDays = $package ? $package->active_days : 90;
-            $invitation->trial_habis_at = now()->addDays($activeDays);
+            $expireDate = now()->addDays($activeDays);
+            if ($expireDate->year > 2037) {
+                $expireDate = \Carbon\Carbon::create(2037, 12, 31, 23, 59, 59);
+            }
+            $invitation->trial_habis_at = $expireDate;
         } elseif ($validated['status'] === 'trial' && !$invitation->trial_habis_at) {
             $invitation->trial_habis_at = $invitation->created_at->copy()->addDay();
         }

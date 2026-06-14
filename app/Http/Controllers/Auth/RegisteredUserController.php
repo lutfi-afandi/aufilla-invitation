@@ -39,12 +39,14 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'couple_name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:50', 'alpha_dash', 'unique:users,username', 'unique:invitations,slug'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = $this->invitationService->quickRegister([
             'couple_name' => $request->couple_name,
+            'username' => strtolower($request->username),
             'email' => $request->email,
             'password' => $request->password,
         ]);
@@ -54,5 +56,39 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
+    }
+
+    /**
+     * Check if username/slug is available.
+     */
+    public function checkUsername(Request $request)
+    {
+        $username = \Illuminate\Support\Str::slug($request->query('username'));
+        
+        if (empty($username)) {
+            return response()->json(['available' => false, 'message' => 'Username tidak boleh kosong']);
+        }
+        
+        // Reserved words
+        $reserved = ['admin', 'login', 'register', 'preview', 'receptionist', 'dashboard', 'api', 'welcome-screen', 'kado', 'tamu'];
+        if (in_array($username, $reserved)) {
+            return response()->json(['available' => false, 'message' => 'Username ini tidak bisa digunakan']);
+        }
+
+        $excludeId = $request->query('exclude_id');
+
+        $userQuery = \App\Models\User::where('username', $username);
+        $slugQuery = \App\Models\Invitation::where('slug', $username);
+
+        if ($excludeId) {
+            $userQuery->where('id', '!=', $excludeId);
+            $slugQuery->where('user_id', '!=', $excludeId);
+        }
+
+        if ($userQuery->exists() || $slugQuery->exists()) {
+            return response()->json(['available' => false, 'message' => 'URL ini sudah dipakai orang lain']);
+        }
+
+        return response()->json(['available' => true, 'slug' => $username, 'message' => 'URL tersedia!']);
     }
 }

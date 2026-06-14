@@ -17,8 +17,8 @@ class InvitationService
     public function quickRegister(array $data)
     {
         return DB::transaction(function () use ($data) {
-            // Generate a username from the couple's name
-            $username = Str::slug($data['couple_name']) . rand(100, 999);
+            // Use the provided username (which is already slugified by the controller/frontend)
+            $username = Str::slug($data['username']);
             
             // Create the user
             $user = User::create([
@@ -28,16 +28,6 @@ class InvitationService
                 'role' => 'client',
             ]);
 
-            // Create the invitation with a 1-day trial
-            $slug = Str::slug($data['couple_name']);
-            // Ensure unique slug
-            $originalSlug = $slug;
-            $count = 1;
-            while (Invitation::where('slug', $slug)->exists()) {
-                $slug = $originalSlug . '-' . $count;
-                $count++;
-            }
-
             // Cari ID Paket VIP untuk Trial
             $vipPackage = \App\Models\Package::where('name', 'VIP')->first();
             $packageId = $vipPackage ? $vipPackage->id : null;
@@ -46,7 +36,7 @@ class InvitationService
                 'user_id' => $user->id,
                 'theme_id' => $data['theme_id'] ?? null,
                 'package_id' => $packageId,
-                'slug' => $slug,
+                'slug' => $username,
                 'status' => 'trial',
                 'trial_habis_at' => Carbon::now()->addDay(),
                 'pria_nama' => 'Pria',

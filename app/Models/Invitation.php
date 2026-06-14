@@ -53,7 +53,7 @@ class Invitation extends Model
 
     public function getMusicUrlAttribute()
     {
-        if ($this->music_file) {
+        if ($this->music_file && \App\Helpers\PackageHelper::canAccessCustomMusic($this)) {
             return asset('storage/' . $this->music_file);
         }
         return asset('assets/default/default-music.mp3');
@@ -79,33 +79,11 @@ class Invitation extends Model
      */
     public function getFeatureAccess(): array
     {
-        // Default (Basic / expired)
-        $access = [
-            'can_cerita' => false,
-            'can_music' => false,
-            'max_galeri' => 5, // Basic default
+        return [
+            'can_cerita' => \App\Helpers\PackageHelper::canAccessLoveStory($this),
+            'can_music'  => \App\Helpers\PackageHelper::canAccessCustomMusic($this),
+            'max_galeri' => \App\Helpers\PackageHelper::getMaxGalleryPhotos($this),
         ];
-
-        // Jika status trial, berikan semua akses (layaknya VIP) hanya jika belum kedaluwarsa
-        if ($this->status === 'trial') {
-            if ($this->trial_habis_at && $this->trial_habis_at->isPast()) {
-                return $access; // Kedaluwarsa -> kembali ke default (Basic/terkunci)
-            }
-            
-            $access['can_cerita'] = true;
-            $access['can_music'] = true;
-            $access['max_galeri'] = 999;
-            return $access;
-        }
-
-        // Jika status aktif atau nonaktif tapi kita butuh ngecek paket (UI view), baca dari package
-        if ($this->package) {
-            $access['can_cerita'] = $this->package->has_love_story;
-            $access['can_music'] = $this->package->can_custom_music;
-            $access['max_galeri'] = $this->package->max_gallery_photos;
-        }
-
-        return $access;
     }
 
     /**

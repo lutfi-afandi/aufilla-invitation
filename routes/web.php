@@ -118,6 +118,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Auth & System check routes
+Route::get('/api/check-username', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'checkUsername'])->name('api.check-username');
+
 require __DIR__.'/auth.php';
 
 // ==========================================

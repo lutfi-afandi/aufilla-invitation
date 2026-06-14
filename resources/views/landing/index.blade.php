@@ -251,23 +251,63 @@
                 </div>
             </div>
 
-            {{-- ─── Kanan: Visual ─── --}}
+            {{-- ─── Kanan: Visual (Phone Mockup) ─── --}}
             <div class="hidden md:flex justify-center relative lp-reveal lp-delay-3">
-                <div class="relative w-[280px] rounded-[3rem] bg-brand-bg p-3 shadow-2xl shadow-brand-dark/15 border border-brand-accent/20 z-10 transform rotate-[-2deg] hover:rotate-0 transition-transform duration-700">
-                    <div class="w-full aspect-[9/19] bg-white rounded-[2.5rem] overflow-hidden relative flex flex-col items-center justify-center text-center px-6 border border-brand-dark/5 bg-[url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23c5a880\' fill-opacity=\'0.05\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Cg%3E%3C/svg%3E')]">
+                
+                {{-- Phone Hardware Bezel --}}
+                <div class="relative w-[280px] rounded-[3.5rem] bg-[#f8f9fa] p-2 shadow-[0_20px_50px_rgba(10,34,20,0.2)] border border-[#e2e8f0] z-10 transform rotate-[-2deg] hover:rotate-0 transition-all duration-700 group hover:shadow-[0_20px_60px_rgba(197,168,128,0.3)]">
+                    
+                    {{-- Outer Frame details (Side buttons simulation) --}}
+                    <div class="absolute -left-[5px] top-24 w-[3px] h-12 bg-[#cbd5e1] rounded-l-md"></div>
+                    <div class="absolute -left-[5px] top-40 w-[3px] h-12 bg-[#cbd5e1] rounded-l-md"></div>
+                    <div class="absolute -right-[5px] top-32 w-[3px] h-16 bg-[#cbd5e1] rounded-r-md"></div>
 
-                        <svg class="w-16 h-16 text-brand-accent mb-6 opacity-80" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 22C12 22 4 16 4 10C4 6 7 4 10 4C11.5 4 12 5 12 5C12 5 12.5 4 14 4C17 4 20 6 20 10C20 16 12 22 12 22Z" fill-opacity="0.1" />
-                            <path d="M12 20.5C12 20.5 5 15.5 5 10C5 6.5 7.5 4.5 10 4.5C11.5 4.5 12 5.5 12 5.5C12 5.5 12.5 4.5 14 4.5C16.5 4.5 19 6.5 19 10C19 15.5 12 20.5 12 20.5Z" stroke="currentColor" stroke-width="1" fill="none" />
-                        </svg>
+                    {{-- Phone Screen --}}
+                    <div class="w-full aspect-[9/19.5] bg-brand-dark rounded-[3rem] overflow-hidden relative flex flex-col items-center justify-center text-center shadow-[inset_0_0_20px_rgba(0,0,0,0.8)] border-[6px] border-black">
+                        
+                        {{-- Realistic Dynamic Island --}}
+                        <div class="absolute top-2 inset-x-0 flex justify-center z-40">
+                            <div class="w-24 h-7 bg-black rounded-full flex items-center justify-end px-3">
+                                <div class="w-2 h-2 rounded-full bg-slate-800/80 shadow-[inset_0_0_2px_rgba(255,255,255,0.2)]"></div>
+                            </div>
+                        </div>
 
-                        <p class="text-[9px] tracking-[.3em] uppercase text-brand-dark/70 mt-4 mb-2 font-bold">The Wedding</p>
-                        <h2 class="font-serif italic text-[32px] leading-none text-brand-dark">Romeo</h2>
-                        <span class="font-serif text-brand-accent text-xl my-2">&amp;</span>
-                        <h2 class="font-serif italic text-[32px] leading-none text-brand-dark">Juliet</h2>
+                        {{-- Screen Background Image --}}
+                        <img src="{{ asset('assets/img/wedding-aesthetic-bg.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-50 mix-blend-luminosity group-hover:scale-105 transition-transform duration-1000 ease-out" alt="Mockup Undangan">
+                        
+                        {{-- Dark Gradient Overlay for Contrast --}}
+                        <div class="absolute inset-0 bg-gradient-to-b from-brand-dark/40 via-brand-dark/70 to-brand-dark/95"></div>
 
-                        <div class="mt-8 mb-4 w-12 h-[1px] bg-brand-accent/50"></div>
-                        <button class="px-6 py-2.5 bg-brand-dark text-white text-[10px] font-bold tracking-widest uppercase rounded-full shadow-lg hover:bg-brand-accent transition-colors">Buka Undangan</button>
+                        {{-- Content Inside Phone Screen --}}
+                        <div class="relative z-30 flex flex-col items-center w-full px-6 mt-6">
+                            
+                            {{-- Bunga / Ornament Icon --}}
+                            <div class="mb-6 relative">
+                                <div class="absolute inset-0 bg-brand-accent/30 blur-xl rounded-full"></div>
+                                <svg class="w-14 h-14 text-brand-accent relative drop-shadow-xl" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 22C12 22 4 16 4 10C4 6 7 4 10 4C11.5 4 12 5 12 5C12 5 12.5 4 14 4C17 4 20 6 20 10C20 16 12 22 12 22Z" fill-opacity="0.15" />
+                                    <path d="M12 20.5C12 20.5 5 15.5 5 10C5 6.5 7.5 4.5 10 4.5C11.5 4.5 12 5.5 12 5.5C12 5.5 12.5 4.5 14 4.5C16.5 4.5 19 6.5 19 10C19 15.5 12 20.5 12 20.5Z" stroke="currentColor" stroke-width="1.5" fill="none" />
+                                </svg>
+                            </div>
+
+                            <p class="text-[9px] tracking-[.35em] uppercase text-brand-accent/90 mb-3 font-semibold">The Wedding Of</p>
+                            
+                            {{-- Natural Names --}}
+                            <h2 class="font-serif italic text-[38px] leading-none text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">Aditya</h2>
+                            <span class="font-serif text-brand-accent text-3xl my-2 opacity-90">&amp;</span>
+                            <h2 class="font-serif italic text-[38px] leading-none text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">Nabila</h2>
+
+                            {{-- Tanggal Dummy --}}
+                            <div class="mt-8 mb-8 flex items-center justify-center gap-3 w-full">
+                                <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent to-brand-accent/50"></div>
+                                <span class="text-xs font-bold tracking-widest text-white/80">14.09.2026</span>
+                                <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent to-brand-accent/50"></div>
+                            </div>
+                            
+                            <button class="w-full py-3.5 bg-brand-accent text-brand-dark text-[11px] font-bold tracking-widest uppercase rounded-full shadow-[0_10px_20px_rgba(197,168,128,0.3)] hover:bg-white transition-colors duration-300 flex items-center justify-center gap-2 group-hover:-translate-y-1">
+                                Buka Undangan
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -538,11 +578,26 @@
             <div class="space-y-3">
                 @php
                 $faqs = [
-                ['q' => 'Bagaimana cara membuat undangan digital?', 'a' => 'Cukup pilih tema yang Anda suka, daftar akun, lalu isi data mempelai dan detail acara. Undangan Anda akan langsung jadi dan siap disebarkan saat itu juga!'],
-                ['q' => 'Berapa lama masa aktif undangan?', 'a' => 'Semua paket undangan kami memiliki masa aktif selamanya (Unlimited). Sekali bayar, undangan Anda akan tetap bisa diakses tanpa ada biaya perpanjangan atau biaya bulanan.'],
-                ['q' => 'Apakah saya bisa mengganti tema nanti?', 'a' => 'Tentu! Anda bebas mengganti tema undangan kapan saja dan sesering apa pun langsung dari dashboard Anda tanpa dikenakan biaya tambahan.'],
-                ['q' => 'Apakah ada batasan jumlah tamu yang bisa diundang?', 'a' => 'Tidak ada sama sekali. Fitur Custom Nama Tamu kami berikan secara Unlimited, sehingga Anda bebas mencetak nama tamu dan menyebarkannya ke sebanyak apa pun kerabat Anda.'],
-                ['q' => 'Bagaimana jika saya butuh bantuan saat mengisi data?', 'a' => 'Tenang saja, tim support kami selalu siap memandu Anda melalui WhatsApp jika Anda mengalami kendala teknis atau kesulitan dalam menggunakan aplikasi.'],
+                    [
+                        'q' => 'Bagaimana alur pembuatan undangan digital di Aufilla Invitation?', 
+                        'a' => 'Pembuatan undangan di Aufilla dirancang secara mandiri dan sepenuhnya otomatis (instant). Anda dapat memulainya dengan mengeksplorasi katalog tema eksklusif yang kami sediakan, lalu mengklik tombol "Pilih Tema". Anda akan diarahkan untuk mendaftarkan akun sekaligus mendapatkan <strong>Masa Uji Coba (Trial)</strong> gratis selama 1 hari. Setelah akun berhasil dibuat, Anda akan langsung diarahkan ke Dasbor Klien yang intuitif. Di sana, Anda bisa melengkapi profil mempelai, mengatur detail waktu dan lokasi acara (Akad & Resepsi), hingga mengunggah foto pre-wedding Anda ke galeri. Segera setelah data inti terisi, URL atau <em>link</em> undangan Anda sudah aktif dan siap disebarkan ke kerabat Anda tanpa perlu menunggu proses manual dari tim kami!'
+                    ],
+                    [
+                        'q' => 'Berapa lama masa aktif undangan yang sudah dibuat?', 
+                        'a' => 'Masa aktif undangan akan sangat bergantung pada jenis paket yang Anda pilih setelah masa uji coba 1 hari Anda berakhir. Untuk paket <strong>Basic</strong>, undangan Anda akan tetap aktif dan bisa diakses publik selama <strong>90 Hari (3 Bulan)</strong>. Jika Anda memilih paket <strong>Premium</strong>, masa aktifnya diperpanjang menjadi <strong>180 Hari (6 Bulan)</strong>. Namun, jika Anda menginginkan kenangan pernikahan Anda abadi dan bisa diakses kapan saja untuk dikenang di masa depan, kami sangat menyarankan paket <strong>VIP</strong>. Paket VIP memberikan jaminan masa aktif <strong>Permanen (Lifetime)</strong> tanpa perlu memikirkan biaya perpanjangan server atau langganan bulanan selamanya. Jika masa aktif paket (Basic/Premium) habis, tautan publik akan ditutup otomatis namun data Anda tidak dihapus.'
+                    ],
+                    [
+                        'q' => 'Apakah ada batasan jumlah foto galeri dan nama tamu yang bisa dimasukkan?', 
+                        'a' => 'Kami memberikan kebebasan penuh pada fitur input <strong>Custom Nama Tamu</strong>. Tidak peduli paket berbayar apa yang Anda gunakan, Anda berhak menyebarkan tautan spesifik untuk tamu <strong>tanpa batasan jumlah (Unlimited)</strong>. Namun, untuk <strong>Foto Galeri</strong>, kami menerapkan kuota: paket <strong>Basic</strong> membatasi maksimal <strong>5 Foto</strong>, paket <strong>Premium</strong> hingga <strong>10 Foto</strong>, dan khusus paket <strong>VIP</strong>, Anda bebas mengunggah foto <strong>Unlimited</strong>. Harap diperhatikan, selama Anda masih berstatus <strong>Trial</strong>, sistem membatasi ketat maksimal 3 foto galeri dan 5 nama tamu untuk mencegah penyalahgunaan sebelum akun diaktivasi ke versi berbayar.'
+                    ],
+                    [
+                        'q' => 'Apakah saya bisa mengganti tema undangan atau mengubah musiknya?', 
+                        'a' => 'Tentu saja! Aufilla Invitation mendukung perubahan desain secara dinamis. Anda bisa masuk ke menu "Ganti Tema" di Dasbor Klien dan secara instan desain undangan publik Anda akan berganti dengan mulus tanpa merusak data mempelai maupun foto Anda. Untuk kustomisasi lanjutan seperti mengaktifkan halaman <strong>Cerita Cinta (Love Story)</strong> dan mengunggah <strong>Musik (Lagu Custom) MP3</strong> sendiri, fitur tersebut secara eksklusif hanya terbuka <em>(unlocked)</em> bagi pengguna paket <strong>Premium</strong> atau <strong>VIP</strong>. Pada paket Basic atau Trial, Anda akan menggunakan instrumen musik elegan yang sudah tertanam secara *default* dari tema kami.'
+                    ],
+                    [
+                        'q' => 'Jika saya mengalami kesulitan teknis, apakah ada bantuan?', 
+                        'a' => 'Kepuasan dan kelancaran momen pernikahan Anda adalah prioritas mutlak kami. Kami telah merancang sistem yang semudah mungkin (layaknya mengisi profil di media sosial), namun kami juga memahami bahwa Anda mungkin membutuhkan arahan teknis. Oleh karena itu, tim <em>Customer Support</em> profesional kami selalu bersiaga dan dapat dengan mudah dihubungi melalui tombol <strong>Bantuan WhatsApp</strong> di dalam Dasbor Anda. Khusus bagi para pengguna paket <strong>VIP</strong>, Anda akan otomatis mendapatkan fasilitas <strong>Dukungan Prioritas (Priority Support)</strong>, di mana setiap keluhan atau permintaan teknis Anda akan diloncatkan ke antrean terdepan untuk ditangani sesegera mungkin.'
+                    ],
                 ];
                 @endphp
 
@@ -561,7 +616,7 @@
                     <div class="grid transition-all duration-500 ease-in-out" :class="open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'">
                         <div class="overflow-hidden">
                             <div class="px-5 pb-5 text-[12px] md:text-[13px] leading-relaxed text-brand-dark/80 border-t border-brand-dark/5 pt-3 mt-1 transform transition-transform duration-500" :class="open ? 'translate-y-0' : '-translate-y-2'">
-                                {{ $faq['a'] }}
+                                {!! $faq['a'] !!}
                             </div>
                         </div>
                     </div>
@@ -692,9 +747,21 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold tracking-widest uppercase text-brand-dark/80 mb-2">Username</label>
-                    <input type="text" name="username" required placeholder="romeojuliet"
+                    <label class="block text-[11px] font-bold tracking-widest uppercase text-brand-dark/80 mb-2">Username / Link Undangan</label>
+                    <input type="text" name="username" id="landing-username" required placeholder="romeojuliet"
                         class="w-full bg-brand-bg border border-brand-dark/5 rounded-xl px-5 py-3.5 text-[13px] text-brand-dark focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/30 transition-all placeholder:text-brand-dark/20">
+                    <div id="landing-url-preview-container" class="mt-3 hidden transition-all duration-300">
+                        <div class="flex flex-col gap-1.5 p-3.5 bg-brand-bg/50 border border-brand-dark/5 rounded-xl shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">
+                            <div class="flex items-center gap-2 text-[11.5px] font-medium">
+                                <div class="w-5 h-5 rounded-full bg-brand-accent/10 flex items-center justify-center shrink-0">
+                                    <svg class="w-3 h-3 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                                </div>
+                                <span class="text-brand-dark/50">Akses URL:</span>
+                                <span class="text-brand-dark font-bold truncate">{{ request()->getSchemeAndHttpHost() }}/<span id="landing-username-value" class="text-brand-accent underline decoration-brand-accent/30 underline-offset-2"></span></span>
+                            </div>
+                            <div id="landing-username-feedback" class="text-[11px] font-medium pl-7"></div>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <label class="block text-[11px] font-bold tracking-widest uppercase text-brand-dark/80 mb-2">Email</label>
@@ -713,7 +780,7 @@
                             class="w-full bg-brand-bg border border-brand-dark/5 rounded-xl px-5 py-3.5 text-[13px] text-brand-dark focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/30 transition-all">
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-brand-dark text-white font-bold py-4 rounded-xl mt-4 hover:bg-brand-accent transition-all duration-300 text-[13px] uppercase tracking-widest shadow-lg shadow-brand-dark/20 hover:shadow-brand-accent/30 hover:-translate-y-1">
+                <button type="submit" id="landing-register-submit" class="w-full bg-brand-dark text-white font-bold py-4 rounded-xl mt-4 hover:bg-brand-accent transition-all duration-300 text-[13px] uppercase tracking-widest shadow-lg shadow-brand-dark/20 hover:shadow-brand-accent/30 hover:-translate-y-1">
                     Daftar Sekarang
                 </button>
                 <p class="text-center text-[11px] text-brand-dark/70 mt-4">
@@ -877,6 +944,72 @@
 
             document.querySelectorAll('.lp-reveal').forEach(el => observer.observe(el));
         });
+        // Register Live Username Check
+        const landingUsername = document.getElementById('landing-username');
+        const landingFeedback = document.getElementById('landing-username-feedback');
+        const landingSubmitBtn = document.getElementById('landing-register-submit');
+        let landingTimeout = null;
+
+        if (landingUsername) {
+            landingUsername.addEventListener('keyup', function() {
+                // Format to slug instantly
+                let val = this.value.toLowerCase().replace(/[^a-z0-9-]+/g, '-');
+                if (this.value !== val) {
+                    this.value = val;
+                }
+
+                const previewValue = document.getElementById('landing-username-value');
+                const previewContainer = document.getElementById('landing-url-preview-container');
+                
+                if (val.length > 0) {
+                    previewValue.textContent = val;
+                    previewContainer.classList.remove('hidden');
+                } else {
+                    previewContainer.classList.add('hidden');
+                }
+
+                clearTimeout(landingTimeout);
+                landingTimeout = setTimeout(() => {
+                    if (val.length > 0) {
+                        checkLandingUsername(val);
+                    } else {
+                        landingFeedback.innerHTML = '';
+                        if (landingSubmitBtn) landingSubmitBtn.disabled = true;
+                    }
+                }, 500);
+            });
+        }
+
+        function checkLandingUsername(username) {
+            if (username.length < 3) {
+                landingFeedback.className = 'text-[11px] font-medium text-amber-600 pl-7';
+                landingFeedback.innerHTML = 'URL terlalu pendek (minimal 3 karakter)';
+                if (landingSubmitBtn) landingSubmitBtn.disabled = true;
+                return;
+            }
+
+            landingFeedback.className = 'text-[11px] font-medium text-brand-dark/60 pl-7';
+            landingFeedback.innerHTML = 'Mengecek ketersediaan...';
+
+            fetch(`/api/check-username?username=${encodeURIComponent(username)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.available) {
+                        landingFeedback.className = 'text-[11px] font-medium text-emerald-600 pl-7';
+                        landingFeedback.innerHTML = `<svg class="inline w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> ${data.message}`;
+                        if (landingSubmitBtn) landingSubmitBtn.disabled = false;
+                    } else {
+                        landingFeedback.className = 'text-[11px] font-medium text-red-500 pl-7';
+                        landingFeedback.innerHTML = `<svg class="inline w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> ${data.message}`;
+                        if (landingSubmitBtn) landingSubmitBtn.disabled = true;
+                    }
+                })
+                .catch(err => {
+                    landingFeedback.className = 'text-[11px] font-medium text-brand-dark/60 pl-7';
+                    landingFeedback.innerHTML = 'Gagal mengecek URL.';
+                });
+        }
+
     </script>
 </body>
 

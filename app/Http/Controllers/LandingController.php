@@ -22,8 +22,24 @@ class LandingController extends Controller
 
     public function register(Request $request)
     {
+        $request->merge([
+            'username' => Str::slug($request->username)
+        ]);
+
         $validated = $request->validate([
-            'username' => 'required|string|max:50|unique:users',
+            'username' => [
+                'required',
+                'string',
+                'max:50',
+                'unique:users,username',
+                'unique:invitations,slug',
+                function ($attribute, $value, $fail) {
+                    $reserved = ['admin', 'login', 'register', 'preview', 'receptionist', 'dashboard', 'api', 'welcome-screen', 'kado', 'tamu'];
+                    if (in_array(strtolower($value), $reserved)) {
+                        $fail('Username ini tidak bisa digunakan.');
+                    }
+                },
+            ],
             'email' => 'required|email|max:100|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'theme_id' => 'required|exists:themes,id',
@@ -36,20 +52,14 @@ class LandingController extends Controller
             'role' => 'client',
         ]);
 
-        $baseSlug = Str::slug($validated['username']);
-        $slug = $baseSlug;
-        $count = 1;
-        while (\App\Models\Invitation::where('slug', $slug)->exists()) {
-            $slug = $baseSlug . '-' . $count;
-            $count++;
-        }
-
         $user->invitation()->create([
-            'slug' => $slug,
+            'slug' => $validated['username'],
             'theme_id' => $validated['theme_id'],
             'status' => 'trial',
             'package_id' => 3,
             'trial_habis_at' => now()->addDay(),
+            'pria_nama' => 'Pria',
+            'wanita_nama' => 'Wanita',
         ]);
 
         Auth::login($user);

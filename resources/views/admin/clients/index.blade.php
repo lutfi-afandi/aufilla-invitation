@@ -56,8 +56,20 @@
             </div>
 
             <div class="mt-4">
-                <label class="block font-bold text-xs tracking-wider text-slate-600 uppercase mb-2">Username <span class="text-red-500">*</span></label>
-                <input type="text" name="username" required class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-admin-accent/30 focus:border-admin-accent transition-all placeholder-slate-400" placeholder="Masukkan username klien">
+                <label class="block font-bold text-xs tracking-wider text-slate-600 uppercase mb-2">Username / Link Undangan <span class="text-red-500">*</span></label>
+                <input type="text" name="username" id="create-username" required class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-admin-accent/30 focus:border-admin-accent transition-all placeholder-slate-400" placeholder="Masukkan username klien">
+                <div id="create-url-preview-container" class="mt-3 hidden transition-all duration-300">
+                    <div class="flex flex-col gap-1.5 p-3.5 bg-slate-50 border border-slate-200 rounded-lg shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">
+                        <div class="flex items-center gap-2 text-[12px] font-medium">
+                            <div class="w-5 h-5 rounded-full bg-admin-accent/10 flex items-center justify-center shrink-0">
+                                <svg class="w-3 h-3 text-admin-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                            </div>
+                            <span class="text-slate-500">Akses URL:</span>
+                            <span class="text-slate-800 font-bold truncate">{{ request()->getSchemeAndHttpHost() }}/<span id="create-username-value" class="text-admin-accent underline decoration-admin-accent/30 underline-offset-2"></span></span>
+                        </div>
+                        <div id="create-username-feedback" class="text-[12px] font-medium pl-7"></div>
+                    </div>
+                </div>
             </div>
             
             <div class="mt-4">
@@ -121,8 +133,20 @@
             </div>
 
             <div class="mt-4">
-                <label class="block font-bold text-xs tracking-wider text-slate-600 uppercase mb-2">Username <span class="text-red-500">*</span></label>
+                <label class="block font-bold text-xs tracking-wider text-slate-600 uppercase mb-2">Username / Link Undangan <span class="text-red-500">*</span></label>
                 <input type="text" name="username" id="edit-username" required class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-admin-accent/30 focus:border-admin-accent transition-all text-slate-700" placeholder="Username klien">
+                <div id="edit-url-preview-container" class="mt-3 hidden transition-all duration-300">
+                    <div class="flex flex-col gap-1.5 p-3.5 bg-slate-50 border border-slate-200 rounded-lg shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">
+                        <div class="flex items-center gap-2 text-[12px] font-medium">
+                            <div class="w-5 h-5 rounded-full bg-admin-accent/10 flex items-center justify-center shrink-0">
+                                <svg class="w-3 h-3 text-admin-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                            </div>
+                            <span class="text-slate-500">Akses URL:</span>
+                            <span class="text-slate-800 font-bold truncate">{{ request()->getSchemeAndHttpHost() }}/<span id="edit-username-value" class="text-admin-accent underline decoration-admin-accent/30 underline-offset-2"></span></span>
+                        </div>
+                        <div id="edit-username-feedback" class="text-[12px] font-medium pl-7"></div>
+                    </div>
+                </div>
             </div>
             
             <div class="mt-4">
@@ -250,6 +274,8 @@ function openCreateModal() {
     $('#create-theme-id').val('');
     $('#create-theme-name').text('Belum memilih tema').removeClass('text-slate-800').addClass('text-slate-600');
     $('#create-theme-icon').html(`<svg class="w-6 h-6 text-slate-400 group-hover:text-admin-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`);
+    $('#create-url-preview-container').addClass('hidden');
+    $('#create-form').find('button[type=submit]').prop('disabled', false);
     $('#create-modal').css('display', 'flex'); 
 }
 
@@ -284,6 +310,10 @@ function openEditModal(client) {
         $('#edit-theme-name').text('Belum memilih tema').removeClass('text-slate-800 font-bold').addClass('text-slate-600');
         $('#edit-theme-icon').html(`<svg class="w-6 h-6 text-slate-400 group-hover:text-admin-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`);
     }
+    
+    // Trigger preview for edit
+    $('#edit-username').trigger('keyup');
+    $('#edit-form').find('button[type=submit]').prop('disabled', false);
     
     $('#edit-modal').css('display', 'flex');
 }
@@ -417,6 +447,82 @@ function filterThemes() {
     });
 }
 
+// URL Preview Logic
+let checkTimeout;
+
+function bindUsernameCheck(inputId, containerId, valueId, feedbackId, formId, excludeIdInputId = null) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    input.addEventListener('keyup', function() {
+        let val = this.value.toLowerCase().replace(/[^a-z0-9-]+/g, '-');
+        if (this.value !== val) {
+            this.value = val;
+        }
+
+        const previewContainer = document.getElementById(containerId);
+        const previewValue = document.getElementById(valueId);
+        const feedback = document.getElementById(feedbackId);
+        const submitBtn = document.getElementById(formId).querySelector('button[type=submit]');
+        const excludeId = excludeIdInputId ? document.getElementById(excludeIdInputId).value : '';
+
+        if (val.length > 0) {
+            previewValue.textContent = val;
+            previewContainer.classList.remove('hidden');
+        } else {
+            previewContainer.classList.add('hidden');
+        }
+
+        clearTimeout(checkTimeout);
+        checkTimeout = setTimeout(() => {
+            if (val.length > 0) {
+                checkAdminUsername(val, feedback, submitBtn, excludeId);
+            } else {
+                feedback.innerHTML = '';
+                if (submitBtn) submitBtn.disabled = true;
+            }
+        }, 500);
+    });
+}
+
+function checkAdminUsername(username, feedbackEl, submitBtn, excludeId = '') {
+    if (username.length < 3) {
+        feedbackEl.className = 'text-[12px] font-medium text-amber-600 pl-7';
+        feedbackEl.innerHTML = 'URL terlalu pendek (minimal 3 karakter)';
+        if (submitBtn) submitBtn.disabled = true;
+        return;
+    }
+
+    feedbackEl.className = 'text-[12px] font-medium text-slate-500 pl-7';
+    feedbackEl.innerHTML = 'Mengecek ketersediaan...';
+
+    let apiUrl = `/api/check-username?username=${encodeURIComponent(username)}`;
+    if (excludeId) apiUrl += `&exclude_id=${excludeId}`;
+
+    fetch(apiUrl)
+        .then(res => res.json())
+        .then(data => {
+            if (data.available) {
+                feedbackEl.className = 'text-[12px] font-medium text-emerald-600 pl-7';
+                feedbackEl.innerHTML = `<svg class="inline w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> ${data.message}`;
+                if (submitBtn) submitBtn.disabled = false;
+            } else {
+                feedbackEl.className = 'text-[12px] font-medium text-red-500 pl-7';
+                feedbackEl.innerHTML = `<svg class="inline w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> ${data.message}`;
+                if (submitBtn) submitBtn.disabled = true;
+            }
+        })
+        .catch(err => {
+            feedbackEl.className = 'text-[12px] font-medium text-slate-500 pl-7';
+            feedbackEl.innerHTML = 'Gagal mengecek URL.';
+        });
+}
+
+$(document).ready(function() {
+    bindUsernameCheck('create-username', 'create-url-preview-container', 'create-username-value', 'create-username-feedback', 'create-form');
+    bindUsernameCheck('edit-username', 'edit-url-preview-container', 'edit-username-value', 'edit-username-feedback', 'edit-form', 'edit-id');
+});
+
 $('#create-form').on('submit', function(e) {
     e.preventDefault();
     const btn = $(this).find('button[type=submit]');
@@ -440,8 +546,16 @@ $('#create-form').on('submit', function(e) {
         .fail(function(xhr) {
             const errors = xhr.responseJSON?.errors;
             let msg = xhr.responseJSON?.message || 'Terjadi kesalahan.';
-            if (errors) msg = Object.values(errors).flat().join('\n');
-            Swal.fire({ icon: 'error', title: 'Gagal', text: msg });
+            if (errors) {
+                msg = '<div class="text-left text-sm text-slate-600 mb-2">Silakan periksa input berikut:</div><ul class="text-left list-disc pl-5 space-y-1 text-sm text-red-600">';
+                Object.values(errors).flat().forEach(e => {
+                    msg += `<li>${e}</li>`;
+                });
+                msg += '</ul>';
+                Swal.fire({ icon: 'error', title: 'Validasi Gagal', html: msg });
+            } else {
+                Swal.fire({ icon: 'error', title: 'Gagal', text: msg });
+            }
         })
         .always(() => btn.prop('disabled', false).text('Buat Klien'));
 });
@@ -468,8 +582,16 @@ $('#edit-form').on('submit', function(e) {
     .fail(function(xhr) {
         const errors = xhr.responseJSON?.errors;
         let msg = xhr.responseJSON?.message || 'Terjadi kesalahan.';
-        if (errors) msg = Object.values(errors).flat().join('\n');
-        Swal.fire({ icon: 'error', title: 'Gagal', text: msg });
+        if (errors) {
+            msg = '<div class="text-left text-sm text-slate-600 mb-2">Silakan periksa input berikut:</div><ul class="text-left list-disc pl-5 space-y-1 text-sm text-red-600">';
+            Object.values(errors).flat().forEach(e => {
+                msg += `<li>${e}</li>`;
+            });
+            msg += '</ul>';
+            Swal.fire({ icon: 'error', title: 'Validasi Gagal', html: msg });
+        } else {
+            Swal.fire({ icon: 'error', title: 'Gagal', text: msg });
+        }
     })
     .always(() => btn.prop('disabled', false).text('Simpan Perubahan'));
 });
