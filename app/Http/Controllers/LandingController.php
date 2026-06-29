@@ -14,7 +14,9 @@ class LandingController extends Controller
 {
     public function index()
     {
-        $themes = Theme::withCount('invitations')->where('is_active', true)->take(6)->get();
+        $themes = Theme::withCount('invitations')->where('is_active', true)
+            // ->take(6)
+            ->get();
         $packages = Package::orderBy('price', 'asc')->get();
 
         return view('landing.index', compact('themes', 'packages'));
