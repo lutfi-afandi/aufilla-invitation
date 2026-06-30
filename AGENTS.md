@@ -129,3 +129,43 @@ Dari pengalaman `aufilla-teal`:
 - `resources/views/themes/aufilla-maroon/index.blade.php` — template dasar untuk clone dark theme
 - `docs/theme_generation_guide.md` — panduan teknis struktur tema
 - `future_themes_suggestions.md` — daftar calon tema dan contoh prompt
+
+---
+
+## 7. Standar Emas Generasi Tema (Mocha Standard)
+
+Berdasarkan perbaikan UI yang diimplementasikan pada tema **Aufilla Mocha (Tema 8)**, setiap pembuatan skrip generasi (`generate_themes_*.php`) untuk tema baru **WAJIB** menyertakan 4 perbaikan (UI Bug Fixes) berikut:
+
+1. **Memperbaiki Typo `inline-self-start`:**
+   Mencegah *background* header melebar ke seluruh layar kiri.
+   ```php
+   $content = str_replace('inline-self-start', 'self-start inline-block', $content);
+   ```
+
+2. **Memperbaiki Kotak Transparan yang Kusam (Muddy Boxes):**
+   Ganti transparansi warna merah tua/primer menjadi efek *Dark Glassmorphism* universal (`bg-black/40 backdrop-blur-md`) agar bersih dan kontras di atas tema warna apapun.
+   ```php
+   $content = str_replace('bg-[#5A1F24]/75', 'bg-black/40', $content);
+   $content = str_replace('bg-[#5A1F24]/80', 'bg-black/40', $content);
+   ```
+
+3. **Gradasi Panel Kiri (Bawah Gelap, Atas Transparan/Clear):**
+   Ubah gradasi statis menyamping (`135deg`) menjadi gradasi vertikal (`to top`) dengan nilai *Alpha* (Opacity) atas adalah `0.0` (transparan penuh). Ini menonjolkan foto pasangan di bagian atas. Header "UNDANGAN PERNIKAHAN" harus dipertebal *background*-nya agar tetap terbaca.
+   ```php
+   $oldLeftGradient = 'linear-gradient(135deg, rgba(61,21,24,0.92) 0%, rgba(90,31,36,0.85) 100%)';
+   $newLeftGradient = 'linear-gradient(to top, rgba(\' . hexToRgbNoSpace($config[\'primary_950\']) . \', 0.95) 0%, rgba(\' . hexToRgbNoSpace($config[\'primary_900\']) . \', 0.0) 100%)';
+   $content = str_replace($oldLeftGradient, $newLeftGradient, $content);
+   
+   // Perlindungan kontras untuk header kiri karena bagian atas gradasi sudah transparan
+   $content = str_replace('bg-black/10 backdrop-blur-xs p-4 rounded-lg', 'bg-black/50 backdrop-blur-md border border-white/10 shadow-2xl p-5 rounded-xl', $content);
+   ```
+
+4. **Navigasi Melayang (*Floating Nav*) & Jarak *Footer*:**
+   Pastikan *footer* utama diberi *padding* bawah 32 agar teks "Dibuat dengan dedikasi..." tidak tertutup menu melayang. Ikon navigasi aktif harus menggunakan **Amber-300 Glowing** agar tidak samar.
+   ```php
+   $content = str_replace('py-20 px-6 bg-[', 'pt-20 pb-32 px-6 bg-[', $content);
+   $content = str_replace("addClass('text-gold-400 font-bold scale-110');", "addClass('text-amber-300 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)] scale-125');", $content);
+   $content = str_replace("removeClass('text-gold-400 font-bold scale-110')", "removeClass('text-amber-300 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)] scale-125')", $content);
+   $content = str_replace('text-white hover:text-gold-400', 'text-stone-300 hover:text-amber-300', $content);
+   $content = str_replace('hover:text-gold-400', 'hover:text-amber-300', $content);
+   ```
