@@ -164,3 +164,33 @@ Jika Anda ingin memerintahkan saya (atau asisten AI lain) di masa depan untuk me
 2. **Definisi Peran Warna Jelas:** Memisahkan mana warna utama, latar, dan aksen.
 3. **Instruksi Kontras Ekstrim:** Mengingatkan AI tentang keterbacaan teks (kontras), karena ini adalah masalah paling umum saat mengganti palet warna secara massal.
 4. **Instruksi Database:** Memastikan AI tidak lupa mendaftarkan tema ke tabel sehingga langsung muncul di Admin.
+
+---
+
+## Standar Emas Generasi Tema (Mocha Standard)
+
+Berdasarkan perbaikan UI yang diimplementasikan pada tema **Aufilla Mocha (Tema 8)**, setiap pembuatan skrip generasi (`generate_themes_*.php`) untuk tema ke-9 hingga ke-15 **WAJIB** menyertakan 3 perbaikan (UI Bug Fixes) berikut:
+
+1. **Memperbaiki Typo `inline-self-start`:**
+   Mencegah *background* header melebar ke seluruh layar kiri.
+   ```php
+   $content = str_replace('inline-self-start', 'self-start inline-block', $content);
+   ```
+
+2. **Memperbaiki Kotak Transparan yang Kusam (Muddy Boxes):**
+   Ganti transparansi warna merah tua/primer menjadi efek *Dark Glassmorphism* universal (`bg-black/40 backdrop-blur-md`) agar bersih dan kontras di atas tema warna apapun.
+   ```php
+   $content = str_replace('bg-[#5A1F24]/75', 'bg-black/40', $content);
+   $content = str_replace('bg-[#5A1F24]/80', 'bg-black/40', $content);
+   ```
+
+3. **Gradasi Panel Kiri (Bawah Gelap, Atas Transparan/Clear):**
+   Ubah gradasi statis menyamping (`135deg`) menjadi gradasi vertikal (`to top`) dengan nilai *Alpha* (Opacity) atas adalah `0.0` (transparan penuh). Ini menonjolkan foto pasangan di bagian atas. Header "UNDANGAN PERNIKAHAN" harus dipertebal *background*-nya agar tetap terbaca.
+   ```php
+   $oldLeftGradient = 'linear-gradient(135deg, rgba(61,21,24,0.92) 0%, rgba(90,31,36,0.85) 100%)';
+   $newLeftGradient = 'linear-gradient(to top, rgba(' . hexToRgbNoSpace($config['primary_950']) . ', 0.95) 0%, rgba(' . hexToRgbNoSpace($config['primary_900']) . ', 0.0) 100%)';
+   $content = str_replace($oldLeftGradient, $newLeftGradient, $content);
+   
+   // Perlindungan kontras untuk header kiri karena bagian atas gradasi sudah transparan
+   $content = str_replace('bg-black/10 backdrop-blur-xs p-4 rounded-lg', 'bg-black/50 backdrop-blur-md border border-white/10 shadow-2xl p-5 rounded-xl', $content);
+   ```

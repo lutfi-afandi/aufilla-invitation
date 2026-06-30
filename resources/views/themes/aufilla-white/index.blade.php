@@ -897,7 +897,7 @@
 
 
       <!-- J: APPRECIATE FOOTER (ANCHOR) -->
-      <section class="relative py-20 px-6 bg-[#09090B] text-white text-center overflow-hidden">
+      <section class="relative pt-20 pb-32 px-6 bg-[#09090B] text-white text-center overflow-hidden">
         <div class="absolute inset-0 bg-wedding-foliage opacity-10"></div>
 
         <div class="max-w-md mx-auto relative z-10" data-aos="fade-up" data-aos-duration="1200">
@@ -969,26 +969,26 @@
 
   <!-- GLASS FLOATING BOTTOM TAB BAR (Responsive thumb reach, scrolls dynamically) -->
   <div id="floating-nav-bar" class="fixed bottom-12 left-1/2 lg:left-auto lg:right-[268px] transform -translate-x-1/2 lg:translate-x-1/2 z-40 bg-onyx-900/85 backdrop-blur-md rounded-full px-5 py-3 shadow-2xl border border-gold-500/25 flex items-center gap-6 max-w-[90%] md:max-w-sm transition-all duration-500 translate-y-32 opacity-0 select-none">
-    <a href="#hero" class="nav-icon-trigger text-white hover:text-gold-400 text-sm transition-colors flex flex-col items-center" title="Cover">
+    <a href="#hero" class="nav-icon-trigger text-stone-300 hover:text-amber-300 text-sm transition-colors flex flex-col items-center" title="Cover">
       <i class="fa-solid fa-circle-notch"></i>
     </a>
-    <a href="#couple" class="nav-icon-trigger text-stone-300 hover:text-gold-400 text-sm transition-colors flex flex-col items-center" title="Mempelai">
+    <a href="#couple" class="nav-icon-trigger text-stone-300 hover:text-amber-300 text-sm transition-colors flex flex-col items-center" title="Mempelai">
       <i class="fa-solid fa-heart"></i>
     </a>
-    <a href="#event" class="nav-icon-trigger text-stone-300 hover:text-gold-400 text-sm transition-colors flex flex-col items-center" title="Acara">
+    <a href="#event" class="nav-icon-trigger text-stone-300 hover:text-amber-300 text-sm transition-colors flex flex-col items-center" title="Acara">
       <i class="fa-solid fa-calendar-alt"></i>
     </a>
     @if($invitation->is_cerita_aktif && count($ceritas) > 0)
-    <a href="#story" class="nav-icon-trigger text-stone-300 hover:text-gold-400 text-sm transition-colors flex flex-col items-center" title="Kisah">
+    <a href="#story" class="nav-icon-trigger text-stone-300 hover:text-amber-300 text-sm transition-colors flex flex-col items-center" title="Kisah">
       <i class="fa-solid fa-shoe-prints"></i>
     </a>
     @endif
     @if($invitation->is_galeri_aktif && count($galeris) > 0)
-    <a href="#gallery" class="nav-icon-trigger text-stone-300 hover:text-gold-400 text-sm transition-colors flex flex-col items-center" title="Galeri">
+    <a href="#gallery" class="nav-icon-trigger text-stone-300 hover:text-amber-300 text-sm transition-colors flex flex-col items-center" title="Galeri">
       <i class="fa-solid fa-images"></i>
     </a>
     @endif
-    <a href="#rsvp" class="nav-icon-trigger text-stone-300 hover:text-gold-400 text-sm transition-colors flex flex-col items-center" title="RSVP">
+    <a href="#rsvp" class="nav-icon-trigger text-stone-300 hover:text-amber-300 text-sm transition-colors flex flex-col items-center" title="RSVP">
       <i class="fa-solid fa-marker"></i>
     </a>
   </div>
@@ -1041,7 +1041,7 @@
   <!-- 5. JQUERY CUSTOM LIGHTBOX SYSTEM MODAL -->
   <div id="lightbox" class="fixed inset-0 bg-black/95 backdrop-blur-md z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 select-none">
     <!-- absolute controls -->
-    <button id="close-lightbox" class="absolute top-6 right-6 text-white text-3xl hover:text-gold-400 transition-colors cursor-pointer">
+    <button id="close-lightbox" class="absolute top-6 right-6 text-white text-3xl hover:text-amber-300 transition-colors cursor-pointer">
       <i class="fa-solid fa-xmark"></i>
     </button>
 
@@ -1371,9 +1371,9 @@
 
           if (scrollPos >= elTop && scrollPos < elBottom) {
             // Match active state
-            $(`a[href="${id}"]`).removeClass('text-stone-300 text-stone-400').addClass('text-gold-400 font-bold scale-110');
+            $(`a[href="${id}"]`).removeClass('text-stone-300 text-stone-400').addClass('text-amber-300 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)] scale-125');
           } else {
-            $(`a[href="${id}"]`).removeClass('text-gold-400 font-bold scale-110').addClass('text-stone-300');
+            $(`a[href="${id}"]`).removeClass('text-amber-300 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)] scale-125').addClass('text-stone-300');
           }
         });
 

@@ -37,44 +37,24 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: {
-            teal: {
-              50: '#ECFDFD',
-              100: '#CFF5F5',
-              200: '#A5EAEA',
-              300: '#6DD9D9',
-              400: '#3DC4C4',
-              500: '#14ADAD', // Brighter vibrant accent
-              600: '#0A9191', // More alive
-              700: '#087878',
-              800: '#0E5E6B', // Base Oceanic Teal
-              900: '#0A3D47', // Dark Teal
-              950: '#062028',
-            },
-            silver: {
-              50: '#F8F9FA',
-              100: '#F1F3F5',
-              200: '#E2E5E7',
-              300: '#CBD0D4',
-              400: '#A8B0B8',
-              500: '#8E98A0', // Platinum Silver Accent
-              600: '#6D7780',
-              700: '#555E66',
-              800: '#3D454D',
-              900: '#262C33',
-            },
-            ice: {
-              50: '#FFFFFF',
-              100: '#F4F8FB', // Ice White Background
-              200: '#E8F0F5',
-              300: '#D4E2ED',
-              450: '#B8CDDE',
-            },
-          },
-          fontFamily: {
-            serif: ['Cormorant Garamond', 'Georgia', 'serif'],
-            sans: ['Poppins', 'Helvetica Neue', 'Arial', 'sans-serif'],
-          }
+          
+      colors: {
+        primary: {
+          50: '#F0F9FA', 100: '#DDF0F2', 200: '#BDE1E6', 300: '#91CBD4', 400: '#5FADBC', 500: '#3D8F9F', 600: '#307484', 700: '#285F6C', 800: '#0E5E6B', 900: '#0A3D47', 950: '#042028'
+        },
+        secondary: '#248896',
+        gold: {
+          50: '#F8F9FA', 100: '#F1F3F5', 200: '#E9ECEF', 300: '#DEE2E6', 400: '#CED4DA', 500: '#ADB5BD', 600: '#868E96', 700: '#495057', 800: '#343A40', 900: '#212529'
+        },
+        pearl: {
+          50: '#FFFFFF', 100: '#F2F9F9', 200: '#E6F4F4', 300: '#D5EDED', 450: '#BEDDDD'
+        },
+      },
+      fontFamily: {
+        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+        sans: ['Poppins', 'Helvetica Neue', 'Arial', 'sans-serif'],
+      }
+
         }
       }
     }
@@ -92,7 +72,7 @@
     }
 
     ::-webkit-scrollbar-track {
-      background: #F4F8FB;
+      background: #F2F9F9;
     }
 
     ::-webkit-scrollbar-thumb {
@@ -101,7 +81,7 @@
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: #6D7780;
+      background: #C5A031;
     }
 
     /* Spin-slow custom classes for music note/disc */
@@ -120,26 +100,26 @@
     }
 
     /* Glow & elegant border frames */
-    .silver-border-glow {
-      box-shadow: 0 0 15px rgba(142, 152, 160, 0.25);
+    .gold-border-glow {
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
     }
 
     /* Glassmorphism utility card */
     .glass-premium {
       background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(142, 152, 160, 0.2);
+      border: 1px solid rgba(212, 175, 55, 0.2);
     }
 
     .glass-dark {
       background: rgba(14, 94, 107, 0.85);
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(142, 152, 160, 0.3);
+      border: 1px solid rgba(212, 175, 55, 0.3);
     }
 
-    /* Foliage ornament dots (uses teal on light, silver on dark via opacity) */
+    /* Gold floral ornaments absolute background masking */
     .bg-wedding-foliage {
-      background-image: radial-gradient(rgba(10, 94, 99, 0.12) 1.5px, transparent 1.5px);
+      background-image: radial-gradient(rgba(212, 175, 55, 0.08) 1.5px, transparent 1.5px);
       background-size: 24px 24px;
     }
 
@@ -162,19 +142,6 @@
       animation: float-gentle 6s ease-in-out infinite;
     }
 
-    /* Card depth & elevation refinements */
-    .card-elevated {
-      box-shadow: 0 8px 24px rgba(10, 61, 71, 0.06), 0 2px 6px rgba(10, 61, 71, 0.04);
-    }
-    .card-elevated:hover {
-      box-shadow: 0 12px 32px rgba(10, 61, 71, 0.10), 0 4px 12px rgba(10, 61, 71, 0.06);
-    }
-
-    /* Text shadow for depth on headings */
-    .text-shadow-subtle {
-      text-shadow: 0 1px 2px rgba(10, 61, 71, 0.05);
-    }
-
     /* Standard fade & unlock controls */
     body.locked {
       overflow: hidden;
@@ -182,17 +149,17 @@
   </style>
 </head>
 
-<body class="font-sans text-stone-800 bg-[#F4F8FB] relative selection:bg-teal-800 selection:text-white locked">
+<body class="font-sans text-stone-800 bg-[#F2F9F9] relative selection:bg-primary-800 selection:text-white locked">
 
   <!-- 1. LOADING SCREEN -->
   <div id="loading-screen" class="fixed inset-0 bg-[#0E5E6B] z-[99] flex flex-col justify-center items-center transition-all duration-700 ease-out">
     <div class="flex flex-col items-center">
       <!-- Floating circular ornaments -->
       <div class="relative w-24 h-24 flex items-center justify-center">
-        <div class="absolute inset-0 border-2 border-silver-500/30 border-t-silver-500 rounded-full animate-spin"></div>
-        <span class="font-serif text-3xl font-bold text-teal-200 relative z-10 leading-none">{{ strtoupper(substr($invitation->pria_nama, 0, 1)) }}&amp;{{ strtoupper(substr($invitation->wanita_nama, 0, 1)) }}</span>
+        <div class="absolute inset-0 border-2 border-gold-500/30 border-t-gold-500 rounded-full animate-spin"></div>
+        <span class="font-serif text-3xl font-bold text-gold-500 relative z-10 leading-none">{{ strtoupper(substr($invitation->pria_nama, 0, 1)) }}&amp;{{ strtoupper(substr($invitation->wanita_nama, 0, 1)) }}</span>
       </div>
-      <p class="font-serif text-silver-100 mt-6 tracking-widest uppercase text-sm animate-pulse-gentle">Bahagia Marayakan Cinta...</p>
+      <p class="font-serif text-amber-200 mt-6 tracking-widest uppercase text-sm animate-pulse-gentle">Bahagia Marayakan Cinta...</p>
     </div>
   </div>
 
@@ -201,37 +168,34 @@
 
 
   <!-- 3. PREMIUM DESKTOP LAYOUT (SPLIT PANEL: left background fixed, right scrollable) -->
-  <div class="min-h-screen lg:flex lg:h-[calc(100vh-2rem)] lg:m-4 lg:rounded-2xl lg:border-[12px] lg:border-[#0E5E6B] lg:outline lg:outline-[2px] lg:outline-[#8E98A0] lg:outline-offset-[-12px] lg:shadow-2xl lg:overflow-hidden relative bg-[#F4F8FB]">
+  <div class="min-h-screen lg:flex lg:h-[calc(100vh-2rem)] lg:m-4 lg:rounded-2xl lg:border-[12px] lg:border-[#0E5E6B] lg:outline lg:outline-[2px] lg:outline-[#D4AF37] lg:outline-offset-[-12px] lg:shadow-2xl lg:overflow-hidden relative bg-[#F2F9F9]">
 
     <!-- 2. COVER SCREEN OVERLAY (FADE OUT UPON CLICKING "BUKA UNDANGAN") -->
     <div id="cover-screen" class="fixed lg:absolute inset-0 lg:left-auto lg:w-[480px] lg:right-0 z-50 flex items-center justify-center transition-all duration-1000 ease-in-out bg-cover bg-center"
-      style="background-image: linear-gradient(to bottom, rgba(10,61,71,0.45) 0%, rgba(14,94,107,0.55) 60%, rgba(4,32,40,0.7) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
+      style="background-image: linear-gradient(to bottom, rgba(10,61,71,0.85) 0%, rgba(14,94,107,0.9) 60%, rgba(4,32,40,0.95) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
       <!-- Ornaments -->
       <div class="absolute inset-0 bg-wedding-foliage opacity-20"></div>
 
-      <!-- Soft teal glow behind couple names -->
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full blur-3xl pointer-events-none" style="background: radial-gradient(circle, rgba(61,196,196,0.08) 0%, transparent 70%);"></div>
-
       <!-- Top Left/Right Gilded Flowers -->
-      <div class="absolute top-0 left-0 w-32 h-32 md:w-48 md:h-48 border-l-4 border-t-4 border-silver-500/20 m-6 rounded-tl-3xl"></div>
-      <div class="absolute bottom-0 right-0 w-32 h-32 md:w-48 md:h-48 border-r-4 border-b-4 border-silver-500/20 m-6 rounded-br-3xl"></div>
+      <div class="absolute top-0 left-0 w-32 h-32 md:w-48 md:h-48 border-l-4 border-t-4 border-gold-500/20 m-6 rounded-tl-3xl"></div>
+      <div class="absolute bottom-0 right-0 w-32 h-32 md:w-48 md:h-48 border-r-4 border-b-4 border-gold-500/20 m-6 rounded-br-3xl"></div>
 
       <!-- Core Display Content -->
       <div class="max-w-md w-full px-6 text-center z-10 flex flex-col items-center">
 
         <!-- Elegant Wedding Motif -->
-        <div class="mb-4 text-silver-500 float-gentle">
+        <div class="mb-4 text-gold-500 float-gentle">
           <svg class="w-16 h-16 mx-auto fill-current" viewBox="0 0 100 100">
             <!-- Simulated gold line art branch ornament -->
             <path d="M50 15 C45 30 35 40 15 50 C35 60 45 70 50 85 C55 70 65 60 85 50 C65 40 55 30 50 15 Z" />
-            <circle cx="50" cy="50" r="10" class="stroke-silver-400 fill-none stroke-2" />
+            <circle cx="50" cy="50" r="10" class="stroke-gold-400 fill-none stroke-2" />
           </svg>
         </div>
 
-        <p class="font-serif text-silver-100 text-xs md:text-sm tracking-[0.25em] uppercase mb-3 text-shadow">UNDANGAN PERNIKAHAN</p>
+        <p class="font-serif text-amber-200 text-xs md:text-sm tracking-[0.25em] uppercase mb-3 text-shadow">UNDANGAN PERNIKAHAN</p>
 
         <h1 class="font-serif text-5xl md:text-6xl text-white font-bold leading-tight tracking-wide mb-2 drop-shadow-lg">
-          {{ $invitation->pria_nama }} <span class="font-serif text-teal-200 block md:inline text-3xl md:text-5xl my-1 md:my-0 font-normal">&amp;</span> {{ $invitation->wanita_nama }}
+          {{ $invitation->pria_nama }} <span class="font-serif text-gold-500 block md:inline text-3xl md:text-5xl my-1 md:my-0 font-normal">&amp;</span> {{ $invitation->wanita_nama }}
         </h1>
 
         @if($akad)
@@ -241,18 +205,18 @@
         @endif
 
         <!-- Guest dynamic tag container -->
-        <div class="w-full bg-[#0E5E6B]/75 backdrop-blur-md border border-silver-500/30 p-6 rounded-2xl mb-8 silver-border-glow shadow-xl animate-fade-in">
-          <p class="text-silver-100/80 text-xs tracking-widest uppercase mb-2">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+        <div class="w-full bg-black/40 backdrop-blur-md border border-gold-500/30 p-6 rounded-2xl mb-8 gold-border-glow shadow-xl animate-fade-in">
+          <p class="text-amber-200/80 text-xs tracking-widest uppercase mb-2">Kepada Yth. Bapak/Ibu/Saudara/i</p>
           <h2 id="guest-name-cover" class="font-serif text-2xl font-semibold text-white tracking-wide truncate max-w-full">
             {{ request('to') ? ucwords(str_replace('-', ' ', request('to'))) : 'Tamu Terhormat' }}
           </h2>
-          <div class="w-12 h-[1px] bg-silver-400 mx-auto my-3"></div>
+          <div class="w-12 h-[1px] bg-gold-400 mx-auto my-3"></div>
           <p class="text-[11px] text-stone-300 italic">*Mohon maaf apabila ada kesalahan penulisan nama/gelar</p>
         </div>
 
         <!-- Pulse trigger button -->
-        <button id="btn-open-invitation" class="relative group inline-flex items-center gap-3 bg-white/90 hover:bg-white text-teal-800 font-semibold tracking-widest uppercase text-xs px-8 py-4 rounded-full shadow-2xl border border-white/40 backdrop-blur-sm transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer">
-          <i class="fa-solid fa-envelope-open text-sm text-teal-600 animate-bounce"></i>
+        <button id="btn-open-invitation" class="relative group inline-flex items-center gap-3 bg-gradient-to-r from-gold-600 via-gold-500 to-gold-600 hover:from-gold-500 hover:to-gold-600 text-[#0A3D47] font-semibold tracking-widest uppercase text-xs px-8 py-4 rounded-full shadow-2xl border-2 border-amber-300/50 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer">
+          <i class="fa-solid fa-envelope-open text-sm animate-bounce"></i>
           <span>Buka Undangan</span>
         </button>
 
@@ -261,53 +225,50 @@
 
     <!-- LEFT COLUMN: Desktop Premium Backdrop Static (Only visible on lg screens) -->
     <div class="hidden lg:flex lg:flex-1 lg:h-full bg-gradient-to-br from-[#0A3D47] to-[#0E5E6B] p-16 flex-col justify-between relative bg-cover bg-center overflow-hidden"
-      style="background-image: linear-gradient(135deg, rgba(10,61,71,0.55) 0%, rgba(14,94,107,0.50) 60%, rgba(4,32,40,0.65) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
+      style="background-image: linear-gradient(to top, rgba(4,32,40, 0.95) 0%, rgba(10,61,71, 0.0) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
 
       <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
-      <!-- Soft teal glow orb behind names for depth -->
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-3xl pointer-events-none" style="background: radial-gradient(circle, rgba(61,196,196,0.07) 0%, transparent 70%);"></div>
-
       <!-- Frame border aesthetics -->
-      <div class="absolute inset-8 border border-silver-500/20 pointer-events-none rounded-xl"></div>
-      <div class="absolute inset-10 border-2 border-silver-500/10 pointer-events-none rounded-lg"></div>
+      <div class="absolute inset-8 border border-gold-500/20 pointer-events-none rounded-xl"></div>
+      <div class="absolute inset-10 border-2 border-gold-500/10 pointer-events-none rounded-lg"></div>
 
       <!-- Floating corner arches -->
-      <div class="absolute top-12 left-12 w-20 h-20 border-t border-l border-silver-500/40 rounded-tl-xl"></div>
-      <div class="absolute bottom-12 right-12 w-20 h-20 border-b border-r border-silver-500/40 rounded-br-xl"></div>
+      <div class="absolute top-12 left-12 w-20 h-20 border-t border-l border-gold-500/40 rounded-tl-xl"></div>
+      <div class="absolute bottom-12 right-12 w-20 h-20 border-b border-r border-gold-500/40 rounded-br-xl"></div>
 
       <!-- Logo / Intro Header -->
-      <div class="z-10 bg-black/10 backdrop-blur-xs p-4 rounded-lg inline-self-start">
-        <span class="font-serif text-silver-200 text-lg tracking-widest uppercase block mb-1">UNDANGAN PERNIKAHAN</span>
+      <div class="z-10 bg-black/50 backdrop-blur-md border border-white/10 shadow-2xl p-5 rounded-xl self-start inline-block">
+        <span class="font-serif text-gold-500 text-lg tracking-widest uppercase block mb-1">UNDANGAN PERNIKAHAN</span>
         <p class="text-[11px] text-stone-300 tracking-wider">THE WEDDING OF {{ strtoupper($invitation->pria_nama) }} &amp; {{ strtoupper($invitation->wanita_nama) }}</p>
       </div>
 
       <!-- Large names & countdown -->
       <div class="z-10 my-auto text-left">
-        <span class="font-serif text-silver-100 text-sm tracking-widest uppercase block mb-2">PERNIKAHAN IMPIAN</span>
+        <span class="font-serif text-amber-200 text-sm tracking-widest uppercase block mb-2">PERNIKAHAN IMPIAN</span>
         <h2 class="font-serif text-6xl xl:text-7xl font-bold leading-tight text-white mb-4">
           {{ $invitation->pria_nama }} <br>
-          <span class="font-light text-teal-200 text-4xl xl:text-5xl font-serif block my-1">&amp;</span>
+          <span class="font-light text-gold-500 text-4xl xl:text-5xl font-serif block my-1">&amp;</span>
           {{ $invitation->wanita_nama }}
         </h2>
-        <div class="w-32 h-[2px] bg-gradient-to-r from-teal-300 to-transparent mb-6"></div>
+        <div class="w-32 h-[2px] bg-gradient-to-r from-gold-500 to-transparent mb-6"></div>
 
         <div id="desktop-countdown-wrapper" class="flex justify-center gap-3 w-full">
-          <div class="text-center w-20 py-3 rounded-xl bg-black/20 backdrop-blur-sm border border-teal-400/15 shadow-md">
-            <span id="dt-days" class="font-serif text-3xl font-bold text-white drop-shadow-sm block">00</span>
-            <span class="text-[9px] text-silver-200 font-medium uppercase tracking-widest">Hari</span>
+          <div class="text-center w-20 py-3 rounded-xl bg-black/40 border border-[#D4AF37]/30 shadow-md">
+            <span id="dt-days" class="font-serif text-3xl font-bold text-gold-500 block">00</span>
+            <span class="text-[9px] text-[#FDF6D9]/80 uppercase tracking-widest">Hari</span>
           </div>
-          <div class="text-center w-20 py-3 rounded-xl bg-black/20 backdrop-blur-sm border border-teal-400/15 shadow-md">
-            <span id="dt-hours" class="font-serif text-3xl font-bold text-white drop-shadow-sm block">00</span>
-            <span class="text-[9px] text-silver-200 font-medium uppercase tracking-widest">Jam</span>
+          <div class="text-center w-20 py-3 rounded-xl bg-black/40 border border-[#D4AF37]/30 shadow-md">
+            <span id="dt-hours" class="font-serif text-3xl font-bold text-gold-500 block">00</span>
+            <span class="text-[9px] text-[#FDF6D9]/80 uppercase tracking-widest">Jam</span>
           </div>
-          <div class="text-center w-20 py-3 rounded-xl bg-black/20 backdrop-blur-sm border border-teal-400/15 shadow-md">
-            <span id="dt-minutes" class="font-serif text-3xl font-bold text-white drop-shadow-sm block">00</span>
-            <span class="text-[9px] text-silver-200 font-medium uppercase tracking-widest">Menit</span>
+          <div class="text-center w-20 py-3 rounded-xl bg-black/40 border border-[#D4AF37]/30 shadow-md">
+            <span id="dt-minutes" class="font-serif text-3xl font-bold text-gold-500 block">00</span>
+            <span class="text-[9px] text-[#FDF6D9]/80 uppercase tracking-widest">Menit</span>
           </div>
-          <div class="text-center w-20 py-3 rounded-xl bg-black/20 backdrop-blur-sm border border-teal-400/15 shadow-md">
-            <span id="dt-seconds" class="font-serif text-3xl font-bold text-white drop-shadow-sm block">00</span>
-            <span class="text-[9px] text-silver-200 font-medium uppercase tracking-widest">Detik</span>
+          <div class="text-center w-20 py-3 rounded-xl bg-black/40 border border-[#D4AF37]/30 shadow-md">
+            <span id="dt-seconds" class="font-serif text-3xl font-bold text-gold-500 block">00</span>
+            <span class="text-[9px] text-[#FDF6D9]/80 uppercase tracking-widest">Detik</span>
           </div>
         </div>
       </div>
@@ -316,12 +277,12 @@
       <div class="z-10 flex justify-between items-end text-white">
         <div>
           @if($resepsi)
-          <p class="font-serif text-silver-100 text-base">{{ $resepsi->tempat }}</p>
+          <p class="font-serif text-amber-200 text-base">{{ $resepsi->tempat }}</p>
           <p class="text-xs text-stone-300">{{ \Carbon\Carbon::parse($resepsi->tgl_acara)->translatedFormat('l, d F Y') }}</p>
           @endif
         </div>
         <div class="text-right text-stone-400 text-xs">
-          <span class="text-white"><i class="fa-solid fa-music mr-1 text-teal-300"></i> From Aufilla</span>
+          <span class="text-white"><i class="fa-solid fa-music mr-1 text-gold-500"></i> From Aufilla</span>
         </div>
       </div>
 
@@ -329,31 +290,31 @@
 
 
     <!-- RIGHT COLUMN: Scrolling Full Invitation Content Panel (Visible everywhere) -->
-    <div id="right-pane" class="w-full lg:w-[480px] lg:min-w-[480px] lg:shrink-0 min-h-screen lg:h-full lg:overflow-y-auto bg-ice-100 overflow-x-hidden relative shadow-2xl mx-auto">
+    <div id="right-pane" class="w-full lg:w-[480px] lg:min-w-[480px] lg:shrink-0 min-h-screen lg:h-full lg:overflow-y-auto bg-pearl-100 overflow-x-hidden relative shadow-2xl mx-auto">
 
       <!-- A: HERO HEADER (ANCHOR) -->
-      <section id="hero" class="relative min-h-screen flex flex-col justify-center items-center py-20 px-6 text-center select-none bg-[#F4F8FB] overflow-hidden">
+      <section id="hero" class="relative min-h-screen flex flex-col justify-center items-center py-20 px-6 text-center select-none bg-[#F2F9F9] overflow-hidden">
 
-        <div class="absolute inset-0 bg-wedding-foliage opacity-[0.08]"></div>
+        <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
         <!-- Gilded circular framing for Hero block -->
-        <div class="absolute top-10 left-10 w-24 h-24 border-t-2 border-l-2 border-silver-400/20 rounded-tl-full pointer-events-none"></div>
-        <div class="absolute bottom-10 right-10 w-24 h-24 border-b-2 border-r-2 border-silver-400/20 rounded-br-full pointer-events-none"></div>
+        <div class="absolute top-10 left-10 w-24 h-24 border-t-2 border-l-2 border-gold-500/20 rounded-tl-full pointer-events-none"></div>
+        <div class="absolute bottom-10 right-10 w-24 h-24 border-b-2 border-r-2 border-gold-500/20 rounded-br-full pointer-events-none"></div>
 
         <!-- Welcome Banner Text -->
         <div data-aos="fade-down" data-aos-duration="1000" class="mb-4">
-          <span class="font-serif text-silver-600 text-xs tracking-[0.25em] uppercase block mb-1">Undangan Pernikahan</span>
-          <div class="w-16 h-[1px] bg-silver-400 mx-auto"></div>
+          <span class="font-serif text-gold-600 text-xs tracking-[0.25em] uppercase block mb-1">Undangan Pernikahan</span>
+          <div class="w-16 h-[1px] bg-gold-500 mx-auto"></div>
         </div>
 
         <!-- Hero Main Couple Image -->
         <div data-aos="zoom-in" data-aos-duration="1200" class="relative w-64 h-64 md:w-72 md:h-72 mx-auto my-8">
           <!-- Gilded frame backing -->
-          <div class="absolute inset-[-10px] border border-silver-400 rounded-full animate-spin-slow opacity-60"></div>
-          <div class="absolute inset-[-4px] border-2 border-silver-500 rounded-full"></div>
+          <div class="absolute inset-[-10px] border border-gold-500 rounded-full animate-spin-slow opacity-60"></div>
+          <div class="absolute inset-[-4px] border-2 border-gold-600 rounded-full"></div>
 
           <!-- Standard round portrait mask -->
-          <div class="w-full h-full rounded-full overflow-hidden shadow-2xl silver-border-glow select-none bg-white">
+          <div class="w-full h-full rounded-full overflow-hidden shadow-2xl gold-border-glow select-none bg-white">
             <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}"
               alt="{{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}"
               class="w-full h-full object-cover scale-105 hover:scale-110 transition-transform duration-700"
@@ -361,20 +322,20 @@
           </div>
 
           <!-- Absolute golden hanging leaves badge -->
-          <div class="absolute bottom-1 -right-2 bg-gradient-to-br from-silver-600 to-silver-500 border-2 border-silver-300 text-white rounded-full p-3 shadow-xl flex items-center justify-center w-12 h-12">
-            <i class="fa-solid fa-heart text-white"></i>
+          <div class="absolute bottom-1 -right-2 bg-gradient-to-br from-primary-800 to-secondary border-2 border-gold-500 text-white rounded-full p-3 shadow-xl flex items-center justify-center w-12 h-12">
+            <i class="fa-solid fa-heart text-gold-400"></i>
           </div>
         </div>
 
         <!-- Names of the couple in Serif -->
         <div data-aos="fade-up" data-aos-duration="1000">
-          <h2 class="font-serif text-4xl md:text-5xl font-bold text-teal-800 leading-none">{{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}</h2>
+          <h2 class="font-serif text-4xl md:text-5xl font-bold text-primary-800 leading-none">{{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}</h2>
           @if($akad)
           <div class="flex items-center justify-center gap-2 mt-4 text-stone-500 text-xs md:text-sm">
             <span class="uppercase">{{ \Carbon\Carbon::parse($akad->tgl_acara)->translatedFormat('l') }}</span>
-            <span class="w-1.5 h-1.5 rounded-full bg-silver-400"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-gold-500"></span>
             <span class="uppercase">{{ \Carbon\Carbon::parse($akad->tgl_acara)->translatedFormat('d F Y') }}</span>
-            <span class="w-1.5 h-1.5 rounded-full bg-silver-400"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-gold-500"></span>
             <span class="uppercase">Di Tempat</span>
           </div>
           @endif
@@ -384,31 +345,31 @@
         <div data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000" class="mt-10 w-full max-w-sm">
           <p class="text-xs text-stone-500 uppercase tracking-[0.2em] mb-4 font-semibold">Menghitung Kisah Indah:</p>
           <div class="grid grid-cols-4 gap-3">
-            <div class="bg-[#0E5E6B] rounded-2xl p-3 border border-teal-400/15 shadow-md">
-              <span id="countdown-days" class="font-serif text-2xl md:text-3xl font-bold text-white drop-shadow-sm block">00</span>
-              <span class="text-[9px] uppercase tracking-wider text-silver-200 font-medium block font-sans">Hari</span>
+            <div class="bg-[#0E5E6B] rounded-2xl p-3 border border-[#D4AF37]/35 shadow-md">
+              <span id="countdown-days" class="font-serif text-2xl md:text-3xl font-bold text-[#D4AF37] block">00</span>
+              <span class="text-[9px] uppercase tracking-wider text-amber-100/80 block font-sans">Hari</span>
             </div>
-            <div class="bg-[#0E5E6B] rounded-2xl p-3 border border-teal-400/15 shadow-md">
-              <span id="countdown-hours" class="font-serif text-2xl md:text-3xl font-bold text-white drop-shadow-sm block">00</span>
-              <span class="text-[9px] uppercase tracking-wider text-silver-200 font-medium block font-sans">Jam</span>
+            <div class="bg-[#0E5E6B] rounded-2xl p-3 border border-[#D4AF37]/35 shadow-md">
+              <span id="countdown-hours" class="font-serif text-2xl md:text-3xl font-bold text-[#D4AF37] block">00</span>
+              <span class="text-[9px] uppercase tracking-wider text-amber-100/80 block font-sans">Jam</span>
             </div>
-            <div class="bg-[#0E5E6B] rounded-2xl p-3 border border-teal-400/15 shadow-md">
-              <span id="countdown-minutes" class="font-serif text-2xl md:text-3xl font-bold text-white drop-shadow-sm block">00</span>
-              <span class="text-[9px] uppercase tracking-wider text-silver-200 font-medium block font-sans">Menit</span>
+            <div class="bg-[#0E5E6B] rounded-2xl p-3 border border-[#D4AF37]/35 shadow-md">
+              <span id="countdown-minutes" class="font-serif text-2xl md:text-3xl font-bold text-[#D4AF37] block">00</span>
+              <span class="text-[9px] uppercase tracking-wider text-amber-100/80 block font-sans">Menit</span>
             </div>
-            <div class="bg-[#0E5E6B] rounded-2xl p-3 border border-teal-400/15 shadow-md">
-              <span id="countdown-seconds" class="font-serif text-2xl md:text-3xl font-bold text-white drop-shadow-sm block">00</span>
-              <span class="text-[9px] uppercase tracking-wider text-silver-200 font-medium block font-sans">Detik</span>
+            <div class="bg-[#0E5E6B] rounded-2xl p-3 border border-[#D4AF37]/35 shadow-md">
+              <span id="countdown-seconds" class="font-serif text-2xl md:text-3xl font-bold text-[#D4AF37] block">00</span>
+              <span class="text-[9px] uppercase tracking-wider text-amber-100/80 block font-sans">Detik</span>
             </div>
           </div>
         </div>
 
         <!-- Guest greeting inside right hero for completeness -->
         <div data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000" class="mt-8 text-stone-600 text-xs">
-          Selamat datang, <span id="guest-name-hero" class="font-semibold text-teal-800">{{ request('to') ? ucwords(str_replace('-', ' ', request('to'))) : 'Tamu Terhormat' }}</span>. Kami menantikan kehadiran Anda.
+          Selamat datang, <span id="guest-name-hero" class="font-semibold text-primary-800">{{ request('to') ? ucwords(str_replace('-', ' ', request('to'))) : 'Tamu Terhormat' }}</span>. Kami menantikan kehadiran Anda.
         </div>
 
-        <div class="mt-10 self-center animate-bounce text-silver-500 text-lg">
+        <div class="mt-10 self-center animate-bounce text-gold-500 text-lg">
           <i class="fa-solid fa-chevron-down opacity-55"></i>
         </div>
 
@@ -416,17 +377,17 @@
 
 
       <!-- B: ROMANTIC QUOTE (QS. AR-RUM) -->
-      <section id="quote" class="relative py-20 px-6 text-center bg-ice-50 overflow-hidden">
-        <div class="absolute inset-0 bg-wedding-foliage opacity-[0.06]"></div>
+      <section id="quote" class="relative py-20 px-6 text-center bg-pearl-50 overflow-hidden">
+        <div class="absolute inset-0 bg-wedding-foliage opacity-10"></div>
 
         <div class="max-w-md mx-auto" data-aos="fade-up" data-aos-duration="1200">
           <!-- Custom Gilded Flower Branch Motif -->
-          <div class="text-silver-500 text-2xl mb-6">
+          <div class="text-gold-500 text-2xl mb-6">
             <i class="fa-solid fa-leaf"></i>
           </div>
 
           <!-- Arabic script styled inside a beautiful elegant font size -->
-          <p class="font-serif text-2xl md:text-3xl text-teal-900 leading-loose mb-6 tracking-wide" dir="rtl">
+          <p class="font-serif text-2xl md:text-3xl text-primary-900 leading-loose mb-6 tracking-wide" dir="rtl">
             وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُمْ مِنْ أَنْفُسِكُمْ أَزْوَاجًا لِتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِقَوْمٍ يَتَفَكَّرُونَ
           </p>
 
@@ -434,24 +395,24 @@
             "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda bagi kaum yang berpikir."
           </blockquote>
 
-          <cite class="font-serif text-xs md:text-sm tracking-widest text-silver-600 block font-bold uppercase mt-4">
+          <cite class="font-serif text-xs md:text-sm tracking-widest text-[#D4AF37] block font-bold uppercase mt-4">
             — QS. Ar-Rum Ayat 21
           </cite>
 
-          <div class="w-16 h-[1.5px] bg-silver-400 mx-auto mt-8"></div>
+          <div class="w-16 h-[1.5px] bg-gold-400 mx-auto mt-8"></div>
         </div>
       </section>
 
 
       <!-- C: COUPLE DETAILS (ANCHOR) -->
-      <section id="couple" class="relative py-24 px-6 bg-[#F4F8FB] overflow-hidden">
-        <div class="absolute inset-0 bg-wedding-foliage opacity-[0.08]"></div>
+      <section id="couple" class="relative py-24 px-6 bg-[#F2F9F9] overflow-hidden">
+        <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
         <!-- Section Intro -->
         <div class="text-center max-w-sm mx-auto mb-16" data-aos="fade-up" data-aos-duration="1000">
-          <span class="font-serif text-silver-600 text-xs tracking-widest uppercase block mb-2">Mempelai Indah</span>
-          <h2 class="font-serif text-4xl font-bold text-teal-800 mb-4">Sepasang Kasih</h2>
-          <div class="w-12 h-[1.5px] bg-silver-400 mx-auto my-3"></div>
+          <span class="font-serif text-gold-500 text-xs tracking-widest uppercase block mb-2">Mempelai Indah</span>
+          <h2 class="font-serif text-4xl font-bold text-primary-800 mb-4">Sepasang Kasih</h2>
+          <div class="w-12 h-[1.5px] bg-gold-500 mx-auto my-3"></div>
           <p class="text-xs md:text-sm leading-relaxed text-stone-600">
             Assalamu’alaikum Warahmatullahi Wabarakatuh. Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud mengundang Bapak/Ibu/Saudara/i ke acara pernikahan kami:
           </p>
@@ -464,21 +425,21 @@
           <div class="flex flex-col items-center text-center" data-aos="fade-up" data-aos-duration="1200">
             <!-- Groom Styled Frame -->
             <div class="relative w-48 h-48 mb-6">
-              <div class="absolute inset-0 border-2 border-silver-400 rounded-2xl rotate-3"></div>
-              <div class="absolute inset-0 border border-silver-600 rounded-2xl -rotate-2 bg-ice-50 shadow-md"></div>
+              <div class="absolute inset-0 border-2 border-gold-500 rounded-2xl rotate-3"></div>
+              <div class="absolute inset-0 border border-primary-800 rounded-2xl -rotate-2 bg-pearl-50 shadow-md"></div>
               <img src="{{ $invitation->pria_foto ? asset('storage/' . $invitation->pria_foto) : asset('assets/default/default_pria.jpg') }}"
                 alt="{{ $invitation->pria_nama_lengkap }}"
-                class="w-full h-full object-cover rounded-2xl relative z-10 border border-silver-400/20 bg-white"
+                class="w-full h-full object-cover rounded-2xl relative z-10 border border-gold-500/20 bg-white"
                 referrerpolicy="no-referrer">
             </div>
 
             <!-- Details -->
-            <h3 class="font-serif text-2xl font-bold text-teal-800 tracking-wide mb-1">
+            <h3 class="font-serif text-2xl font-bold text-primary-800 tracking-wide mb-1">
               {{ $invitation->pria_nama_lengkap }}
             </h3>
-            <p class="text-[11px] text-silver-600 uppercase tracking-[0.2em] font-semibold mb-3">Mempelai Pria</p>
+            <p class="text-[11px] text-[#C5A031] uppercase tracking-[0.2em] font-semibold mb-3">Mempelai Pria</p>
 
-            <div class="w-6 h-[1px] bg-silver-400 my-2"></div>
+            <div class="w-6 h-[1px] bg-gold-400 my-2"></div>
 
             <p class="text-xs leading-relaxed text-stone-600 max-w-xs font-sans">
               Putra dari <br>
@@ -489,30 +450,30 @@
 
           <!-- Heart spacer divider symbol -->
           <div class="flex items-center justify-center gap-4 py-4" data-aos="zoom-in" data-aos-duration="1000">
-            <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent to-silver-400/60"></div>
-            <span class="text-silver-500 text-lg"><i class="fa-solid fa-heart"></i></span>
-            <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent to-silver-400/60"></div>
+            <div class="h-[1px] flex-1 bg-gradient-to-r from-transparent to-gold-500/40"></div>
+            <span class="text-gold-500 text-lg"><i class="fa-solid fa-heart"></i></span>
+            <div class="h-[1px] flex-1 bg-gradient-to-l from-transparent to-gold-500/40"></div>
           </div>
 
           <!-- BRIDE PROFILE CARD -->
           <div class="flex flex-col items-center text-center" data-aos="fade-up" data-aos-duration="1200">
             <!-- Bride Styled Frame -->
             <div class="relative w-48 h-48 mb-6">
-              <div class="absolute inset-0 border-2 border-silver-400 rounded-2xl -rotate-3"></div>
-              <div class="absolute inset-0 border border-silver-600 rounded-2xl rotate-2 bg-ice-50 shadow-md"></div>
+              <div class="absolute inset-0 border-2 border-gold-500 rounded-2xl -rotate-3"></div>
+              <div class="absolute inset-0 border border-primary-800 rounded-2xl rotate-2 bg-pearl-50 shadow-md"></div>
               <img src="{{ $invitation->wanita_foto ? asset('storage/' . $invitation->wanita_foto) : asset('assets/default/default_wanita.jpg') }}"
                 alt="{{ $invitation->wanita_nama_lengkap }}"
-                class="w-full h-full object-cover rounded-2xl relative z-10 border border-silver-400/20 bg-white"
+                class="w-full h-full object-cover rounded-2xl relative z-10 border border-gold-500/20 bg-white"
                 referrerpolicy="no-referrer">
             </div>
 
             <!-- Details -->
-            <h3 class="font-serif text-2xl font-bold text-teal-800 tracking-wide mb-1">
+            <h3 class="font-serif text-2xl font-bold text-primary-800 tracking-wide mb-1">
               {{ $invitation->wanita_nama_lengkap }}
             </h3>
-            <p class="text-[11px] text-silver-600 uppercase tracking-[0.2em] font-semibold mb-3">Mempelai Wanita</p>
+            <p class="text-[11px] text-[#C5A031] uppercase tracking-[0.2em] font-semibold mb-3">Mempelai Wanita</p>
 
-            <div class="w-6 h-[1px] bg-silver-400 my-2"></div>
+            <div class="w-6 h-[1px] bg-gold-400 my-2"></div>
 
             <p class="text-xs leading-relaxed text-stone-600 max-w-xs font-sans">
               Putri dari <br>
@@ -526,18 +487,18 @@
 
 
       <!-- D: INTERACTIVE EVENTS SECTION (ANCHOR) -->
-      <section id="event" class="relative py-24 px-6 bg-ice-50 overflow-hidden">
-        <div class="absolute inset-0 bg-wedding-foliage opacity-[0.06]"></div>
+      <section id="event" class="relative py-24 px-6 bg-pearl-50 overflow-hidden">
+        <div class="absolute inset-0 bg-wedding-foliage opacity-10"></div>
 
         <!-- Ornaments -->
-        <div class="absolute top-0 right-0 w-24 h-24 border-t-2 border-r-2 border-silver-400/20 m-4 rounded-tr-xl pointer-events-none"></div>
-        <div class="absolute bottom-0 left-0 w-24 h-24 border-b-2 border-l-2 border-silver-400/20 m-4 rounded-bl-xl pointer-events-none"></div>
+        <div class="absolute top-0 right-0 w-24 h-24 border-t-2 border-r-2 border-gold-500/20 m-4 rounded-tr-xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-24 h-24 border-b-2 border-l-2 border-gold-500/20 m-4 rounded-bl-xl pointer-events-none"></div>
 
         <!-- Section title -->
         <div class="text-center max-w-sm mx-auto mb-16" data-aos="fade-up" data-aos-duration="1000">
-          <span class="font-serif text-silver-600 text-xs tracking-widest uppercase block mb-2">Tanggal &amp; Lokasi</span>
-          <h2 class="font-serif text-4xl font-bold text-teal-800 mb-3">Momentum Bahagia</h2>
-          <div class="w-12 h-[1.5px] bg-silver-400 mx-auto my-3"></div>
+          <span class="font-serif text-gold-500 text-xs tracking-widest uppercase block mb-2">Tanggal &amp; Lokasi</span>
+          <h2 class="font-serif text-4xl font-bold text-primary-800 mb-3">Momentum Bahagia</h2>
+          <div class="w-12 h-[1.5px] bg-gold-500 mx-auto my-3"></div>
           <p class="text-xs md:text-sm text-stone-600 leading-relaxed">
             Dengan penuh kebahagiaan, rangkaian acara sakral pernikahan kami akan diselenggarakan pada:
           </p>
@@ -548,17 +509,17 @@
 
           @if($akad)
           <!-- AKAD CARD -->
-          <div class="bg-white rounded-3xl border border-silver-400/20 shadow-xl overflow-hidden glass-premium relative card-elevated" data-aos="fade-up" data-aos-duration="1200">
+          <div class="bg-white rounded-3xl border border-gold-500/20 shadow-xl overflow-hidden glass-premium relative" data-aos="fade-up" data-aos-duration="1200">
             <!-- Gilded vertical ribbon edge -->
-            <div class="absolute top-0 left-0 bottom-0 w-2 bg-gradient-to-b from-silver-500 to-silver-300"></div>
+            <div class="absolute top-0 left-0 bottom-0 w-2 bg-gradient-to-b from-gold-600 to-gold-400"></div>
 
             <div class="p-8 truncate-normal">
               <div class="flex items-center gap-4 mb-4">
-                <div class="w-12 h-12 rounded-2xl bg-silver-50 border border-silver-400/30 flex items-center justify-center text-teal-800 text-xl shadow-inner">
+                <div class="w-12 h-12 rounded-2xl bg-primary-50 border border-gold-500/30 flex items-center justify-center text-primary-800 text-xl shadow-inner">
                   <i class="fa-solid fa-ring"></i>
                 </div>
                 <div>
-                  <h3 class="font-serif text-2xl font-bold text-teal-800">{{ $akad->nama_acara ?? 'Akad Nikah' }}</h3>
+                  <h3 class="font-serif text-2xl font-bold text-primary-800">{{ $akad->nama_acara ?? 'Akad Nikah' }}</h3>
                   <span class="text-[10px] text-stone-500 tracking-wider block uppercase">PROSESI AKAD</span>
                 </div>
               </div>
@@ -567,7 +528,7 @@
 
               <div class="space-y-4 text-xs md:text-sm text-stone-600">
                 <div class="flex items-start gap-3">
-                  <div class="text-silver-600 mt-1"><i class="fa-solid fa-calendar-days"></i></div>
+                  <div class="text-gold-600 mt-1"><i class="fa-solid fa-calendar-days"></i></div>
                   <div>
                     <p class="font-semibold text-stone-800">Hari &amp; Tanggal</p>
                     <p>{{ \Carbon\Carbon::parse($akad->tgl_acara)->translatedFormat('l, d F Y') }}</p>
@@ -575,7 +536,7 @@
                 </div>
 
                 <div class="flex items-start gap-3">
-                  <div class="text-silver-600 mt-1"><i class="fa-solid fa-clock"></i></div>
+                  <div class="text-gold-600 mt-1"><i class="fa-solid fa-clock"></i></div>
                   <div>
                     <p class="font-semibold text-stone-800">Waktu</p>
                     <p>Pukul {{ substr($akad->waktu_mulai, 0, 5) }} WIB s/d {{ $akad->waktu_selesai ? substr($akad->waktu_selesai, 0, 5) . ' WIB' : 'Selesai' }}</p>
@@ -583,10 +544,10 @@
                 </div>
 
                 <div class="flex items-start gap-3">
-                  <div class="text-silver-600 mt-1"><i class="fa-solid fa-location-dot"></i></div>
+                  <div class="text-gold-600 mt-1"><i class="fa-solid fa-location-dot"></i></div>
                   <div>
                     <p class="font-semibold text-stone-800">Tempat / Lokasi</p>
-                    <p class="font-medium text-teal-900">{{ $akad->tempat }}</p>
+                    <p class="font-medium text-primary-900">{{ $akad->tempat }}</p>
                     <p class="text-xs text-stone-500">{{ $akad->alamat }}</p>
                   </div>
                 </div>
@@ -594,8 +555,8 @@
 
               <!-- Google Maps Link Button -->
               <div class="mt-8">
-                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($akad->tempat . ' ' . $akad->alamat) }}" target="_blank" class="inline-flex items-center justify-center gap-2 w-full bg-teal-800 hover:bg-teal-900 text-white font-medium text-xs tracking-wider uppercase px-6 py-3 rounded-2xl shadow-lg border border-teal-400/25 transition-all duration-300">
-                  <i class="fa-solid fa-map-marked-alt text-teal-200"></i>
+                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($akad->tempat . ' ' . $akad->alamat) }}" target="_blank" class="inline-flex items-center justify-center gap-2 w-full bg-primary-800 hover:bg-primary-900 text-white font-medium text-xs tracking-wider uppercase px-6 py-3 rounded-2xl shadow-lg border border-gold-500/25 transition-all duration-300">
+                  <i class="fa-solid fa-map-marked-alt text-gold-400"></i>
                   <span>Petunjuk Lokasi Google Maps</span>
                 </a>
               </div>
@@ -605,17 +566,17 @@
 
           @if($resepsi)
           <!-- RESEPSI CARD -->
-          <div class="bg-white rounded-3xl border border-silver-400/20 shadow-xl overflow-hidden glass-premium relative card-elevated" data-aos="fade-up" data-aos-duration="1200">
+          <div class="bg-white rounded-3xl border border-gold-500/20 shadow-xl overflow-hidden glass-premium relative" data-aos="fade-up" data-aos-duration="1200">
             <!-- Gilded vertical ribbon edge -->
-            <div class="absolute top-0 left-0 bottom-0 w-2 bg-gradient-to-b from-silver-500 to-silver-300"></div>
+            <div class="absolute top-0 left-0 bottom-0 w-2 bg-gradient-to-b from-primary-900 via-primary-800 to-[#248896]"></div>
 
             <div class="p-8">
               <div class="flex items-center gap-4 mb-4">
-                <div class="w-12 h-12 rounded-2xl bg-silver-50 border border-silver-400/30 flex items-center justify-center text-teal-800 text-xl shadow-inner">
+                <div class="w-12 h-12 rounded-2xl bg-primary-50 border border-gold-500/30 flex items-center justify-center text-primary-800 text-xl shadow-inner">
                   <i class="fa-solid fa-champagne-glasses"></i>
                 </div>
                 <div>
-                  <h3 class="font-serif text-2xl font-bold text-teal-800">{{ $resepsi->nama_acara ?? 'Resepsi Pernikahan' }}</h3>
+                  <h3 class="font-serif text-2xl font-bold text-primary-800">{{ $resepsi->nama_acara ?? 'Resepsi Pernikahan' }}</h3>
                   <span class="text-[10px] text-stone-500 tracking-wider block uppercase font-sans">PERAYAAN</span>
                 </div>
               </div>
@@ -624,7 +585,7 @@
 
               <div class="space-y-4 text-xs md:text-sm text-stone-600">
                 <div class="flex items-start gap-3">
-                  <div class="text-silver-600 mt-1"><i class="fa-solid fa-calendar-days"></i></div>
+                  <div class="text-gold-600 mt-1"><i class="fa-solid fa-calendar-days"></i></div>
                   <div>
                     <p class="font-semibold text-stone-800">Hari &amp; Tanggal</p>
                     <p>{{ \Carbon\Carbon::parse($resepsi->tgl_acara)->translatedFormat('l, d F Y') }}</p>
@@ -632,7 +593,7 @@
                 </div>
 
                 <div class="flex items-start gap-3">
-                  <div class="text-silver-600 mt-1"><i class="fa-solid fa-clock"></i></div>
+                  <div class="text-gold-600 mt-1"><i class="fa-solid fa-clock"></i></div>
                   <div>
                     <p class="font-semibold text-stone-800">Waktu</p>
                     <p>Pukul {{ substr($resepsi->waktu_mulai, 0, 5) }} WIB s/d {{ $resepsi->waktu_selesai ? substr($resepsi->waktu_selesai, 0, 5) . ' WIB' : 'Selesai' }}</p>
@@ -640,10 +601,10 @@
                 </div>
 
                 <div class="flex items-start gap-3">
-                  <div class="text-silver-600 mt-1"><i class="fa-solid fa-location-dot"></i></div>
+                  <div class="text-gold-600 mt-1"><i class="fa-solid fa-location-dot"></i></div>
                   <div>
                     <p class="font-semibold text-stone-800">Tempat / Lokasi</p>
-                    <p class="font-medium text-teal-900">{{ $resepsi->tempat }}</p>
+                    <p class="font-medium text-primary-900">{{ $resepsi->tempat }}</p>
                     <p class="text-xs text-stone-500">{{ $resepsi->alamat }}</p>
                   </div>
                 </div>
@@ -651,8 +612,8 @@
 
               <!-- Google Maps Link Button -->
               <div class="mt-8">
-                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($resepsi->tempat . ' ' . $resepsi->alamat) }}" target="_blank" class="inline-flex items-center justify-center gap-2 w-full bg-teal-800 hover:bg-teal-900 text-white font-medium text-xs tracking-wider uppercase px-6 py-3 rounded-2xl shadow-lg border border-teal-400/25 transition-all duration-300">
-                  <i class="fa-solid fa-map-marked-alt text-teal-200"></i>
+                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($resepsi->tempat . ' ' . $resepsi->alamat) }}" target="_blank" class="inline-flex items-center justify-center gap-2 w-full bg-primary-800 hover:bg-primary-900 text-white font-medium text-xs tracking-wider uppercase px-6 py-3 rounded-2xl shadow-lg border border-gold-500/25 transition-all duration-300">
+                  <i class="fa-solid fa-map-marked-alt text-gold-400"></i>
                   <span>Petunjuk Lokasi Google Maps</span>
                 </a>
               </div>
@@ -668,14 +629,14 @@
 
       @if($invitation->is_cerita_aktif && count($ceritas) > 0)
       <!-- E: OUR LOVE STORY TIMELINE (ANCHOR) -->
-      <section id="story" class="relative py-24 px-6 bg-[#F4F8FB] overflow-hidden">
-        <div class="absolute inset-0 bg-wedding-foliage opacity-[0.08]"></div>
+      <section id="story" class="relative py-24 px-6 bg-[#F2F9F9] overflow-hidden">
+        <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
         <!-- Section title -->
         <div class="text-center max-w-sm mx-auto mb-16" data-aos="fade-up" data-aos-duration="1000">
-          <span class="font-serif text-silver-600 text-xs tracking-widest uppercase block mb-2">Kisah Asmara</span>
-          <h2 class="font-serif text-4xl font-bold text-teal-800 mb-3">Cerita Cinta Kami</h2>
-          <div class="w-12 h-[1.5px] bg-silver-400 mx-auto my-3"></div>
+          <span class="font-serif text-gold-500 text-xs tracking-widest uppercase block mb-2">Kisah Asmara</span>
+          <h2 class="font-serif text-4xl font-bold text-primary-800 mb-3">Cerita Cinta Kami</h2>
+          <div class="w-12 h-[1.5px] bg-gold-500 mx-auto my-3"></div>
         </div>
 
         <!-- Timeline core container -->
@@ -684,18 +645,18 @@
           @foreach($ceritas as $cerita)
           <div class="flex gap-4 relative" data-aos="fade-up" data-aos-duration="1250">
             <div class="flex flex-col items-center">
-              <span class="w-8 h-8 rounded-full bg-gradient-to-br from-teal-800 to-teal-600 border-2 border-white shadow-md flex items-center justify-center shrink-0 z-10 relative mt-1">
-                <i class="fa-solid fa-heart text-[10px] text-white"></i>
+              <span class="w-8 h-8 rounded-full bg-gradient-to-r from-gold-500 to-amber-400 border border-white shadow-md flex items-center justify-center shrink-0 z-10 relative mt-1">
+                <i class="fa-solid fa-heart text-[10px] text-[#0A3D47]"></i>
               </span>
               @if(!$loop->last)
-              <div class="w-[2px] h-full bg-silver-400/40 mt-[-8px]"></div>
+              <div class="w-[2px] h-full bg-gold-500/30 mt-[-8px]"></div>
               @endif
             </div>
 
-            <div class="bg-white/80 p-6 rounded-2xl border border-silver-400/20 shadow-md flex-1 mb-10">
+            <div class="bg-white/80 p-6 rounded-2xl border border-gold-500/20 shadow-md flex-1 mb-10">
               <div class="flex items-center justify-between mb-2">
-                <h3 class="font-serif text-lg font-bold text-teal-800">{{ $cerita->judul }}</h3>
-                <span class="text-[10px] text-silver-600 bg-silver-50 font-semibold px-2.5 py-1 rounded-full uppercase">{{ $cerita->tanggal }}</span>
+                <h3 class="font-serif text-lg font-bold text-primary-800">{{ $cerita->judul }}</h3>
+                <span class="text-[10px] text-amber-600 bg-gold-100 font-semibold px-2.5 py-1 rounded-full uppercase">{{ $cerita->tanggal }}</span>
               </div>
               <p class="text-xs text-stone-600 leading-relaxed mt-2">
                 {{ $cerita->isi_cerita }}
@@ -711,14 +672,14 @@
 
       @if($invitation->is_galeri_aktif && count($galeris) > 0)
       <!-- F: GALLERY (ANCHOR) -->
-      <section id="gallery" class="relative py-24 px-6 bg-ice-50 overflow-hidden">
-        <div class="absolute inset-0 bg-wedding-foliage opacity-[0.06]"></div>
+      <section id="gallery" class="relative py-24 px-6 bg-pearl-50 overflow-hidden">
+        <div class="absolute inset-0 bg-wedding-foliage opacity-10"></div>
 
         <!-- Section title -->
         <div class="text-center max-w-sm mx-auto mb-16" data-aos="fade-up" data-aos-duration="1000">
-          <span class="font-serif text-silver-600 text-xs tracking-widest uppercase block mb-2">Galeri Foto</span>
-          <h2 class="font-serif text-4xl font-bold text-teal-800 mb-3">Galeri Kebahagiaan</h2>
-          <div class="w-12 h-[1.5px] bg-silver-400 mx-auto my-3"></div>
+          <span class="font-serif text-gold-500 text-xs tracking-widest uppercase block mb-2">Galeri Foto</span>
+          <h2 class="font-serif text-4xl font-bold text-primary-800 mb-3">Galeri Kebahagiaan</h2>
+          <div class="w-12 h-[1.5px] bg-gold-500 mx-auto my-3"></div>
           <p class="text-xs md:text-sm text-stone-600 leading-relaxed">
             Memori abadi yang terukir manis dalam bingkai romansa. (Klik salah satu gambar untuk memperbesar)
           </p>
@@ -731,16 +692,16 @@
           @php
           $galeriUrl = str_starts_with($galeri->image_path, 'assets/') ? asset($galeri->image_path) : asset('storage/' . $galeri->image_path);
           @endphp
-            <div class="break-inside-avoid relative overflow-hidden rounded-2xl border border-silver-400/20 shadow-md group cursor-pointer gallery-trigger"
-              data-aos="zoom-in" data-aos-duration="1200"
-              data-src="{{ $galeriUrl }}"
-              data-caption="Momen Kebahagiaan">
-              <img src="{{ $galeriUrl }}"
-                alt="Galeri"
-                class="w-full object-cover h-auto rounded-2xl group-hover:scale-110 transition-transform duration-500"
-                referrerpolicy="no-referrer">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#0A3D47]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-              <span class="text-[10px] text-white uppercase tracking-widest font-serif block">Momen Indah</span>
+          <div class="break-inside-avoid relative overflow-hidden rounded-2xl border border-gold-500/20 shadow-md group cursor-pointer gallery-trigger"
+            data-aos="zoom-in" data-aos-duration="1200"
+            data-src="{{ $galeriUrl }}"
+            data-caption="Momen Kebahagiaan">
+            <img src="{{ $galeriUrl }}"
+              alt="Galeri"
+              class="w-full object-cover h-auto rounded-2xl group-hover:scale-110 transition-transform duration-500"
+              referrerpolicy="no-referrer">
+            <div class="absolute inset-0 bg-gradient-to-t from-primary-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+              <span class="text-[10px] text-amber-200 uppercase tracking-widest font-serif block">Momen Indah</span>
             </div>
           </div>
           @endforeach
@@ -752,14 +713,14 @@
 
       @if($invitation->is_kado_aktif && count($kados) > 0)
       <!-- G: WEDDING GIFT / DIGITAL ENVELOPE (ANCHOR) -->
-      <section id="gift" class="relative py-24 px-6 bg-[#F4F8FB] overflow-hidden">
-        <div class="absolute inset-0 bg-wedding-foliage opacity-[0.08]"></div>
+      <section id="gift" class="relative py-24 px-6 bg-[#F2F9F9] overflow-hidden">
+        <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
         <!-- Section title -->
         <div class="text-center max-w-sm mx-auto mb-16" data-aos="fade-up" data-aos-duration="1000">
-          <span class="font-serif text-silver-600 text-xs tracking-widest uppercase block mb-2">Tanda Kasih</span>
-          <h2 class="font-serif text-4xl font-bold text-teal-800 mb-3">Kado Digital</h2>
-          <div class="w-12 h-[1.5px] bg-silver-400 mx-auto my-3"></div>
+          <span class="font-serif text-gold-500 text-xs tracking-widest uppercase block mb-2">Tanda Kasih</span>
+          <h2 class="font-serif text-4xl font-bold text-primary-800 mb-3">Kado Digital</h2>
+          <div class="w-12 h-[1.5px] bg-gold-500 mx-auto my-3"></div>
           <p class="text-xs md:text-sm text-stone-600 leading-relaxed font-sans">
             Doa restu Anda adalah karunia terindah. Namun, jika Anda ingin memberikan tanda kasih secara digital, Anda dapat mentransfer melalui saluran berikut:
           </p>
@@ -769,11 +730,11 @@
         <div class="max-w-md mx-auto space-y-8">
 
           @foreach($kados as $index => $kado)
-          <div class="relative bg-gradient-to-br from-[#F8FAFC] via-[#E2E8F0] to-[#CBD5E1] text-teal-900 rounded-3xl border border-gray-400/50 shadow-2xl overflow-hidden p-6 hover:scale-105 transition-transform duration-300" data-aos="fade-up" data-aos-duration="1200">
+          <div class="relative bg-gradient-to-br from-[#F8FAFC] via-[#E2E8F0] to-[#CBD5E1] text-primary-900 rounded-3xl border border-gray-400/50 shadow-2xl overflow-hidden p-6 hover:scale-105 transition-transform duration-300" data-aos="fade-up" data-aos-duration="1200">
             <!-- Hologram chip aesthetic -->
             <div class="flex justify-between items-start mb-6">
               <div>
-                <h4 class="font-serif text-xl tracking-widest text-teal-900 font-bold block">{{ strtoupper($kado->nama_bank) }}</h4>
+                <h4 class="font-serif text-xl tracking-widest text-primary-900 font-bold block">{{ strtoupper($kado->nama_bank) }}</h4>
                 <span class="text-[8px] text-stone-500 block uppercase tracking-widest">Digital Envelope</span>
               </div>
               <div class="w-10 h-8 rounded bg-gradient-to-br from-gray-300 via-gray-100 to-gray-400 border border-white/80 shadow-inner"></div>
@@ -781,18 +742,18 @@
 
             <div class="mb-4">
               <span class="text-[9px] uppercase text-stone-500 block tracking-widest">Nomor Rekening</span>
-              <p class="font-mono text-xl tracking-wider text-teal-900 font-bold">{{ $kado->nomor_rekening }}</p>
+              <p class="font-mono text-xl tracking-wider text-primary-900 font-bold">{{ $kado->nomor_rekening }}</p>
             </div>
 
             <div class="flex justify-between items-end">
               <div>
                 <span class="text-[9px] uppercase text-stone-500 block">Atas Nama</span>
-                <p class="font-serif text-sm tracking-wide text-teal-800 font-bold uppercase font-sans">{{ $kado->atas_nama }}</p>
+                <p class="font-serif text-sm tracking-wide text-primary-800 font-bold uppercase font-sans">{{ $kado->atas_nama }}</p>
               </div>
               <!-- Copy Button Trigger -->
-              <button class="btn-copy-account flex items-center gap-1 bg-white/60 hover:bg-white/90 border border-gray-300 text-teal-900 text-xs px-4 py-2 rounded-xl transition-all cursor-pointer font-sans"
+              <button class="btn-copy-account flex items-center gap-1 bg-white/60 hover:bg-white/90 border border-gray-300 text-primary-900 text-xs px-4 py-2 rounded-xl transition-all cursor-pointer font-sans"
                 data-account="{{ $kado->nomor_rekening }}">
-                <i class="fa-solid fa-copy text-teal-700"></i>
+                <i class="fa-solid fa-copy text-primary-700"></i>
                 <span>Salin</span>
               </button>
             </div>
@@ -805,18 +766,18 @@
 
 
       <!-- H: MESSAGE / RSVP INPUT INTERCONNECTED FORM (ANCHOR) -->
-      <section id="rsvp" class="relative py-24 px-6 bg-ice-50 overflow-hidden">
-        <div class="absolute inset-0 bg-wedding-foliage opacity-[0.06]"></div>
+      <section id="rsvp" class="relative py-24 px-6 bg-pearl-50 overflow-hidden">
+        <div class="absolute inset-0 bg-wedding-foliage opacity-10"></div>
 
         <!-- Section title -->
         <div class="text-center max-w-sm mx-auto mb-12" data-aos="fade-up" data-aos-duration="1000">
-          <span class="font-serif text-silver-600 text-xs tracking-widest uppercase block mb-2">Konfirmasi Kehadiran</span>
-          <h2 class="font-serif text-4xl font-bold text-teal-800 mb-3">Daftar Kehadiran</h2>
-          <div class="w-12 h-[1.5px] bg-silver-400 mx-auto my-3"></div>
+          <span class="font-serif text-gold-500 text-xs tracking-widest uppercase block mb-2">Konfirmasi Kehadiran</span>
+          <h2 class="font-serif text-4xl font-bold text-primary-800 mb-3">Daftar Kehadiran</h2>
+          <div class="w-12 h-[1.5px] bg-gold-500 mx-auto my-3"></div>
         </div>
 
         <!-- RSVP Form Grid -->
-        <div class="max-w-md mx-auto bg-white border border-silver-400/20 p-8 rounded-3xl shadow-xl glass-premium card-elevated" data-aos="fade-up" data-aos-duration="1200">
+        <div class="max-w-md mx-auto bg-white border border-gold-500/20 p-8 rounded-3xl shadow-xl glass-premium" data-aos="fade-up" data-aos-duration="1200">
           <form id="rsvp-form" class="space-y-6">
 
             <!-- Input: Nama -->
@@ -828,7 +789,7 @@
                 <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-stone-400">
                   <i class="fa-solid fa-user text-xs"></i>
                 </span>
-                <input type="text" id="rsvp-name" required placeholder="Contoh: Nama Anda..." class="w-full pl-10 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none text-xs text-stone-800 transition-all font-sans" value="{{ request('to') ? ucwords(str_replace('-', ' ', request('to'))) : '' }}">
+                <input type="text" id="rsvp-name" required placeholder="Contoh: Nama Anda..." class="w-full pl-10 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none text-xs text-stone-800 transition-all font-sans" value="{{ request('to') ? ucwords(str_replace('-', ' ', request('to'))) : '' }}">
               </div>
             </div>
 
@@ -841,7 +802,7 @@
                 <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-stone-400">
                   <i class="fa-solid fa-clipboard-question text-xs"></i>
                 </span>
-                <select id="rsvp-status" required class="w-full pl-10 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none text-xs text-stone-800 transition-all font-sans appearance-none">
+                <select id="rsvp-status" required class="w-full pl-10 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none text-xs text-stone-800 transition-all font-sans appearance-none">
                   <option value="" disabled selected>Pilih Kehadiran Anda...</option>
                   <option value="Hadir">Hadir</option>
                   <option value="Tidak Hadir">Mohon Maaf, Berhalangan Mandiri</option>
@@ -856,14 +817,14 @@
                 Ucapan Selamat / Doa Restu
               </label>
               <div class="relative">
-                <textarea id="rsvp-message" required rows="4" placeholder="Ketik ucapan doa restu indah Anda untuk sepasang mempelai..." class="w-full p-4 bg-stone-50 border border-stone-200 rounded-xl focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none text-xs text-stone-800 transition-all font-sans"></textarea>
+                <textarea id="rsvp-message" required rows="4" placeholder="Ketik ucapan doa restu indah Anda untuk sepasang mempelai..." class="w-full p-4 bg-stone-50 border border-stone-200 rounded-xl focus:border-gold-500 focus:ring-1 focus:ring-gold-500 outline-none text-xs text-stone-800 transition-all font-sans"></textarea>
               </div>
             </div>
 
             <!-- Action button submitting RSVP -->
             <div>
-              <button type="submit" id="btn-submit-rsvp" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-teal-800 to-teal-900 border border-teal-400/25 text-white font-semibold text-xs tracking-widest uppercase py-4 rounded-xl shadow-xl transition-all hover:brightness-110 cursor-pointer">
-                <i class="fa-solid fa-paper-plane text-xs text-teal-200"></i>
+              <button type="submit" id="btn-submit-rsvp" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-primary-800 to-secondary border border-gold-500/25 text-white font-semibold text-xs tracking-widest uppercase py-4 rounded-xl shadow-xl transition-all hover:brightness-110 cursor-pointer">
+                <i class="fa-solid fa-paper-plane text-xs text-gold-400"></i>
                 <span id="btn-submit-text">Kirim Konfirmasi Kehadiran</span>
               </button>
             </div>
@@ -873,8 +834,8 @@
 
         <!-- Divider -->
         <div class="max-w-md mx-auto my-12 text-center" data-aos="fade-up" data-aos-duration="1000">
-          <span class="font-serif text-silver-600 text-xs tracking-widest uppercase block mb-2">Pilar Ucapan Restu</span>
-          <div class="w-12 h-[1.5px] bg-silver-400 mx-auto my-3"></div>
+          <span class="font-serif text-gold-500 text-xs tracking-widest uppercase block mb-2">Pilar Ucapan Restu</span>
+          <div class="w-12 h-[1.5px] bg-gold-500 mx-auto my-3"></div>
         </div>
 
         <!-- Scrollable wall wishes -->
@@ -883,12 +844,12 @@
             <div id="wishes-list" class="space-y-4">
               @forelse($wishes as $wish)
               <div class="bg-white p-5 rounded-2xl border border-stone-100 shadow-sm flex gap-4 transition-all hover:shadow-md">
-                <div class="w-10 h-10 rounded-full bg-teal-800 text-teal-200 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-silver-400/25">
+                <div class="w-10 h-10 rounded-full bg-primary-800 text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-gold-500/25">
                   {{ strtoupper(substr($wish->nama, 0, 2)) }}
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="flex flex-wrap items-center justify-between gap-1 mb-1.5">
-                    <h4 class="font-serif text-sm font-bold text-teal-900 truncate">{{ $wish->nama }}</h4>
+                    <h4 class="font-serif text-sm font-bold text-primary-900 truncate">{{ $wish->nama }}</h4>
                     <span class="text-[9px] text-stone-400">{{ $wish->created_at->diffForHumans() }}</span>
                   </div>
                   <div class="mb-2">
@@ -915,25 +876,25 @@
 
 
       <!-- J: APPRECIATE FOOTER (ANCHOR) -->
-      <section class="relative py-20 px-6 bg-[#0A3D47] text-white text-center overflow-hidden">
+      <section class="relative pt-20 pb-32 px-6 bg-[#0A3D47] text-white text-center overflow-hidden">
         <div class="absolute inset-0 bg-wedding-foliage opacity-10"></div>
 
         <div class="max-w-md mx-auto relative z-10" data-aos="fade-up" data-aos-duration="1200">
-          <h4 class="font-serif text-2xl tracking-widest text-silver-200 font-bold block mb-2">TERIMA KASIH</h4>
-          <div class="w-12 h-[1px] bg-silver-500 mx-auto my-3"></div>
+          <h4 class="font-serif text-2xl tracking-widest text-[#D4AF37] font-bold block mb-2">TERIMA KASIH</h4>
+          <div class="w-12 h-[1px] bg-gold-500 mx-auto my-3"></div>
 
           <p class="text-stone-300 text-xs md:text-sm leading-relaxed max-w-xs mx-auto mb-12">
             Keberadaan serta untaian doa tulus Bapak/Ibu/Saudara/i sangatlah berharga bagi hidup baru kami yang akan dimulai.
           </p>
 
-          <span class="font-serif text-3xl font-bold block bg-gradient-to-r from-silver-200 via-white to-silver-200 bg-clip-text text-transparent mb-1">
+          <span class="font-serif text-3xl font-bold block bg-gradient-to-r from-amber-200 via-white to-amber-200 bg-clip-text text-transparent mb-1">
             {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}
           </span>
           <!-- <p class="text-[10px] text-stone-400 tracking-widest uppercase mb-12">Wassalamu’alaikum Warahmatullahi Wabarakatuh</p> -->
 
           <div class="text-[10px] text-stone-500 border-t border-white/10 pt-8 flex flex-col items-center gap-1">
             <span>Dibuat dengan dedikasi cinta © {{ date('Y') }} Aufilla Invitation.</span>
-            <span class="tracking-widest uppercase text-[8px] text-silver-400/80 font-semibold">Premium Wedding Concierge</span>
+            <span class="tracking-widest uppercase text-[8px] text-amber-500/80 font-semibold">Premium Wedding Concierge</span>
           </div>
         </div>
       </section>
@@ -945,7 +906,7 @@
     <div id="qr-modal" onclick="this.style.display='none'" class="fixed lg:absolute inset-0 lg:left-auto lg:w-[480px] lg:right-0 z-[10000]" style="display:none; background-color:rgba(0,0,0,0.6); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:1rem; cursor:pointer;">
       <div onclick="event.stopPropagation()" style="background:#fff; border-radius:1rem; box-shadow:0 25px 50px rgba(0,0,0,0.25); width:100%; max-width:24rem; overflow:hidden; text-align:center; margin:auto; cursor:default;">
         <div style="background-color:#0E5E6B; padding:1rem; color:#fff; display:flex; justify-content:space-between; align-items:center;">
-          <h3 style="font-size:1.125rem; font-weight:700; color:#CFF5F5; margin:0; font-family:'Cormorant Garamond',serif;">Tiket Akses Masuk</h3>
+          <h3 style="font-size:1.125rem; font-weight:700; color:#D4AF37; margin:0; font-family:'Cormorant Garamond',serif;">Tiket Akses Masuk</h3>
           <button onclick="document.getElementById('qr-modal').style.display='none'" style="background:none; border:none; color:#fff; cursor:pointer; padding:4px;">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -962,7 +923,7 @@
           <span style="font-size:0.75rem; font-family:monospace; color:#9ca3af; margin-top:0.25rem; text-transform:uppercase; letter-spacing:0.1em;">{{ $tamu->kode_qr }}</span>
           <div style="margin-top:1.5rem;">
             <a href="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data={{ $tamu->kode_qr }}" download="QR_{{ $tamu->nama_tamu }}.png" target="_blank"
-              style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 1.5rem; background-color:#0E5E6B; color:#E2E5E7; border-radius:9999px; text-decoration:none; font-size:0.875rem; font-weight:600;">
+              style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 1.5rem; background-color:#0E5E6B; color:#D4AF37; border-radius:9999px; text-decoration:none; font-size:0.875rem; font-weight:600;">
               <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
               </svg>
@@ -980,41 +941,41 @@
   <!-- 4. CONTROLS, EFFECTS & FLOATING NOTIFIERS -->
 
   <!-- CUSTOM TOAST NOTIFICATION -->
-  <div id="toast" class="fixed bottom-32 left-1/2 lg:left-auto lg:right-[268px] transform -translate-x-1/2 lg:translate-x-1/2 z-[100] bg-teal-800 border border-teal-400/30 text-silver-100 px-6 py-3 rounded-full shadow-2xl flex items-center gap-2.5 transition-all duration-300 opacity-0 pointer-events-none text-xs tracking-wider">
-    <i class="fa-solid fa-circle-check text-teal-300 text-sm animate-pulse"></i>
+  <div id="toast" class="fixed bottom-32 left-1/2 lg:left-auto lg:right-[268px] transform -translate-x-1/2 lg:translate-x-1/2 z-[100] bg-[#0E5E6B] border border-[#D4AF37] text-amber-100 px-6 py-3 rounded-full shadow-2xl flex items-center gap-2.5 transition-all duration-300 opacity-0 pointer-events-none text-xs tracking-wider">
+    <i class="fa-solid fa-circle-check text-[#D4AF37] text-sm animate-pulse"></i>
     <span id="toast-message" class="font-medium">Nomor Rekening Berhasil Disalin!</span>
   </div>
 
   <!-- GLASS FLOATING BOTTOM TAB BAR (Responsive thumb reach, scrolls dynamically) -->
-  <div id="floating-nav-bar" class="fixed bottom-12 left-1/2 lg:left-auto lg:right-[268px] transform -translate-x-1/2 lg:translate-x-1/2 z-40 bg-teal-900/85 backdrop-blur-md rounded-full px-5 py-3 shadow-2xl border border-teal-400/20 flex items-center gap-6 max-w-[90%] md:max-w-sm transition-all duration-500 translate-y-32 opacity-0 select-none">
-    <a href="#hero" class="nav-icon-trigger text-white hover:text-silver-400 text-sm transition-colors flex flex-col items-center" title="Cover">
+  <div id="floating-nav-bar" class="fixed bottom-12 left-1/2 lg:left-auto lg:right-[268px] transform -translate-x-1/2 lg:translate-x-1/2 z-40 bg-primary-900/85 backdrop-blur-md rounded-full px-5 py-3 shadow-2xl border border-gold-500/25 flex items-center gap-6 max-w-[90%] md:max-w-sm transition-all duration-500 translate-y-32 opacity-0 select-none">
+    <a href="#hero" class="nav-icon-trigger text-stone-300 hover:text-amber-300 text-sm transition-colors flex flex-col items-center" title="Cover">
       <i class="fa-solid fa-circle-notch"></i>
     </a>
-    <a href="#couple" class="nav-icon-trigger text-stone-300 hover:text-silver-400 text-sm transition-colors flex flex-col items-center" title="Mempelai">
+    <a href="#couple" class="nav-icon-trigger text-stone-300 hover:text-amber-300 text-sm transition-colors flex flex-col items-center" title="Mempelai">
       <i class="fa-solid fa-heart"></i>
     </a>
-    <a href="#event" class="nav-icon-trigger text-stone-300 hover:text-silver-400 text-sm transition-colors flex flex-col items-center" title="Acara">
+    <a href="#event" class="nav-icon-trigger text-stone-300 hover:text-amber-300 text-sm transition-colors flex flex-col items-center" title="Acara">
       <i class="fa-solid fa-calendar-alt"></i>
     </a>
     @if($invitation->is_cerita_aktif && count($ceritas) > 0)
-    <a href="#story" class="nav-icon-trigger text-stone-300 hover:text-silver-400 text-sm transition-colors flex flex-col items-center" title="Kisah">
+    <a href="#story" class="nav-icon-trigger text-stone-300 hover:text-amber-300 text-sm transition-colors flex flex-col items-center" title="Kisah">
       <i class="fa-solid fa-shoe-prints"></i>
     </a>
     @endif
     @if($invitation->is_galeri_aktif && count($galeris) > 0)
-    <a href="#gallery" class="nav-icon-trigger text-stone-300 hover:text-silver-400 text-sm transition-colors flex flex-col items-center" title="Galeri">
+    <a href="#gallery" class="nav-icon-trigger text-stone-300 hover:text-amber-300 text-sm transition-colors flex flex-col items-center" title="Galeri">
       <i class="fa-solid fa-images"></i>
     </a>
     @endif
-    <a href="#rsvp" class="nav-icon-trigger text-stone-300 hover:text-silver-400 text-sm transition-colors flex flex-col items-center" title="RSVP">
+    <a href="#rsvp" class="nav-icon-trigger text-stone-300 hover:text-amber-300 text-sm transition-colors flex flex-col items-center" title="RSVP">
       <i class="fa-solid fa-marker"></i>
     </a>
   </div>
 
   <!-- FLOATING RIGHT-SIDE CONTROLS (stacked vertically: music -> qr -> back-to-top) -->
   <div id="floating-music-trigger" class="lg:!right-[52px]" style="position:fixed; bottom:104px; right:24px; z-index:48; transition:all 0.5s; transform:translateX(80px); opacity:0;">
-    <button id="btn-toggle-music" style="width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#0A9191,#14ADAD); color:#FFFFFF; border:2px solid rgba(255,255,255,0.4); display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; box-shadow:0 8px 24px rgba(0,0,0,0.15);" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-      <span style="position:absolute; inset:0; border-radius:50%; border:1px solid #A8B0B8; animation:ping 1.5s cubic-bezier(0,0,0.2,1) infinite; opacity:0.6;"></span>
+    <button id="btn-toggle-music" style="width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#B08E27,#D4AF37); color:#0A3D47; border:2px solid rgba(255,255,255,0.5); display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; box-shadow:0 8px 24px rgba(0,0,0,0.15);" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+      <span style="position:absolute; inset:0; border-radius:50%; border:1px solid #EECD4F; animation:ping 1.5s cubic-bezier(0,0,0.2,1) infinite; opacity:0.6;"></span>
       <i id="music-icon" class="fa-solid fa-compact-disc" style="font-size:1.25rem;"></i>
     </button>
   </div>
@@ -1023,7 +984,7 @@
   <!-- FLOATING QR BUTTON -->
   <button id="qr-btn" onclick="document.getElementById('qr-modal').style.display='flex'"
     class="lg:!right-[52px]"
-    style="position:fixed; bottom:48px; right:24px; width:48px; height:48px; z-index:48; background-color:#0E5E6B; color:#A5EAEA; border:1px solid rgba(61,196,196,0.3); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 4px 15px rgba(0,0,0,0.3); padding:0; transition:all 0.5s; transform:translateX(80px); opacity:0;">
+    style="position:fixed; bottom:48px; right:24px; width:48px; height:48px; z-index:48; background-color:#0E5E6B; color:#D4AF37; border:1px solid rgba(212,175,55,0.3); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 4px 15px rgba(0,0,0,0.3); padding:0; transition:all 0.5s; transform:translateX(80px); opacity:0;">
     <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
     </svg>
@@ -1031,7 +992,7 @@
   @endif
 
   <!-- BACK TO TOP BUTTON -->
-  <button id="btn-back-to-top" class="lg:!right-[52px]" style="position:fixed; bottom:104px; right:24px; z-index:47; width:40px; height:40px; border-radius:50%; background:rgba(14,94,107,0.9); border:1px solid rgba(61,196,196,0.3); color:#A5EAEA; box-shadow:0 4px 12px rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; cursor:pointer; transition:all 0.3s;">
+  <button id="btn-back-to-top" class="lg:!right-[52px]" style="position:fixed; bottom:104px; right:24px; z-index:47; width:40px; height:40px; border-radius:50%; background:rgba(14,94,107,0.9); border:1px solid rgba(212,175,55,0.3); color:#D4AF37; box-shadow:0 4px 12px rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; cursor:pointer; transition:all 0.3s;">
     <i class="fa-solid fa-arrow-up" style="font-size:0.75rem;"></i>
   </button>
 
@@ -1059,13 +1020,13 @@
   <!-- 5. JQUERY CUSTOM LIGHTBOX SYSTEM MODAL -->
   <div id="lightbox" class="fixed inset-0 bg-black/95 backdrop-blur-md z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 select-none">
     <!-- absolute controls -->
-    <button id="close-lightbox" class="absolute top-6 right-6 text-white text-3xl hover:text-silver-400 transition-colors cursor-pointer">
+    <button id="close-lightbox" class="absolute top-6 right-6 text-white text-3xl hover:text-amber-300 transition-colors cursor-pointer">
       <i class="fa-solid fa-xmark"></i>
     </button>
 
     <div class="max-w-[90%] max-h-[85vh] relative flex flex-col items-center">
-      <img id="lightbox-img" src="" alt="Zoomed View" class="max-w-full max-h-[70vh] object-contain rounded-2xl border border-silver-500/50 shadow-2xl">
-      <div id="lightbox-caption" class="text-silver-100 font-serif mt-5 text-center text-sm md:text-base italic max-w-sm"></div>
+      <img id="lightbox-img" src="" alt="Zoomed View" class="max-w-full max-h-[70vh] object-contain rounded-2xl border border-gold-500/50 shadow-2xl">
+      <div id="lightbox-caption" class="text-amber-100 font-serif mt-5 text-center text-sm md:text-base italic max-w-sm"></div>
     </div>
   </div>
 
@@ -1307,12 +1268,12 @@
 
               const card = `
                           <div class="bg-white p-5 rounded-2xl border border-stone-100 shadow-sm flex gap-4 transition-all hover:shadow-md animate-fade-in">
-                            <div class="w-10 h-10 rounded-full bg-teal-800 text-teal-200 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-silver-400/25">
+                            <div class="w-10 h-10 rounded-full bg-primary-800 text-gold-400 font-serif font-bold text-sm flex items-center justify-center shrink-0 border border-gold-500/25">
                               ${initials}
                             </div>
                             <div class="flex-1 min-w-0">
                               <div class="flex flex-wrap items-center justify-between gap-1 mb-1.5">
-                                <h4 class="font-serif text-sm font-bold text-teal-900 truncate">${response.wish.nama}</h4>
+                                <h4 class="font-serif text-sm font-bold text-primary-900 truncate">${response.wish.nama}</h4>
                                 <span class="text-[9px] text-stone-400">Baru saja</span>
                               </div>
                               <div class="mb-2">
@@ -1389,9 +1350,9 @@
 
           if (scrollPos >= elTop && scrollPos < elBottom) {
             // Match active state
-            $(`a[href="${id}"]`).removeClass('text-stone-300 text-stone-400').addClass('text-silver-400 font-bold scale-110');
+            $(`a[href="${id}"]`).removeClass('text-stone-300 text-stone-400').addClass('text-amber-300 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)] scale-125');
           } else {
-            $(`a[href="${id}"]`).removeClass('text-silver-400 font-bold scale-110').addClass('text-stone-300');
+            $(`a[href="${id}"]`).removeClass('text-amber-300 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)] scale-125').addClass('text-stone-300');
           }
         });
 
