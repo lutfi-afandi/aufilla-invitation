@@ -136,7 +136,7 @@ class PublicInvitationController extends Controller
             'is_galeri_aktif' => true,
             'is_cerita_aktif' => true,
             'is_kado_aktif' => true,
-            'alamat_kado' => 'Jl. Cinta Sejati No. 12, Verona City',
+            'alamat_kado' => 'Jl. Cinta Sejati No. 12, Lampung',
             'music_file' => null,
         ]);
 
