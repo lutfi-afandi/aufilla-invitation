@@ -164,19 +164,16 @@
       <!-- Gradient overlay to make text readable -->
       <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60"></div>
       
-      <!-- Top Text -->
+      <!-- Top Text & Names -->
       <div class="absolute top-12 left-0 right-0 text-center px-6 z-10">
         <p class="font-sans text-white/90 text-[10px] tracking-[0.3em] uppercase mb-3">Undangan Pernikahan</p>
-        <p class="font-sans text-white/70 text-xs tracking-widest uppercase">The Wedding Of</p>
-      </div>
-
-      <!-- Center Large Text -->
-      <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
-         <h1 class="font-serif text-6xl md:text-8xl text-white font-bold drop-shadow-lg text-center leading-tight">
+        <p class="font-sans text-white/70 text-xs tracking-widest uppercase mb-6">The Wedding Of</p>
+        
+        <h1 class="font-serif text-5xl md:text-8xl text-white font-bold drop-shadow-lg text-center leading-tight">
            {{ $invitation->pria_nama }} <br>
-           <span class="font-script text-5xl md:text-7xl font-normal text-white/90 block my-2">&amp;</span>
+           <span class="font-script text-4xl md:text-7xl font-normal text-white/90 block my-1 md:my-2">&amp;</span>
            {{ $invitation->wanita_nama }}
-         </h1>
+        </h1>
       </div>
 
       <!-- Bottom White Card Overlap (Ref 1 Style) -->
