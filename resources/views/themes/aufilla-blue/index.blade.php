@@ -11,7 +11,12 @@
   <meta name="description" content="Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami pada {{ isset($resepsi) ? $resepsi->tgl_acara->translatedFormat('l, d F Y') : (isset($akad) ? $akad->tgl_acara->translatedFormat('l, d F Y') : '') }}.">
   <meta property="og:title" content="Undangan Pernikahan: {{ $invitation->pria_nama }} & {{ $invitation->wanita_nama }}">
   <meta property="og:description" content="Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami pada {{ isset($resepsi) ? $resepsi->tgl_acara->translatedFormat('l, d F Y') : (isset($akad) ? $akad->tgl_acara->translatedFormat('l, d F Y') : '') }}.">
-  <meta property="og:image" content="{{ $invitation->id ? route('og-image', $invitation->id) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}">
+  @php
+    $ogImg = $invitation->cover_img 
+        ? (str_starts_with($invitation->cover_img, "http") ? $invitation->cover_img : asset("storage/" . $invitation->cover_img))
+        : ($invitation->theme?->thumbnail ? asset("storage/" . $invitation->theme->thumbnail) : asset("assets/img/thumbnail-tema/demo1.png"));
+@endphp
+  <meta property="og:image" content="{{ $ogImg }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="{{ url()->current() }}">

@@ -6,6 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   
   <title>{{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }} - Undangan Pernikahan</title>
+  @php
+    $ogImg = $invitation->cover_img
+        ? asset('storage/' . $invitation->cover_img)
+        : asset('assets/img/thumbnail-tema/demo1.png');
+  @endphp
+  <meta name="description" content="Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami pada {{ isset($resepsi) ? $resepsi->tgl_acara->translatedFormat('l, d F Y') : (isset($akad) ? $akad->tgl_acara->translatedFormat('l, d F Y') : '') }}.">
+  <meta property="og:title" content="Undangan Pernikahan: {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}">
+  <meta property="og:description" content="Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami pada {{ isset($resepsi) ? $resepsi->tgl_acara->translatedFormat('l, d F Y') : (isset($akad) ? $akad->tgl_acara->translatedFormat('l, d F Y') : '') }}.">
+  <meta property="og:image" content="{{ $ogImg }}">
+  <meta property="og:url" content="{{ url()->current() }}">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{{ $ogImg }}">
   
   <!-- Google Fonts: Playfair Display, Great Vibes, Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
