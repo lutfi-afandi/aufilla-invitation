@@ -185,7 +185,7 @@
 
     <!-- 2. COVER SCREEN OVERLAY (FADE OUT UPON CLICKING "BUKA UNDANGAN") -->
     <div id="cover-screen" class="fixed lg:absolute inset-0 lg:left-auto lg:w-[480px] lg:right-0 z-50 flex items-center justify-center transition-all duration-1000 ease-in-out bg-cover bg-center"
-      style="background-image: linear-gradient(to bottom, rgba(49,61,23,0.85) 0%, rgba(74,93,35,0.9) 60%, rgba(28,35,13,0.95) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}');">
+      style="background-image: linear-gradient(to bottom, rgba(49,61,23,0.85) 0%, rgba(74,93,35,0.9) 60%, rgba(28,35,13,0.95) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
       <!-- Ornaments -->
       <div class="absolute inset-0 bg-wedding-foliage opacity-20"></div>
 
@@ -238,7 +238,7 @@
 
     <!-- LEFT COLUMN: Desktop Premium Backdrop Static (Only visible on lg screens) -->
     <div class="hidden lg:flex lg:flex-1 lg:h-full bg-gradient-to-br from-[#313D17] to-[#4A5D23] p-16 flex-col justify-between relative bg-cover bg-center overflow-hidden"
-      style="background-image: linear-gradient(to top, rgba(28,35,13, 0.95) 0%, rgba(49,61,23, 0.0) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}');">
+      style="background-image: linear-gradient(to top, rgba(28,35,13, 0.95) 0%, rgba(49,61,23, 0.0) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
 
       <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
@@ -328,7 +328,7 @@
 
           <!-- Standard round portrait mask -->
           <div class="w-full h-full rounded-full overflow-hidden shadow-2xl gold-border-glow select-none bg-white">
-            <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}"
+            <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}"
               alt="{{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}"
               class="w-full h-full object-cover scale-105 hover:scale-110 transition-transform duration-700"
               referrerpolicy="no-referrer">

@@ -10,7 +10,7 @@
     $ogUrl  = str_replace('http://', 'https://', url('/' . $invitation->slug));
     $ogImg  = $invitation->cover_img
         ? str_replace('http://', 'https://', asset('storage/' . $invitation->cover_img))
-        : ($invitation->theme?->thumbnail ? str_replace('http://', 'https://', asset('storage/' . $invitation->theme->thumbnail)) : str_replace('http://', 'https://', asset('assets/img/thumbnail-tema/demo1.png')));
+        : str_replace('http://', 'https://', asset('assets/default/default-pasangan.jpg'));
     $ogDesc = 'Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami pada ' . (isset($resepsi) ? $resepsi->tgl_acara->translatedFormat('l, d F Y') : (isset($akad) ? $akad->tgl_acara->translatedFormat('l, d F Y') : 'hari yang telah ditentukan')) . '.';
   @endphp
   <!-- Meta Data & Open Graph untuk WhatsApp / Sosmed -->
@@ -159,7 +159,7 @@
 
     <!-- COVER SCREEN OVERLAY -->
     <!-- Reference 1 Style: Full image background, dark overlay, white card at bottom left -->
-    <div id="cover-screen" class="fixed inset-0 z-50 transition-all duration-1000 ease-in-out bg-cover bg-center" style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}');">
+    <div id="cover-screen" class="fixed inset-0 z-50 transition-all duration-1000 ease-in-out bg-cover bg-center" style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
       
       <!-- Gradient overlay to make text readable -->
       <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60"></div>
@@ -207,7 +207,7 @@
       <section id="hero" class="relative w-full min-h-screen flex flex-col items-center justify-center text-center overflow-hidden ornament-leaf">
         <!-- Background Image with Parallax effect -->
         <div class="absolute inset-0 z-0">
-          <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}" class="w-full h-full object-cover" alt="Hero">
+          <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}" class="w-full h-full object-cover" alt="Hero">
           <div class="absolute inset-0 bg-brand-900/60 mix-blend-multiply"></div>
           <div class="absolute inset-0 bg-gradient-to-t from-[#F9F9F9] via-transparent to-transparent"></div>
         </div>
@@ -311,7 +311,7 @@
           <div class="bg-white shadow-2xl rounded-tr-[80px] rounded-tl-[10px] rounded-b-[10px] overflow-hidden" data-aos="fade-up">
             <!-- Top Image -->
             <div class="w-full h-32 md:h-40 overflow-hidden">
-               <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}" class="w-full h-full object-cover" alt="Akad Image">
+               <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}" class="w-full h-full object-cover" alt="Akad Image">
             </div>
             <!-- Bottom Details Split -->
             <div class="flex flex-row">
@@ -342,7 +342,7 @@
           <div class="bg-white shadow-2xl rounded-tl-[80px] rounded-tr-[10px] rounded-b-[10px] overflow-hidden" data-aos="fade-up">
             <!-- Top Image -->
             <div class="w-full h-32 md:h-40 overflow-hidden">
-               <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}" class="w-full h-full object-cover" alt="Resepsi Image">
+               <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}" class="w-full h-full object-cover" alt="Resepsi Image">
             </div>
             <!-- Bottom Details Split -->
             <div class="flex flex-row-reverse">
@@ -546,7 +546,7 @@
       </section>
 
       <!-- FOOTER -->
-      <footer class="relative min-h-[60vh] md:min-h-[50vh] bg-cover bg-center flex flex-col justify-end items-end" style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}');">
+      <footer class="relative min-h-[60vh] md:min-h-[50vh] bg-cover bg-center flex flex-col justify-end items-end" style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
         
         <!-- Subtle gradient overlay -->
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
