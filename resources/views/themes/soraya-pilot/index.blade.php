@@ -179,9 +179,14 @@
       <div class="absolute bottom-0 left-0 w-[90%] md:w-[60%] lg:w-[45%] bg-white rounded-tr-[80px] p-8 md:p-12 z-20 shadow-[10px_-10px_30px_rgba(0,0,0,0.15)] flex flex-col justify-center transition-transform duration-1000" id="cover-card">
         
         <p class="font-serif italic text-brand-800 text-sm md:text-base mb-2">Kepada Yth. Bapak/Ibu/Saudara/i</p>
-        <h2 class="font-serif text-3xl font-bold text-brand-900 mb-6 truncate">
+        <h2 class="font-serif text-3xl md:text-4xl font-bold text-brand-900 mb-2 truncate">
           {{ request('to') ? ucwords(str_replace('-', ' ', request('to'))) : 'Tamu Terhormat' }}
         </h2>
+        <p class="text-[11px] text-stone-500 italic mb-4">*Mohon maaf apabila ada kesalahan penulisan nama/gelar</p>
+        
+        <p class="text-sm md:text-base text-stone-600 leading-relaxed mb-8">
+          Tanpa mengurangi rasa hormat, kami mengundang Anda untuk hadir dan memberikan doa restu di acara pernikahan kami.
+        </p>
         
         <button id="btn-open-invitation" class="self-start inline-flex items-center gap-3 bg-brand-800 text-white font-sans font-medium tracking-widest uppercase text-xs px-8 py-4 rounded-full shadow-lg transition-all duration-300 hover:bg-brand-900 active:scale-95 cursor-pointer">
           <i class="fa-solid fa-envelope-open text-sm"></i>
@@ -195,7 +200,7 @@
     <div id="main-content" class="w-full relative opacity-0 pointer-events-none">
 
       <!-- HERO SECTION -->
-      <section id="hero" class="relative w-full h-[60vh] md:h-[80vh] flex flex-col items-center justify-center text-center overflow-hidden ornament-leaf">
+      <section id="hero" class="relative w-full min-h-screen flex flex-col items-center justify-center text-center overflow-hidden ornament-leaf">
         <!-- Background Image with Parallax effect -->
         <div class="absolute inset-0 z-0">
           <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}" class="w-full h-full object-cover" alt="Hero">
