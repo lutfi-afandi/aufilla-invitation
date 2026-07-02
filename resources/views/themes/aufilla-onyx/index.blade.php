@@ -7,19 +7,29 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Undangan Pernikahan — {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}</title>
 
-  <!-- SEO & Social Media Meta Tags -->
-  <meta name="description" content="Kami mengundang Anda untuk hadir dan memberikan doa restu pada acara pernikahan kami: {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}">
-  <meta property="og:title" content="Undangan Pernikahan — {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}">
-  <meta property="og:description" content="Kami mengundang Anda untuk hadir dan memberikan doa restu pada acara pernikahan kami.">
-  <meta property="og:type" content="website">
   @php
-    $ogImg = $invitation->cover_img 
-        ? (str_starts_with($invitation->cover_img, "http") ? $invitation->cover_img : asset("storage/" . $invitation->cover_img))
-        : ($invitation->theme?->thumbnail ? asset("storage/" . $invitation->theme->thumbnail) : asset("assets/img/thumbnail-tema/demo1.png"));
-@endphp
+    $ogUrl  = str_replace('http://', 'https://', url('/' . $invitation->slug));
+    $ogImg  = $invitation->cover_img
+        ? str_replace('http://', 'https://', asset('storage/' . $invitation->cover_img))
+        : ($invitation->theme?->thumbnail ? str_replace('http://', 'https://', asset('storage/' . $invitation->theme->thumbnail)) : str_replace('http://', 'https://', asset('assets/img/thumbnail-tema/demo1.png')));
+    $ogDesc = 'Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami pada ' . (isset($resepsi) ? $resepsi->tgl_acara->translatedFormat('l, d F Y') : (isset($akad) ? $akad->tgl_acara->translatedFormat('l, d F Y') : 'hari yang telah ditentukan')) . '.';
+  @endphp
+  <!-- Meta Data & Open Graph untuk WhatsApp / Sosmed -->
+  <meta name="description" content="{{ $ogDesc }}">
+  <meta property="og:url" content="{{ $ogUrl }}">
+  <meta property="og:site_name" content="Aufilla Digital Invitation">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Undangan Pernikahan: {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}">
+  <meta property="og:description" content="{{ $ogDesc }}">
   <meta property="og:image" content="{{ $ogImg }}">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
+  <meta property="og:image:secure_url" content="{{ $ogImg }}">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="600">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Undangan Pernikahan: {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}">
+  <meta name="twitter:description" content="{{ $ogDesc }}">
+  <meta name="twitter:image:src" content="{{ $ogImg }}">
 
   <!-- Favicon -->
   <link rel="icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
