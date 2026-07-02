@@ -96,12 +96,10 @@ class Invitation extends Model
                !empty($this->pria_nama_lengkap) &&
                !empty($this->pria_ayah) &&
                !empty($this->pria_ibu) &&
-               !empty($this->pria_foto) &&
                !empty($this->wanita_nama) && $this->wanita_nama !== 'Wanita' &&
                !empty($this->wanita_nama_lengkap) &&
                !empty($this->wanita_ayah) &&
-               !empty($this->wanita_ibu) &&
-               !empty($this->wanita_foto);
+               !empty($this->wanita_ibu);
     }
 
     /**
