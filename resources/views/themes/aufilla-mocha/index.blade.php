@@ -12,7 +12,7 @@
   <meta property="og:title" content="Undangan Pernikahan — {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}">
   <meta property="og:description" content="Kami mengundang Anda untuk hadir dan memberikan doa restu pada acara pernikahan kami.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}">
+  <meta property="og:image" content="{{ $invitation->id ? route('og-image', $invitation->id) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
 

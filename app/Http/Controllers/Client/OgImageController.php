@@ -30,154 +30,77 @@ class OgImageController extends Controller
             return response()->file($ogPath);
         }
 
-        // Setup Canvas 1200x630
-        $width = 1200;
-        $height = 630;
-        $image = imagecreatetruecolor($width, $height);
-
-        // Colors
-        $bg = imagecolorallocate($image, 248, 250, 252); // slate-50 #F8FAFC
-        $textDark = imagecolorallocate($image, 15, 23, 42); // slate-900 #0F172A
-        $textMuted = imagecolorallocate($image, 100, 116, 139); // slate-500 #64748B
-        $accentBlue = imagecolorallocate($image, 37, 99, 235); // blue-600 #2563EB
-        $white = imagecolorallocate($image, 255, 255, 255);
-
-        // Fill background
-        imagefill($image, 0, 0, $bg);
-
-        // Draw Accent Line (Left border ala GitHub PR)
-        imagefilledrectangle($image, 0, 0, 16, $height, $accentBlue);
-
-        // Fonts
-        $fontBold = public_path('assets/fonts/Inter-Bold.ttf');
-        $fontReg = public_path('assets/fonts/Inter-Regular.ttf');
-
-        if (!File::exists($fontBold)) {
-            // Fallback to default thumbnail to prevent 500 Error for WhatsApp Crawler
+        // Jika tidak ada cover image, gunakan default thumbnail tema
+        if (!$invitation->cover_img || !Storage::disk('public')->exists($invitation->cover_img)) {
+            $defaultPath = $invitation->theme?->thumbnail ? storage_path('app/public/' . $invitation->theme->thumbnail) : public_path('assets/img/thumbnail-tema/demo1.png');
+            if (File::exists($defaultPath)) {
+                return response()->file($defaultPath);
+            }
             return response()->file(public_path('assets/img/thumbnail-tema/demo1.png'));
         }
 
-        // Draw Branding
-        imagettftext($image, 14, 0, 80, 80, $accentBlue, $fontBold, "AUFILLA DIGITAL INVITATION");
-
-        // Draw Subtitle
-        imagettftext($image, 22, 0, 80, 180, $textMuted, $fontReg, "Pernikahan dari");
-
-        // Draw Couple Names
-        $names = $invitation->pria_nama . " & " . $invitation->wanita_nama;
-        $fontSize = 80;
-        $bbox = imagettfbbox($fontSize, 0, $fontBold, $names);
-        $textWidth = $bbox[2] - $bbox[0];
-        
-        // Responsive font size
-        while ($textWidth > 680 && $fontSize > 30) {
-            $fontSize -= 2;
-            $bbox = imagettfbbox($fontSize, 0, $fontBold, $names);
-            $textWidth = $bbox[2] - $bbox[0];
+        $avatarPath = Storage::disk('public')->path($invitation->cover_img);
+        $info = @getimagesize($avatarPath);
+        if (!$info) {
+            return response()->file(public_path('assets/img/thumbnail-tema/demo1.png'));
         }
+
+        // Buka gambar asli
+        switch ($info['mime']) {
+            case 'image/jpeg': $src = @imagecreatefromjpeg($avatarPath); break;
+            case 'image/png':  $src = @imagecreatefrompng($avatarPath); break;
+            case 'image/webp': $src = @imagecreatefromwebp($avatarPath); break;
+            default: return response()->file(public_path('assets/img/thumbnail-tema/demo1.png'));
+        }
+
+        if (!$src) {
+            return response()->file(public_path('assets/img/thumbnail-tema/demo1.png'));
+        }
+
+        // Setup Canvas 800x600 (Ukuran aman WhatsApp)
+        $targetW = 800;
+        $targetH = 600;
         
-        imagettftext($image, $fontSize, 0, 76, 280, $textDark, $fontBold, $names);
+        $srcW = imagesx($src);
+        $srcH = imagesy($src);
 
-        // Draw Date
-        $dateText = $invitation->akad ? \Carbon\Carbon::parse($invitation->akad->tgl_acara)->translatedFormat('l, d F Y') : 'Waktu menyusul';
-        imagettftext($image, 20, 0, 80, 380, $textDark, $fontBold, "Tanggal");
-        imagettftext($image, 20, 0, 200, 380, $textMuted, $fontReg, $dateText);
-        
-        // Draw Location
-        $locationText = $invitation->akad ? $invitation->akad->tempat_nama : 'Lokasi menyusul';
-        if (strlen($locationText) > 40) $locationText = substr($locationText, 0, 40) . '...';
-        imagettftext($image, 20, 0, 80, 430, $textDark, $fontBold, "Lokasi");
-        imagettftext($image, 20, 0, 200, 430, $textMuted, $fontReg, $locationText);
+        // Crop & Resize (Center Crop)
+        $srcRatio = $srcW / $srcH;
+        $targetRatio = $targetW / $targetH;
 
-        // URL at bottom
-        $url = url('/' . $invitation->slug);
-        imagettftext($image, 18, 0, 80, 560, $textMuted, $fontReg, $url);
-        
-        // Draw Avatar on the right
-        $avatarSize = 340;
-        $avatarX = 780;
-        $avatarY = 145;
-
-        // Draw soft shadow behind avatar (Circle)
-        $shadowColor = imagecolorallocatealpha($image, 15, 23, 42, 110);
-        imagefilledellipse($image, $avatarX + ($avatarSize/2), $avatarY + ($avatarSize/2) + 15, $avatarSize, $avatarSize, $shadowColor);
-
-        if ($invitation->cover_img && Storage::disk('public')->exists($invitation->cover_img)) {
-            $avatarPath = Storage::disk('public')->path($invitation->cover_img);
-            $this->drawCircularAvatar($image, $avatarPath, $avatarX, $avatarY, $avatarSize);
+        if ($srcRatio > $targetRatio) {
+            $cropW = (int) ($srcH * $targetRatio);
+            $cropH = $srcH;
+            $cropX = (int) (($srcW - $cropW) / 2);
+            $cropY = 0;
         } else {
-            // Placeholder circle
-            $placeholderColor = imagecolorallocate($image, 226, 232, 240); // slate-200
-            imagefilledellipse($image, $avatarX + ($avatarSize/2), $avatarY + ($avatarSize/2), $avatarSize, $avatarSize, $placeholderColor);
-            
-            $initials = strtoupper(substr($invitation->pria_nama, 0, 1) . substr($invitation->wanita_nama, 0, 1));
-            $bbox = imagettfbbox(80, 0, $fontBold, $initials);
-            $tw = $bbox[2] - $bbox[0];
-            $th = $bbox[1] - $bbox[7];
-            imagettftext($image, 80, 0, $avatarX + ($avatarSize/2) - ($tw/2) - 5, $avatarY + ($avatarSize/2) + ($th/2) - 5, $textMuted, $fontBold, $initials);
+            $cropW = $srcW;
+            $cropH = (int) ($srcW / $targetRatio);
+            $cropX = 0;
+            $cropY = (int) (($srcH - $cropH) / 2);
         }
 
-        // Save as JPEG to keep file size small (WhatsApp limit ~300KB)
+        $image = imagecreatetruecolor($targetW, $targetH);
+        
+        // Background putih jika ada transparan
+        $white = imagecolorallocate($image, 255, 255, 255);
+        imagefill($image, 0, 0, $white);
+
+        imagecopyresampled($image, $src, 0, 0, $cropX, $cropY, $targetW, $targetH, $cropW, $cropH);
+        imagedestroy($src);
+
+        // Save as JPEG dengan quality 70 (agar size dibawah 100KB untuk WhatsApp)
         try {
-            imagejpeg($image, $ogPath, 80);
+            imagejpeg($image, $ogPath, 70);
             imagedestroy($image);
             return response()->file($ogPath);
         } catch (\Exception $e) {
             // Jika gagal save (permission), langsung stream output
             ob_start();
-            imagejpeg($image, null, 80);
+            imagejpeg($image, null, 70);
             $imgData = ob_get_clean();
             imagedestroy($image);
             return response($imgData)->header('Content-Type', 'image/jpeg');
         }
-    }
-
-    private function drawCircularAvatar($canvas, $imagePath, $dstX, $dstY, $size)
-    {
-        $info = getimagesize($imagePath);
-        if (!$info) return;
-
-        switch ($info['mime']) {
-            case 'image/jpeg': $src = imagecreatefromjpeg($imagePath); break;
-            case 'image/png':  $src = imagecreatefrompng($imagePath); break;
-            case 'image/webp': $src = imagecreatefromwebp($imagePath); break;
-            default: return;
-        }
-
-        $srcW = imagesx($src);
-        $srcH = imagesy($src);
-        $minSize = min($srcW, $srcH);
-        
-        $tempCanvas = imagecreatetruecolor($size, $size);
-        imagealphablending($tempCanvas, false);
-        imagesavealpha($tempCanvas, true);
-        $transparent = imagecolorallocatealpha($tempCanvas, 0, 0, 0, 127);
-        imagefill($tempCanvas, 0, 0, $transparent);
-
-        $square = imagecreatetruecolor($size, $size);
-        imagecopyresampled($square, $src, 0, 0, ($srcW - $minSize) / 2, ($srcH - $minSize) / 2, $size, $size, $minSize, $minSize);
-
-        $radius = $size / 2;
-        for ($x = 0; $x < $size; $x++) {
-            for ($y = 0; $y < $size; $y++) {
-                $distance = sqrt(pow($x - $radius, 2) + pow($y - $radius, 2));
-                if ($distance <= $radius) {
-                    $color = imagecolorat($square, $x, $y);
-                    if ($distance > $radius - 1) {
-                        $alpha = (int) (127 * ($distance - ($radius - 1)));
-                        $rgb = imagecolorsforindex($square, $color);
-                        $color = imagecolorallocatealpha($tempCanvas, $rgb['red'], $rgb['green'], $rgb['blue'], $alpha);
-                    }
-                    imagesetpixel($tempCanvas, $x, $y, $color);
-                }
-            }
-        }
-
-        imagealphablending($canvas, true);
-        imagecopy($canvas, $tempCanvas, $dstX, $dstY, 0, 0, $size, $size);
-
-        imagedestroy($src);
-        imagedestroy($square);
-        imagedestroy($tempCanvas);
     }
 }
