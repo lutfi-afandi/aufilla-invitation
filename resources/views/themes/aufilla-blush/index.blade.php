@@ -12,7 +12,7 @@
   <meta property="og:title" content="Undangan Pernikahan — {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}">
   <meta property="og:description" content="Kami mengundang Anda untuk hadir dan memberikan doa restu pada acara pernikahan kami.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="{{ $invitation->id ? route('og-image', $invitation->id) : asset(($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png'))) }}">
+  <meta property="og:image" content="{{ $invitation->id ? route('og-image', $invitation->id) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
 
@@ -193,7 +193,7 @@
 
     <!-- 2. COVER SCREEN OVERLAY (FADE OUT UPON CLICKING "BUKA UNDANGAN") -->
     <div id="cover-screen" class="fixed lg:absolute inset-0 lg:left-auto lg:w-[480px] lg:right-0 z-50 flex items-center justify-center transition-all duration-1000 ease-in-out bg-cover bg-center"
-      style="background-image: linear-gradient(to bottom, rgba(97,45,63,0.85) 0%, rgba(115,51,72,0.9) 60%, rgba(54,21,33,0.95) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset(($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png'))) }}');">
+      style="background-image: linear-gradient(to bottom, rgba(97,45,63,0.85) 0%, rgba(115,51,72,0.9) 60%, rgba(54,21,33,0.95) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}');">
       <!-- Ornaments -->
       <div class="absolute inset-0 bg-wedding-foliage opacity-20"></div>
 
@@ -246,7 +246,7 @@
 
     <!-- LEFT COLUMN: Desktop Premium Backdrop Static (Only visible on lg screens) -->
     <div class="hidden lg:flex lg:flex-1 lg:h-full bg-gradient-to-br from-[#612D3F] to-[#733348] p-16 flex-col justify-between relative bg-cover bg-center overflow-hidden"
-      style="background-image: linear-gradient(135deg, rgba(97,45,63,0.92) 0%, rgba(115,51,72,0.85) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset(($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png'))) }}');">
+      style="background-image: linear-gradient(135deg, rgba(97,45,63,0.92) 0%, rgba(115,51,72,0.85) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}');">
 
       <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
@@ -336,7 +336,7 @@
 
           <!-- Standard round portrait mask -->
           <div class="w-full h-full rounded-full overflow-hidden shadow-2xl gold-border-glow select-none bg-white">
-            <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset(($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png'))) }}"
+            <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : ($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png')) }}"
               alt="{{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}"
               class="w-full h-full object-cover scale-105 hover:scale-110 transition-transform duration-700"
               referrerpolicy="no-referrer">
@@ -828,8 +828,8 @@
                 <select id="rsvp-status" required class="w-full pl-10 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:border-rosegold-500 focus:ring-1 focus:ring-rosegold-500 outline-none text-xs text-stone-800 transition-all font-sans appearance-none">
                   <option value="" disabled selected>Pilih Kehadiran Anda...</option>
                   <option value="Hadir">Hadir</option>
-                  <option value="Tidak Hadir">Mohon Maaf, Berhalangan Mandiri</option>
-                  <option value="Masih Ragu">Belum Dapat Konfirmasi Kehadiran</option>
+                  <option value="Tidak Hadir">Mohon Maaf, Berhalangan Hadir</option>
+                  <option value="Masih Ragu">Belum Dapat Konfirmasi</option>
                 </select>
               </div>
             </div>

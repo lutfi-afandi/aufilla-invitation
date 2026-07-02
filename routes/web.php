@@ -126,7 +126,7 @@ require __DIR__.'/auth.php';
 // ==========================================
 // OPEN GRAPH IMAGE GENERATOR
 // ==========================================
-Route::get('/og-image/{id}', [\App\Http\Controllers\Client\OgImageController::class, 'generate'])->name('og-image');
+Route::get('/og-image/{id}.jpg', [\App\Http\Controllers\Client\OgImageController::class, 'generate'])->name('og-image');
 
 // ==========================================
 // PUBLIC INVITATION ROUTE (Must be at the very bottom, after all other routes including auth) ---
