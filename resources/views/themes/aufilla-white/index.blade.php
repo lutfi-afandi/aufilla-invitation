@@ -259,7 +259,7 @@
 
     <!-- LEFT COLUMN: Desktop Premium Backdrop Static (Only visible on lg screens) -->
     <div class="hidden lg:flex lg:flex-1 lg:h-full bg-gradient-to-br from-pearl-50 to-pearl-100 p-16 flex-col justify-between relative bg-cover bg-center overflow-hidden"
-      style="background-image: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(250,250,250,0.85) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
+      style="background-image: linear-gradient(to top, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.0) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
 
       <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
@@ -272,7 +272,7 @@
       <div class="absolute bottom-12 right-12 w-20 h-20 border-b border-r border-gold-500/40 rounded-br-xl"></div>
 
       <!-- Logo / Intro Header -->
-      <div class="z-10 bg-white/40 border border-gold-500/20 backdrop-blur-xs p-4 rounded-lg inline-self-start">
+      <div class="z-10 bg-white/70 border border-gold-500/20 backdrop-blur-md shadow-2xl p-5 rounded-xl self-start inline-block">
         <span class="font-serif text-gold-600 text-lg tracking-widest uppercase block mb-1">UNDANGAN PERNIKAHAN</span>
         <p class="text-[11px] text-stone-500 tracking-wider">THE WEDDING OF {{ strtoupper($invitation->pria_nama) }} &amp; {{ strtoupper($invitation->wanita_nama) }}</p>
       </div>
