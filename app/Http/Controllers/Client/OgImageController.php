@@ -16,8 +16,13 @@ class OgImageController extends Controller
         $ogPath = storage_path("app/public/og/og_invitation_{$id}.jpg");
 
         // Ensure directory exists
-        if (!File::exists(dirname($ogPath))) {
-            File::makeDirectory(dirname($ogPath), 0755, true);
+        try {
+            if (!File::exists(dirname($ogPath))) {
+                File::makeDirectory(dirname($ogPath), 0755, true);
+            }
+        } catch (\Exception $e) {
+            // Jika Hostinger melarang pembuatan folder, return default
+            return response()->file(public_path('assets/img/thumbnail-tema/demo1.png'));
         }
 
         // Cache logic
@@ -48,7 +53,8 @@ class OgImageController extends Controller
         $fontReg = public_path('assets/fonts/Inter-Regular.ttf');
 
         if (!File::exists($fontBold)) {
-            abort(500, "Font Inter-Bold.ttf tidak ditemukan di public/assets/fonts/");
+            // Fallback to default thumbnail to prevent 500 Error for WhatsApp Crawler
+            return response()->file(public_path('assets/img/thumbnail-tema/demo1.png'));
         }
 
         // Draw Branding
@@ -112,10 +118,18 @@ class OgImageController extends Controller
         }
 
         // Save as JPEG to keep file size small (WhatsApp limit ~300KB)
-        imagejpeg($image, $ogPath, 80);
-        imagedestroy($image);
-
-        return response()->file($ogPath);
+        try {
+            imagejpeg($image, $ogPath, 80);
+            imagedestroy($image);
+            return response()->file($ogPath);
+        } catch (\Exception $e) {
+            // Jika gagal save (permission), langsung stream output
+            ob_start();
+            imagejpeg($image, null, 80);
+            $imgData = ob_get_clean();
+            imagedestroy($image);
+            return response($imgData)->header('Content-Type', 'image/jpeg');
+        }
     }
 
     private function drawCircularAvatar($canvas, $imagePath, $dstX, $dstY, $size)
