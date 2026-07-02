@@ -103,4 +103,5 @@ class OgImageController extends Controller
             return response($imgData)->header('Content-Type', 'image/jpeg');
         }
     }
+
 }
