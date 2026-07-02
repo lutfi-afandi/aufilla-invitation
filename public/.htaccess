@@ -22,4 +22,20 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+    # Allow crawlers (bypass potential mod_security for OG image)
+    SetEnvIfNoCase User-Agent "facebookexternalhit|Facebot|WhatsApp|Twitterbot|LinkedInBot|Slack|TelegramBot|Discordbot" is_crawler=1
+    <IfModule mod_security.c>
+        SecRuleRemoveById 1-999999 env=is_crawler
+    </IfModule>
+
+    # Cache images for 7 days
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+        Header set Cache-Control "public, max-age=604800, immutable"
+    </FilesMatch>
+
+    # CORS headers for crawlers
+    <IfModule mod_headers.c>
+        Header always set X-Robots-Tag "index, follow"
+    </IfModule>
 </IfModule>

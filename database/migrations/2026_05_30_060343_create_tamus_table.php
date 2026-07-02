@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('invitation_id')->constrained('invitations')->cascadeOnDelete();
             $table->string('nama_tamu');
             $table->string('no_wa')->nullable();
+            $table->boolean('is_wa_sent')->default(false);
             $table->timestamps();
         });
     }

@@ -56,9 +56,7 @@
     <meta property="og:title" content="{{ $meta_title }}">
     <meta property="og:description" content="{{ $meta_desc }}">
     @php
-    $ogImg = $invitation->cover_img 
-        ? asset('storage/' . $invitation->cover_img)
-        : $pengaturan->foto_hero;
+    $ogImg  = route('og-image', ['id' => $invitation->id]);
     @endphp
     <meta property="og:image" content="{{ $ogImg }}">
 

@@ -89,6 +89,30 @@ class FeatureController extends Controller
         ]);
     }
 
+    public function updateCerita(Request $request, $id)
+    {
+        $request->validate([
+            'tanggal' => 'required|string|max:255',
+            'judul' => 'required|string|max:255',
+            'isi_cerita' => 'required|string'
+        ]);
+
+        $invitation = Auth::user()->invitation;
+        $cerita = $invitation->ceritas()->findOrFail($id);
+
+        $cerita->update([
+            'tanggal' => $request->tanggal,
+            'judul' => $request->judul,
+            'isi_cerita' => $request->isi_cerita
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cerita berhasil diperbarui',
+            'cerita' => $cerita
+        ]);
+    }
+
     public function destroyCerita($id)
     {
         $invitation = Auth::user()->invitation;

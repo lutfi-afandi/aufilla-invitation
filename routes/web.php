@@ -71,6 +71,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::delete('/galeri/{id}', [\App\Http\Controllers\Client\FeatureController::class, 'destroyGaleri'])->name('galeri.destroy');
 
             Route::post('/cerita', [\App\Http\Controllers\Client\FeatureController::class, 'storeCerita'])->name('cerita.store');
+            Route::put('/cerita/{id}', [\App\Http\Controllers\Client\FeatureController::class, 'updateCerita'])->name('cerita.update');
             Route::delete('/cerita/{id}', [\App\Http\Controllers\Client\FeatureController::class, 'destroyCerita'])->name('cerita.destroy');
 
             Route::post('/kado/alamat', [\App\Http\Controllers\Client\FeatureController::class, 'updateAlamatKado'])->name('kado.alamat.update');

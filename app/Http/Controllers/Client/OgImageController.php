@@ -12,27 +12,31 @@ class OgImageController extends Controller
 {
     public function generate($id)
     {
-        $invitation = Invitation::with('akad')->findOrFail($id);
+        $invitation = Invitation::findOrFail($id);
         $ogPath = storage_path("app/public/og/og_invitation_{$id}.jpg");
 
-        // Ensure directory exists
         try {
             if (!File::exists(dirname($ogPath))) {
                 File::makeDirectory(dirname($ogPath), 0755, true);
             }
         } catch (\Exception $e) {
-            // Jika Hostinger melarang pembuatan folder, return default
             return response()->file(public_path('assets/img/thumbnail-tema/demo1.png'));
         }
 
-        // Cache logic
-        if (File::exists($ogPath) && filemtime($ogPath) >= $invitation->updated_at->timestamp && !request()->has('refresh')) {
-            return response()->file($ogPath);
+        if (File::exists($ogPath) && !request()->has('refresh')) {
+            $cacheTime = filemtime($ogPath);
+            $invUpdated = $invitation->updated_at instanceof \Carbon\Carbon
+                ? $invitation->updated_at->timestamp
+                : strtotime($invitation->updated_at);
+            if ($cacheTime >= $invUpdated) {
+                return response()->file($ogPath);
+            }
         }
 
-        // Jika tidak ada cover image, gunakan default thumbnail tema
         if (!$invitation->cover_img || !Storage::disk('public')->exists($invitation->cover_img)) {
-            $defaultPath = $invitation->theme?->thumbnail ? storage_path('app/public/' . $invitation->theme->thumbnail) : public_path('assets/img/thumbnail-tema/demo1.png');
+            $defaultPath = $invitation->theme?->thumbnail
+                ? storage_path('app/public/' . $invitation->theme->thumbnail)
+                : public_path('assets/img/thumbnail-tema/demo1.png');
             if (File::exists($defaultPath)) {
                 return response()->file($defaultPath);
             }

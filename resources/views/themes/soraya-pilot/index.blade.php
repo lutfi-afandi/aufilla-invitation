@@ -7,18 +7,28 @@
   
   <title>{{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }} - Undangan Pernikahan</title>
   @php
-    $ogImg = $invitation->cover_img
-        ? asset('storage/' . $invitation->cover_img)
-        : asset('assets/img/thumbnail-tema/demo1.png');
+    $ogUrl  = str_replace('http://', 'https://', url('/' . $invitation->slug));
+    $ogImg  = $invitation->cover_img
+        ? str_replace('http://', 'https://', asset('storage/' . $invitation->cover_img))
+        : ($invitation->theme?->thumbnail ? str_replace('http://', 'https://', asset('storage/' . $invitation->theme->thumbnail)) : str_replace('http://', 'https://', asset('assets/img/thumbnail-tema/demo1.png')));
+    $ogDesc = 'Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami pada ' . (isset($resepsi) ? $resepsi->tgl_acara->translatedFormat('l, d F Y') : (isset($akad) ? $akad->tgl_acara->translatedFormat('l, d F Y') : 'hari yang telah ditentukan')) . '.';
   @endphp
-  <meta name="description" content="Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami pada {{ isset($resepsi) ? $resepsi->tgl_acara->translatedFormat('l, d F Y') : (isset($akad) ? $akad->tgl_acara->translatedFormat('l, d F Y') : '') }}.">
+  <!-- Meta Data & Open Graph untuk WhatsApp / Sosmed -->
+  <meta name="description" content="{{ $ogDesc }}">
+  <meta property="og:url" content="{{ $ogUrl }}">
+  <meta property="og:site_name" content="Aufilla Digital Invitation">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:type" content="article">
   <meta property="og:title" content="Undangan Pernikahan: {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}">
-  <meta property="og:description" content="Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami pada {{ isset($resepsi) ? $resepsi->tgl_acara->translatedFormat('l, d F Y') : (isset($akad) ? $akad->tgl_acara->translatedFormat('l, d F Y') : '') }}.">
+  <meta property="og:description" content="{{ $ogDesc }}">
   <meta property="og:image" content="{{ $ogImg }}">
-  <meta property="og:url" content="{{ url()->current() }}">
-  <meta property="og:type" content="website">
+  <meta property="og:image:secure_url" content="{{ $ogImg }}">
+  <meta property="og:image:width" content="800">
+  <meta property="og:image:height" content="600">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="{{ $ogImg }}">
+  <meta name="twitter:title" content="Undangan Pernikahan: {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}">
+  <meta name="twitter:description" content="{{ $ogDesc }}">
+  <meta name="twitter:image:src" content="{{ $ogImg }}">
   
   <!-- Google Fonts: Playfair Display, Great Vibes, Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -207,7 +217,10 @@
       <section id="couple" class="relative py-16 px-6 bg-white overflow-hidden ornament-corner">
         <div class="max-w-4xl mx-auto flex flex-col items-center text-center mb-16" data-aos="fade-up">
            <h2 class="font-script text-5xl md:text-6xl text-brand-800 mb-2">Mempelai</h2>
-           <p class="font-sans text-xs tracking-widest uppercase text-stone-500">Dua Hati Menjadi Satu</p>
+           <p class="font-sans text-xs tracking-widest uppercase text-stone-500 mb-4">Dua Hati Menjadi Satu</p>
+           <p class="text-sm md:text-base leading-relaxed text-stone-600 max-w-2xl">
+             Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud mengundang Bapak/Ibu/Saudara/i ke acara pernikahan kami:
+           </p>
         </div>
 
         <div class="max-w-3xl mx-auto space-y-24">
@@ -374,7 +387,13 @@
                <div class="absolute top-6 -left-2 w-4 h-4 bg-white rotate-45"></div>
                
                <h4 class="font-serif font-bold text-2xl text-brand-900 mb-1">{{ $cerita->judul }}</h4>
-               <p class="font-sans text-xs text-brand-800 uppercase tracking-widest font-semibold mb-4">{{ $cerita->tanggal ? \Carbon\Carbon::parse($cerita->tanggal)->translatedFormat('d F Y') : '' }}</p>
+                 @php
+                   $tanggalTampil = $cerita->tanggal;
+                   try {
+                     $tanggalTampil = \Carbon\Carbon::parse($cerita->tanggal)->translatedFormat('d F Y');
+                   } catch (\Exception $e) {}
+                 @endphp
+                <p class="font-sans text-xs text-brand-800 uppercase tracking-widest font-semibold mb-4">{{ $tanggalTampil }}</p>
                <p class="font-sans text-sm leading-relaxed text-stone-600">{{ $cerita->isi_cerita }}</p>
              </div>
            </div>

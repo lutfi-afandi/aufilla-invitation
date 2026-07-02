@@ -8,10 +8,8 @@
   <title>Undangan Pernikahan — {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}</title>
 
   @php
-    $ogUrl  = str_replace('http://', 'https://', url('/' . $invitation->slug));
-    $ogImg  = $invitation->cover_img
-        ? str_replace('http://', 'https://', asset('storage/' . $invitation->cover_img))
-        : ($invitation->theme?->thumbnail ? str_replace('http://', 'https://', asset('storage/' . $invitation->theme->thumbnail)) : str_replace('http://', 'https://', asset('assets/img/thumbnail-tema/demo1.png')));
+    $ogUrl  = url('/' . $invitation->slug);
+    $ogImg  = route('og-image', ['id' => $invitation->id]);
     $ogDesc = 'Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami pada ' . (isset($resepsi) ? $resepsi->tgl_acara->translatedFormat('l, d F Y') : (isset($akad) ? $akad->tgl_acara->translatedFormat('l, d F Y') : 'hari yang telah ditentukan')) . '.';
   @endphp
   <!-- Meta Data & Open Graph untuk WhatsApp / Sosmed -->
