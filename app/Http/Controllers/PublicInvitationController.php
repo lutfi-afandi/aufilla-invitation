@@ -141,6 +141,8 @@ class PublicInvitationController extends Controller
             'alamat_kado' => 'Jl. Cinta Sejati No. 12, Lampung',
             'music_file' => null,
         ]);
+        // Set dummy ID for route generation (e.g. og-image)
+        $invitation->id = 9999;
 
         // Relationship mock (this might not be perfect for all eloquent relations but works for standard property access)
         $invitation->setRelation('theme', $theme);
