@@ -591,7 +591,7 @@
 
               <!-- Google Maps Link Button -->
               <div class="mt-8">
-                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($akad->tempat . ' ' . $akad->alamat) }}" target="_blank" class="inline-flex items-center justify-center gap-2 w-full bg-royal-800 hover:bg-royal-900 text-white font-medium text-xs tracking-wider uppercase px-6 py-3 rounded-2xl shadow-lg border border-gold-500/25 transition-all duration-300">
+                <a href="{{ $akad->gmaps_link ?: 'https://www.google.com/maps/search/?api=1&query=' . urlencode($akad->tempat . ' ' . $akad->alamat) }}" target="_blank" class="inline-flex items-center justify-center gap-2 w-full bg-royal-800 hover:bg-royal-900 text-white font-medium text-xs tracking-wider uppercase px-6 py-3 rounded-2xl shadow-lg border border-gold-500/25 transition-all duration-300">
                   <i class="fa-solid fa-map-marked-alt text-gold-400"></i>
                   <span>Petunjuk Lokasi Google Maps</span>
                 </a>
@@ -648,7 +648,7 @@
 
               <!-- Google Maps Link Button -->
               <div class="mt-8">
-                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($resepsi->tempat . ' ' . $resepsi->alamat) }}" target="_blank" class="inline-flex items-center justify-center gap-2 w-full bg-royal-800 hover:bg-royal-900 text-white font-medium text-xs tracking-wider uppercase px-6 py-3 rounded-2xl shadow-lg border border-gold-500/25 transition-all duration-300">
+                <a href="{{ $resepsi->gmaps_link ?: 'https://www.google.com/maps/search/?api=1&query=' . urlencode($resepsi->tempat . ' ' . $resepsi->alamat) }}" target="_blank" class="inline-flex items-center justify-center gap-2 w-full bg-royal-800 hover:bg-royal-900 text-white font-medium text-xs tracking-wider uppercase px-6 py-3 rounded-2xl shadow-lg border border-gold-500/25 transition-all duration-300">
                   <i class="fa-solid fa-map-marked-alt text-gold-400"></i>
                   <span>Petunjuk Lokasi Google Maps</span>
                 </a>

@@ -342,7 +342,7 @@
                 <h4 class="font-serif text-lg font-bold text-brand-900 mb-1">Lokasi</h4>
                 <p class="font-sans text-xs md:text-sm text-stone-700 mb-3 font-medium">{{ $akad->tempat }}</p>
                 
-                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($akad->tempat . ' ' . $akad->alamat) }}" target="_blank" class="inline-flex items-center justify-center gap-2 bg-brand-800 text-white font-sans text-[10px] md:text-xs px-4 py-2 md:px-5 md:py-2.5 rounded-md hover:bg-brand-900 transition-colors w-max">
+                <a href="{{ $akad->gmaps_link ?: 'https://www.google.com/maps/search/?api=1&query=' . urlencode($akad->tempat . ' ' . $akad->alamat) }}" target="_blank" class="inline-flex items-center justify-center gap-2 bg-brand-800 text-white font-sans text-[10px] md:text-xs px-4 py-2 md:px-5 md:py-2.5 rounded-md hover:bg-brand-900 transition-colors w-max">
                   <i class="fa-solid fa-map-location-dot"></i> Google Maps Lokasi
                 </a>
               </div>
@@ -373,7 +373,7 @@
                 <h4 class="font-serif text-lg font-bold text-brand-900 mb-1">Lokasi</h4>
                 <p class="font-sans text-xs md:text-sm text-stone-700 mb-3 font-medium">{{ $resepsi->tempat }}</p>
                 
-                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($resepsi->tempat . ' ' . $resepsi->alamat) }}" target="_blank" class="inline-flex items-center justify-center gap-2 bg-brand-800 text-white font-sans text-[10px] md:text-xs px-4 py-2 md:px-5 md:py-2.5 rounded-md hover:bg-brand-900 transition-colors w-max">
+                <a href="{{ $resepsi->gmaps_link ?: 'https://www.google.com/maps/search/?api=1&query=' . urlencode($resepsi->tempat . ' ' . $resepsi->alamat) }}" target="_blank" class="inline-flex items-center justify-center gap-2 bg-brand-800 text-white font-sans text-[10px] md:text-xs px-4 py-2 md:px-5 md:py-2.5 rounded-md hover:bg-brand-900 transition-colors w-max">
                   <i class="fa-solid fa-map-location-dot"></i> Google Maps Lokasi
                 </a>
               </div>
@@ -743,80 +743,7 @@
         }, 300);
       });
 
-
-      // COPY CLIPBOARD
-      $('.btn-copy-account').on('click', function() {
-        const acc = $(this).data('account');
-        navigator.clipboard.writeText(acc).then(function() {
-          showToast("Nomor rekening disalin!");
-        }).catch(function() {
-          const temp = document.createElement("input");
-          temp.value = acc;
-          document.body.appendChild(temp);
-          temp.select();
-          document.execCommand("copy");
-          document.body.removeChild(temp);
-          showToast("Nomor rekening disalin!");
-        });
-      });
-
-
-      // BACK TO TOP SCROLL
-      $(window).on('scroll', function() {
-        if ($(this).scrollTop() > 500) {
-          $('#btn-back-to-top').removeClass('opacity-0 pointer-events-none').addClass('opacity-100');
-        } else {
-          $('#btn-back-to-top').removeClass('opacity-100').addClass('opacity-0 pointer-events-none');
-        }
-      });
-      $('#btn-back-to-top').on('click', function() {
-        $('html, body').animate({ scrollTop: 0 }, 800);
-      });
-
-
-      // TOAST HELPER
-      let toastTimer;
-      function showToast(msg) {
-        $('#toast-message').text(msg);
-        $('#toast').removeClass('opacity-0 translate-y-[-10px] pointer-events-none').addClass('opacity-100 translate-y-0');
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(function() {
-          $('#toast').removeClass('opacity-100 translate-y-0').addClass('opacity-0 translate-y-[-10px] pointer-events-none');
-        }, 3000);
-      }
-
-
-      // RSVP AJAX
-      $('#rsvp-form').on('submit', function(e) {
-        e.preventDefault();
-        
-        const btn = $('#btn-submit-rsvp');
-        const txt = $('#btn-submit-text');
-        const origTxt = txt.text();
-        
-        btn.prop('disabled', true);
-        txt.text('Mengirim...');
-        
-        let formData = {
-          _token: $('meta[name="csrf-token"]').attr('content'),
-          name: $('#rsvp-name').val(),
-          is_attending: $('#rsvp-status').val() === 'Hadir' ? 1 : ($('#rsvp-status').val() === 'Tidak Hadir' ? 0 : 2),
-          message: $('#rsvp-message').val()
-        };
-
-        $.ajax({
-          url: '{{ route("public.ucapan.store", $invitation->slug) }}',
-          type: 'POST',
-          data: formData,
-          success: function(res) {
-            showToast(res.message || 'Terkirim!');
-            $('#rsvp-status').val('');
-            $('#rsvp-message').val('');
-            
-            if (res.wish) {
-              const bg = formData.is_attending === 1 ? 'bg-green-100 text-green-700' : (formData.is_attending === 0 ? 'bg-red-100 text-red-700' : 'bg-stone-200 text-stone-700');
-              const icon = formData.is_attending === 1 ? 'fa-check' : (formData.is_attending === 0 ? 'fa-xmark' : 'fa-circle-question');
-              const lbl = formData.is_attending === 1 ? 'Hadir' : (formData.is_attending === 0 ? 'Berhalangan' : 'Ragu');
+: (formData.is_attending === 0 ? 'Berhalangan' : 'Ragu');
               
               const newCard = `
                   <div class="bg-white p-5 rounded-xl border border-stone-100 shadow-sm animate-fade-in">
