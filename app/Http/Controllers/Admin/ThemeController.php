@@ -19,7 +19,7 @@ class ThemeController extends Controller
         }
 
         // Urutkan berdasarkan yang terbaru, dan gunakan pagination
-        $themes = $query->latest()->paginate(9)->withQueryString();
+        $themes = $query->latest()->paginate(12)->withQueryString();
 
         if ($request->ajax()) {
             return view('admin.themes.partials.grid', compact('themes'))->render();

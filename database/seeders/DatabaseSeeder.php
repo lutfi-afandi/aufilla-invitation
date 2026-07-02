@@ -37,5 +37,6 @@ class DatabaseSeeder extends Seeder
         //     'thumbnail' => '/assets/img/thumbnail-tema/demo1.png',
         //     'is_active' => true,
         // ]);
+        $this->call(ContentSeeder::class);
     }
 }

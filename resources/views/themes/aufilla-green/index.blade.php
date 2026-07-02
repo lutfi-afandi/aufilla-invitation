@@ -18,7 +18,7 @@
     'instagram_pria' => null,
     'foto_pria' => $invitation->pria_foto ? asset('storage/' . $invitation->pria_foto) : asset('assets/default/default_pria.jpg'),
 
-    'foto_hero' => $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg'),
+    'foto_hero' => $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset(($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png'))),
 
     'tanggal_pernikahan' => $akad && $akad->tgl_acara ? \Carbon\Carbon::parse($akad->tgl_acara) : now(),
     'lokasi_akad' => $akad->lokasi ?? 'Lokasi Akad',

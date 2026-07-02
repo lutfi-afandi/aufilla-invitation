@@ -12,7 +12,7 @@
   <meta property="og:title" content="Undangan Pernikahan — {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}">
   <meta property="og:description" content="Kami mengundang Anda untuk hadir dan memberikan doa restu pada acara pernikahan kami.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="{{ $invitation->id ? route('og-image', $invitation->id) : asset('assets/default/default-pasangan.jpg') }}">
+  <meta property="og:image" content="{{ $invitation->id ? route('og-image', $invitation->id) : asset(($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png'))) }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
 
@@ -172,7 +172,7 @@
 
     <!-- 2. COVER SCREEN OVERLAY (FADE OUT UPON CLICKING "BUKA UNDANGAN") -->
     <div id="cover-screen" class="fixed lg:absolute inset-0 lg:left-auto lg:w-[480px] lg:right-0 z-50 flex items-center justify-center transition-all duration-1000 ease-in-out bg-cover bg-center"
-      style="background-image: linear-gradient(to bottom, rgba(10,61,71,0.85) 0%, rgba(14,94,107,0.9) 60%, rgba(4,32,40,0.95) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
+      style="background-image: linear-gradient(to bottom, rgba(10,61,71,0.85) 0%, rgba(14,94,107,0.9) 60%, rgba(4,32,40,0.95) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset(($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png'))) }}');">
       <!-- Ornaments -->
       <div class="absolute inset-0 bg-wedding-foliage opacity-20"></div>
 
@@ -225,7 +225,7 @@
 
     <!-- LEFT COLUMN: Desktop Premium Backdrop Static (Only visible on lg screens) -->
     <div class="hidden lg:flex lg:flex-1 lg:h-full bg-gradient-to-br from-[#0A3D47] to-[#0E5E6B] p-16 flex-col justify-between relative bg-cover bg-center overflow-hidden"
-      style="background-image: linear-gradient(to top, rgba(4,32,40, 0.95) 0%, rgba(10,61,71, 0.0) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
+      style="background-image: linear-gradient(to top, rgba(4,32,40, 0.95) 0%, rgba(10,61,71, 0.0) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset(($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png'))) }}');">
 
       <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
@@ -315,7 +315,7 @@
 
           <!-- Standard round portrait mask -->
           <div class="w-full h-full rounded-full overflow-hidden shadow-2xl gold-border-glow select-none bg-white">
-            <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}"
+            <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset(($invitation->theme?->thumbnail ? asset('storage/' . $invitation->theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png'))) }}"
               alt="{{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}"
               class="w-full h-full object-cover scale-105 hover:scale-110 transition-transform duration-700"
               referrerpolicy="no-referrer">

@@ -6,9 +6,7 @@
             @if($theme->thumbnail)
                 <img src="{{ asset('storage/' . $theme->thumbnail) }}" alt="{{ $theme->name }}" class="w-full h-full object-cover">
             @else
-                <div class="flex items-center justify-center h-full">
-                    <svg class="w-16 h-16 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
-                </div>
+                <img src="{{ asset('assets/img/thumbnail-tema/demo1.png') }}" alt="{{ $theme->name }}" class="w-full h-full object-cover opacity-80 mix-blend-multiply">
             @endif
             <!-- Status Badge -->
             <div class="absolute top-3 right-3">

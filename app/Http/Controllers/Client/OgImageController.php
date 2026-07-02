@@ -13,7 +13,7 @@ class OgImageController extends Controller
     public function generate($id)
     {
         $invitation = Invitation::with('akad')->findOrFail($id);
-        $ogPath = storage_path("app/public/og/og_invitation_{$id}.png");
+        $ogPath = storage_path("app/public/og/og_invitation_{$id}.jpg");
 
         // Ensure directory exists
         if (!File::exists(dirname($ogPath))) {
@@ -111,8 +111,8 @@ class OgImageController extends Controller
             imagettftext($image, 80, 0, $avatarX + ($avatarSize/2) - ($tw/2) - 5, $avatarY + ($avatarSize/2) + ($th/2) - 5, $textMuted, $fontBold, $initials);
         }
 
-        // Save Image
-        imagepng($image, $ogPath);
+        // Save as JPEG to keep file size small (WhatsApp limit ~300KB)
+        imagejpeg($image, $ogPath, 80);
         imagedestroy($image);
 
         return response()->file($ogPath);

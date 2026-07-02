@@ -122,7 +122,8 @@ function openEditTheme(theme) {
         $('#edit-thumbnail-preview').attr('src', '/storage/' + theme.thumbnail);
         $('#edit-preview-container').show();
     } else {
-        $('#edit-preview-container').hide();
+        $('#edit-thumbnail-preview').attr('src', '/assets/img/thumbnail-tema/demo1.png');
+        $('#edit-preview-container').show();
     }
     
     $('#edit-theme-modal').css('display', 'flex');

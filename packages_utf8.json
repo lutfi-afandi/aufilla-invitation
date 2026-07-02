@@ -1,0 +1,41 @@
+﻿[
+    {
+        "id": 1,
+        "name": "Basic",
+        "price": "35000.00",
+        "active_days": 90,
+        "max_gallery_photos": 5,
+        "has_love_story": false,
+        "can_custom_music": false,
+        "is_priority_support": false,
+        "description": "Paket ekonomis dengan fitur dasar untuk menyebarkan undangan digital dengan mudah.",
+        "created_at": "2026-05-30T22:51:26.000000Z",
+        "updated_at": "2026-05-30T22:51:26.000000Z"
+    },
+    {
+        "id": 2,
+        "name": "Premium",
+        "price": "50000.00",
+        "active_days": 180,
+        "max_gallery_photos": 10,
+        "has_love_story": true,
+        "can_custom_music": false,
+        "is_priority_support": false,
+        "description": "Pilihan tepat dengan masa aktif lebih lama dan fitur ekstra untuk melengkapi momen spesial Anda.",
+        "created_at": "2026-05-30T22:51:26.000000Z",
+        "updated_at": "2026-05-30T22:51:26.000000Z"
+    },
+    {
+        "id": 3,
+        "name": "VIP",
+        "price": "80000.00",
+        "active_days": 36500,
+        "max_gallery_photos": 999,
+        "has_love_story": true,
+        "can_custom_music": true,
+        "is_priority_support": true,
+        "description": "Paket paling lengkap tanpa batasan. Aktif selamanya dengan dukungan penuh dan kebebasan kustomisasi.",
+        "created_at": "2026-05-30T22:51:26.000000Z",
+        "updated_at": "2026-05-30T22:51:26.000000Z"
+    }
+]
