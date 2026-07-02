@@ -52,7 +52,13 @@
                             <textarea name="akad_alamat" rows="2" class="w-full bg-white border-1.5 border-brand-light/30 rounded-xl px-4 py-2.5 text-sm focus:border-brand-dark focus:ring-4 focus:ring-brand-dark/10 transition-all outline-none" placeholder="Alamat lengkap acara">{{ optional($akad)->alamat }}</textarea>
                         </div>
                         <div>
-                            <label class="block font-medium text-brand-dark mb-2 text-sm">Link Google Maps (URL)</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block font-medium text-brand-dark text-sm">Link Google Maps (URL)</label>
+                                <button type="button" onclick="openMapsGuide()" class="text-xs text-brand-accent hover:text-brand-accent-dark underline flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Cara ambil link
+                                </button>
+                            </div>
                             <input type="url" name="akad_gmaps" value="{{ optional($akad)->gmaps_link }}" class="w-full bg-white border-1.5 border-brand-light/30 rounded-xl px-4 py-2.5 text-sm focus:border-brand-dark focus:ring-4 focus:ring-brand-dark/10 transition-all outline-none" placeholder="https://maps.google.com/...">
                         </div>
                     </div>
@@ -91,7 +97,13 @@
                             <textarea name="resepsi_alamat" rows="2" class="w-full bg-white border-1.5 border-brand-accent/40 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/20 transition-all outline-none" placeholder="Alamat lengkap acara">{{ optional($resepsi)->alamat }}</textarea>
                         </div>
                         <div>
-                            <label class="block font-medium text-brand-dark mb-2 text-sm">Link Google Maps (URL)</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block font-medium text-brand-dark text-sm">Link Google Maps (URL)</label>
+                                <button type="button" onclick="openMapsGuide()" class="text-xs text-brand-accent hover:text-brand-accent-dark underline flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Cara ambil link
+                                </button>
+                            </div>
                             <input type="url" name="resepsi_gmaps" value="{{ optional($resepsi)->gmaps_link }}" class="w-full bg-white border-1.5 border-brand-accent/40 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/20 transition-all outline-none" placeholder="https://maps.google.com/...">
                         </div>
                     </div>
@@ -106,12 +118,66 @@
             </form>
         </div>
     </div>
+    <!-- Maps Guide Modal -->
+    <div id="maps-guide-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden transform scale-95 opacity-0 transition-all duration-300" id="maps-guide-content">
+            <div class="bg-gradient-to-r from-brand-dark/5 to-transparent px-6 py-4 border-b border-brand-accent/15 flex justify-between items-center">
+                <h3 class="font-semibold text-brand-dark" style="font-family: 'Playfair Display', serif;">Cara Ambil Link Google Maps</h3>
+                <button type="button" onclick="closeMapsGuide()" class="text-stone-400 hover:text-stone-600 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 text-sm text-stone-600">
+                <p>Agar titik lokasi di undangan akurat, jangan langsung <em>copy-paste</em> sembarangan. Ikuti langkah berikut:</p>
+                <ol class="list-decimal list-inside space-y-2 ml-1">
+                    <li>Buka aplikasi Google Maps atau situs <a href="https://maps.google.com" target="_blank" class="text-brand-accent hover:underline font-semibold">Google Maps</a>.</li>
+                    <li>Cari lokasi gedung/acara Anda.</li>
+                    <li>Pastikan titik pin merah pada peta sudah akurat.</li>
+                    <li>Klik tombol <strong>Bagikan (Share)</strong>.</li>
+                    <li>Pilih <strong>Salin Link (Copy Link)</strong>.</li>
+                    <li>Tempel (Paste) link tersebut ke dalam form.</li>
+                </ol>
+                <div class="bg-brand-light/10 p-3 rounded-xl border border-brand-light/20 mt-4 text-xs italic">
+                    <span class="font-semibold text-brand-dark flex items-center gap-1"><i class="fa-solid fa-check-circle text-green-500"></i> Contoh link yang BENAR:</span>
+                    https://maps.app.goo.gl/xxxxxxxxx
+                </div>
+                <div class="bg-red-50 p-3 rounded-xl border border-red-100 mt-2 text-xs italic text-red-700">
+                    <span class="font-semibold flex items-center gap-1"><i class="fa-solid fa-times-circle text-red-500"></i> Contoh yang SALAH (berisiko nyasar):</span>
+                    https://www.google.com/maps/search/Jl.+Melati+No+10<br>
+                    atau sekadar menulis "Balai Desa Sukamaju"
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-brand-accent/15 bg-stone-50 flex justify-end">
+                <button type="button" onclick="closeMapsGuide()" class="bg-brand-dark hover:bg-brand-dark/90 text-white px-5 py-2 rounded-lg font-medium transition-colors text-sm">
+                    Saya Mengerti
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
 @push('scripts')
 <script>
+    function openMapsGuide() {
+        $('#maps-guide-modal').removeClass('hidden').addClass('flex');
+        setTimeout(() => {
+            $('#maps-guide-content').removeClass('scale-95 opacity-0').addClass('scale-100 opacity-100');
+        }, 10);
+    }
+    
+    function closeMapsGuide() {
+        $('#maps-guide-content').removeClass('scale-100 opacity-100').addClass('scale-95 opacity-0');
+        setTimeout(() => {
+            $('#maps-guide-modal').removeClass('flex').addClass('hidden');
+        }, 300);
+    }
+
     $(document).ready(function() {
+        $('#maps-guide-modal').on('click', function(e) {
+            if (e.target === this) closeMapsGuide();
+        });
+
         $('#form-acara').on('submit', function(e) {
             e.preventDefault();
             var btn = $('#btn-save-acara');
