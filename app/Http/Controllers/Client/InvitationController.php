@@ -15,15 +15,15 @@ class InvitationController extends Controller
             'pria_nama_lengkap' => 'nullable|string|max:255',
             'pria_ayah' => 'nullable|string|max:255',
             'pria_ibu' => 'nullable|string|max:255',
-            'pria_foto' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:4096',
+            'pria_foto' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:6144',
             
             'wanita_nama' => 'nullable|string|max:255',
             'wanita_nama_lengkap' => 'nullable|string|max:255',
             'wanita_ayah' => 'nullable|string|max:255',
             'wanita_ibu' => 'nullable|string|max:255',
-            'wanita_foto' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:4096',
+            'wanita_foto' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:6144',
             
-            'cover_img' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:4096',
+            'cover_img' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:6144',
         ]);
 
         $invitation = Auth::user()->invitation;

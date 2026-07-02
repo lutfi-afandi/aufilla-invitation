@@ -125,7 +125,7 @@ class BukuTamuController extends Controller
         $invitation = Invitation::findOrFail($id);
 
         $request->validate([
-            'background_image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'background_image' => 'required|image|mimes:jpeg,png,jpg,webp|max:6144',
         ]);
 
         if ($request->hasFile('background_image')) {

@@ -18,7 +18,7 @@ class FeatureController extends Controller
     public function storeGaleri(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:6144'
         ]);
 
         $invitation = Auth::user()->invitation;

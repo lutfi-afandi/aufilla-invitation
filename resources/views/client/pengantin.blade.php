@@ -34,7 +34,7 @@
                             <p class="text-sm text-gray-500 mb-2">Foto Utama ini akan ditampilkan secara penuh (layar penuh) pada bagian pertama undangan digital Anda.</p>
                             <ul class="text-xs text-gray-400 list-disc list-inside space-y-1">
                                 <li>Rekomendasi rasio: 3:4 atau vertikal (Potret)</li>
-                                <li>Maksimal ukuran file: 2MB</li>
+                                <li>Maksimal ukuran file: 6MB</li>
                                 <li>Format yang diizinkan: JPG, PNG</li>
                             </ul>
                         </div>
@@ -173,7 +173,7 @@
                         if (firstError.includes('mimes') || firstError.includes('image')) {
                             errorMsg = 'Format file tidak valid. Harap unggah file gambar (JPG, PNG, WEBP).';
                         } else if (firstError.includes('max')) {
-                            errorMsg = 'Ukuran gambar terlalu besar. Maksimal 4MB.';
+                            errorMsg = 'Ukuran gambar terlalu besar. Maksimal 6MB.';
                         } else {
                             errorMsg = firstError;
                         }
