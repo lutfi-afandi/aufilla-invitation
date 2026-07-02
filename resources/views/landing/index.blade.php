@@ -17,14 +17,14 @@
     <meta property="og:url" content="{{ url('/') }}">
     <meta property="og:title" content="{{ config('app.name', 'Aufilla Invitation') }} — Undangan Pernikahan Digital">
     <meta property="og:description" content="Buat undangan pernikahan digital premium, elegan, dan mudah digunakan. Bagikan momen kebahagiaan Anda tanpa batas dengan Aufilla Invitation.">
-    <meta property="og:image" content="{{ asset('assets/img/logo-icon.png') }}">
+    <meta property="og:image" content="{{ asset('assets/img/brand-white-og.png') }}">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="{{ url('/') }}">
     <meta name="twitter:title" content="{{ config('app.name', 'Aufilla Invitation') }} — Undangan Pernikahan Digital">
     <meta name="twitter:description" content="Buat undangan pernikahan digital premium, elegan, dan mudah digunakan. Bagikan momen kebahagiaan Anda tanpa batas dengan Aufilla Invitation.">
-    <meta name="twitter:image" content="{{ asset('assets/img/logo-icon.png') }}">
+    <meta name="twitter:image" content="{{ asset('assets/img/brand-white-og.png') }}">
 
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
