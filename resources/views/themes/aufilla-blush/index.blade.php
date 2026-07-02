@@ -408,16 +408,18 @@
           </div>
 
           <!-- Arabic script styled inside a beautiful elegant font size -->
+          @if(empty($invitation->kutipan_teks))
           <p class="font-serif text-2xl md:text-3xl text-blush-900 leading-loose mb-6 tracking-wide" dir="rtl">
             وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُمْ مِنْ أَنْفُسِكُمْ أَزْوَاجًا لِتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِقَوْمٍ يَتَفَكَّرُونَ
           </p>
+          @endif
 
           <blockquote class="text-sm md:text-base text-stone-600 leading-relaxed italic mb-4">
-            "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda bagi kaum yang berpikir."
+            "{{ $invitation->kutipan_teks ?? 'Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang.' }}"
           </blockquote>
 
           <cite class="font-serif text-xs md:text-sm tracking-widest text-[#E28073] block font-bold uppercase mt-4">
-            — QS. Ar-Rum Ayat 21
+            — {{ $invitation->kutipan_sumber ?? 'QS. Ar-Rum Ayat 21' }}
           </cite>
 
           <div class="w-16 h-[1.5px] bg-rosegold-400 mx-auto mt-8"></div>
@@ -435,7 +437,7 @@
           <h2 class="font-serif text-4xl font-bold text-blush-800 mb-4">Sepasang Kasih</h2>
           <div class="w-12 h-[1.5px] bg-rosegold-500 mx-auto my-3"></div>
           <p class="text-xs md:text-sm leading-relaxed text-stone-600">
-            Assalamu’alaikum Warahmatullahi Wabarakatuh. Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud mengundang Bapak/Ibu/Saudara/i ke acara pernikahan kami:
+              Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud mengundang Bapak/Ibu/Saudara/i ke acara pernikahan kami:
           </p>
         </div>
 

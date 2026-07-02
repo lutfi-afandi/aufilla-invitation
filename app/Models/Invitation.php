@@ -10,6 +10,7 @@ class Invitation extends Model
         'user_id', 'theme_id', 'package_id', 'slug', 'status', 'trial_habis_at',
         'pria_nama', 'pria_nama_lengkap', 'pria_ayah', 'pria_ibu',
         'wanita_nama', 'wanita_nama_lengkap', 'wanita_ayah', 'wanita_ibu',
+        'kutipan_sumber', 'kutipan_teks',
         'cover_img', 'music_file', 'is_galeri_aktif', 'is_cerita_aktif', 'is_kado_aktif', 'alamat_kado',
         'pria_foto', 'wanita_foto'
     ];

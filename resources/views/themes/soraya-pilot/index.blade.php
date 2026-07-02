@@ -184,9 +184,9 @@
         <div class="relative z-10 px-6 max-w-3xl" data-aos="fade-up" data-aos-duration="1500">
            <i class="fa-solid fa-quote-right text-4xl text-accent/50 mb-6"></i>
            <p class="font-serif italic text-white text-xl md:text-3xl leading-relaxed mb-6 font-light drop-shadow-md">
-             "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang."
+             "{{ $invitation->kutipan_teks ?? 'Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang.' }}"
            </p>
-           <p class="font-sans text-xs text-white/80 tracking-[0.3em] uppercase font-bold">QS. Ar-Rum: 21</p>
+           <p class="font-sans text-xs text-white/80 tracking-[0.3em] uppercase font-bold">{{ $invitation->kutipan_sumber ?? 'QS. Ar-Rum: 21' }}</p>
         </div>
       </section>
 

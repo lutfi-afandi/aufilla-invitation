@@ -73,9 +73,30 @@ $access['can_cerita'] = \App\Helpers\PackageHelper::canAccessLoveStory($invitati
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                         </svg>
                                         Tidak tersedia di paket/status Anda
-                                    </div>
+                                    </div>                          
                                     @endif
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Kutipan -->
+                        <div class="bg-brand-bg/50 p-5 rounded-2xl border border-brand-accent/20 mt-6">
+                            <h4 class="font-semibold text-brand-dark mb-4 text-md flex items-center gap-2">
+                                <svg class="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                                </svg>
+                                Kutipan / Ayat Suci
+                            </h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block font-medium text-brand-dark mb-2 text-sm">Sumber Kutipan (Opsional)</label>
+                                    <input type="text" name="kutipan_sumber" value="{{ old('kutipan_sumber', $invitation->kutipan_sumber) }}" placeholder="Contoh: QS. Ar-Rum: 21" class="w-full bg-white border-1.5 border-brand-accent/30 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/20 transition-all outline-none">
+                                </div>
+                                <div>
+                                    <label class="block font-medium text-brand-dark mb-2 text-sm">Isi Kutipan</label>
+                                    <textarea name="kutipan_teks" rows="3" placeholder="Contoh: Dan di antara tanda-tanda kekuasaan-Nya..." class="w-full bg-white border-1.5 border-brand-accent/30 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/20 transition-all outline-none resize-none">{{ old('kutipan_teks', $invitation->kutipan_teks) }}</textarea>
+                                </div>
+                                <p class="text-[11px] text-gray-500 mt-2 italic">*Jika dibiarkan kosong, undangan akan menampilkan kutipan bawaan (Default: QS. Ar-Rum: 21).</p>
                             </div>
                         </div>
                     </div>

@@ -133,6 +133,8 @@ class PublicInvitationController extends Controller
             'wanita_nama_lengkap' => 'Juliet Capulet',
             'wanita_ayah' => 'Bapak Capulet',
             'wanita_ibu' => 'Ibu Capulet',
+            'kutipan_sumber' => 'QS. Ar-Rum: 21',
+            'kutipan_teks' => 'Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang.',
             'is_galeri_aktif' => true,
             'is_cerita_aktif' => true,
             'is_kado_aktif' => true,

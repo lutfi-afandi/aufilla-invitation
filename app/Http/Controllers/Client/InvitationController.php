@@ -73,6 +73,7 @@ class InvitationController extends Controller
     public function updateAcara(Request $request)
     {
         $request->validate([
+            'akad_nama' => 'nullable|string|max:100',
             'akad_tgl' => 'nullable|date',
             'akad_mulai' => 'nullable|date_format:H:i',
             'akad_selesai' => 'nullable|date_format:H:i',
@@ -80,6 +81,7 @@ class InvitationController extends Controller
             'akad_alamat' => 'nullable|string',
             'akad_gmaps' => 'nullable|url',
             
+            'resepsi_nama' => 'nullable|string|max:100',
             'resepsi_tgl' => 'nullable|date',
             'resepsi_mulai' => 'nullable|date_format:H:i',
             'resepsi_selesai' => 'nullable|date_format:H:i',
@@ -97,6 +99,7 @@ class InvitationController extends Controller
         $invitation->acaras()->updateOrCreate(
             ['tipe_acara' => 'akad'],
             [
+                'nama_acara' => $request->akad_nama,
                 'tgl_acara' => $request->akad_tgl,
                 'waktu_mulai' => $request->akad_mulai,
                 'waktu_selesai' => $request->akad_selesai,
@@ -110,6 +113,7 @@ class InvitationController extends Controller
         $invitation->acaras()->updateOrCreate(
             ['tipe_acara' => 'resepsi'],
             [
+                'nama_acara' => $request->resepsi_nama,
                 'tgl_acara' => $request->resepsi_tgl,
                 'waktu_mulai' => $request->resepsi_mulai,
                 'waktu_selesai' => $request->resepsi_selesai,
@@ -151,6 +155,8 @@ class InvitationController extends Controller
             'is_galeri_aktif' => $request->has('is_galeri_aktif'),
             'is_cerita_aktif' => $canCerita ? $request->has('is_cerita_aktif') : false,
             'is_kado_aktif' => $request->has('is_kado_aktif'),
+            'kutipan_sumber' => $request->input('kutipan_sumber'),
+            'kutipan_teks' => $request->input('kutipan_teks'),
         ];
 
         if ($request->hasFile('music_file')) {

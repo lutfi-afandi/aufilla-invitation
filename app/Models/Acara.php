@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Acara extends Model
 {
     protected $fillable = [
-        'invitation_id', 'tipe_acara', 'tgl_acara', 'waktu_mulai', 
+        'invitation_id', 'tipe_acara', 'nama_acara', 'tgl_acara', 'waktu_mulai', 
         'waktu_selesai', 'lokasi', 'alamat', 'gmaps_link'
     ];
 

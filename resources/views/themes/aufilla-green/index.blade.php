@@ -891,7 +891,7 @@
                         antaramu rasa kasih dan sayang."
                     </p>
                     <span class="block mt-2 text-xs font-semibold text-[#849687] uppercase tracking-widest"
-                        style="display: block; margin-top: 0.5rem; letter-spacing: 0.15em;">- QS. AR-RUM 21</span>
+                        style="display: block; margin-top: 0.5rem; letter-spacing: 0.15em;">- {{ $invitation->kutipan_sumber ?? 'QS. AR-RUM 21' }}</span>
                 </div>
             </div>
             <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-1 text-[#c5a880] text-xs font-semibold tracking-widest opacity-80 animate-bounce"
