@@ -130,6 +130,8 @@ class InvitationController extends Controller
     {
         $request->validate([
             'music_file' => 'nullable|file|mimes:mp3,wav|max:10240', // Max 10MB
+            'kutipan_sumber' => 'nullable|string|max:100',
+            'kutipan_teks' => 'nullable|string|max:1000',
         ]);
 
         $invitation = Auth::user()->invitation;
