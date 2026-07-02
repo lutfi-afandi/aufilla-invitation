@@ -11,7 +11,7 @@
 
         <!-- Couple Name -->
         <div>
-            <label for="couple_name" class="block font-medium text-sm text-brand-dark">{{ __('Nama Pasangan (Contoh: Romeo & Juliet)') }}</label>
+            <label for="couple_name" class="block font-medium text-sm text-brand-dark">{{ __('Nama Pasangan (Contoh: Bima & Ayu)') }}</label>
             <input id="couple_name" class="block mt-1 w-full border-gray-300 focus:border-brand-light focus:ring-brand-light rounded-md shadow-sm" type="text" name="couple_name" :value="old('couple_name')" required autofocus />
             <x-input-error :messages="$errors->get('couple_name')" class="mt-2" />
         </div>
@@ -19,7 +19,7 @@
         <!-- Username / Link Undangan -->
         <div class="mt-4">
             <label for="username" class="block font-medium text-sm text-brand-dark">{{ __('Link Undangan Anda') }}</label>
-            <input id="username" class="block mt-1 w-full border-gray-300 focus:border-brand-light focus:ring-brand-light rounded-md shadow-sm" type="text" name="username" :value="old('username')" required autocomplete="username" placeholder="romeo-juliet" />
+            <input id="username" class="block mt-1 w-full border-gray-300 focus:border-brand-light focus:ring-brand-light rounded-md shadow-sm" type="text" name="username" :value="old('username')" required autocomplete="username" placeholder="bima-ayu" />
             
             <div id="username-preview-container" class="mt-3 hidden transition-all duration-300">
                 <div class="flex flex-col gap-1.5 p-3.5 bg-gray-50 border border-gray-200 rounded-lg shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">

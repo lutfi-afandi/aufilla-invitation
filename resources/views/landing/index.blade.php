@@ -748,7 +748,7 @@
                 </div>
                 <div>
                     <label class="block text-[11px] font-bold tracking-widest uppercase text-brand-dark/80 mb-2">Username / Link Undangan</label>
-                    <input type="text" name="username" id="landing-username" required placeholder="romeojuliet"
+                    <input type="text" name="username" id="landing-username" required placeholder="bimaayu"
                         class="w-full bg-brand-bg border border-brand-dark/5 rounded-xl px-5 py-3.5 text-[13px] text-brand-dark focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/30 transition-all placeholder:text-brand-dark/20">
                     <div id="landing-url-preview-container" class="mt-3 hidden transition-all duration-300">
                         <div class="flex flex-col gap-1.5 p-3.5 bg-brand-bg/50 border border-brand-dark/5 rounded-xl shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">

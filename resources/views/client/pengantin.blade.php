@@ -63,11 +63,11 @@
 
                         <div>
                             <label class="block font-medium text-brand-dark mb-2 text-sm">Nama Panggilan</label>
-                            <input type="text" name="pria_nama" value="{{ $invitation->pria_nama }}" class="w-full border-1.5 border-brand-accent/20 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/15 transition-all outline-none" placeholder="Contoh: Romeo">
+                            <input type="text" name="pria_nama" value="{{ $invitation->pria_nama }}" class="w-full border-1.5 border-brand-accent/20 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/15 transition-all outline-none" placeholder="Contoh: Bima">
                         </div>
                         <div>
                             <label class="block font-medium text-brand-dark mb-2 text-sm">Nama Lengkap</label>
-                            <input type="text" name="pria_nama_lengkap" value="{{ $invitation->pria_nama_lengkap }}" class="w-full border-1.5 border-brand-accent/20 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/15 transition-all outline-none" placeholder="Contoh: Romeo Montague">
+                            <input type="text" name="pria_nama_lengkap" value="{{ $invitation->pria_nama_lengkap }}" class="w-full border-1.5 border-brand-accent/20 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/15 transition-all outline-none" placeholder="Contoh: Bima Saputra">
                         </div>
                         <div>
                             <label class="block font-medium text-brand-dark mb-2 text-sm">Nama Ayah</label>
@@ -100,11 +100,11 @@
 
                         <div>
                             <label class="block font-medium text-brand-dark mb-2 text-sm">Nama Panggilan</label>
-                            <input type="text" name="wanita_nama" value="{{ $invitation->wanita_nama }}" class="w-full border-1.5 border-brand-accent/20 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/15 transition-all outline-none" placeholder="Contoh: Juliet">
+                            <input type="text" name="wanita_nama" value="{{ $invitation->wanita_nama }}" class="w-full border-1.5 border-brand-accent/20 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/15 transition-all outline-none" placeholder="Contoh: Ayu">
                         </div>
                         <div>
                             <label class="block font-medium text-brand-dark mb-2 text-sm">Nama Lengkap</label>
-                            <input type="text" name="wanita_nama_lengkap" value="{{ $invitation->wanita_nama_lengkap }}" class="w-full border-1.5 border-brand-accent/20 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/15 transition-all outline-none" placeholder="Contoh: Juliet Capulet">
+                            <input type="text" name="wanita_nama_lengkap" value="{{ $invitation->wanita_nama_lengkap }}" class="w-full border-1.5 border-brand-accent/20 rounded-xl px-4 py-2.5 text-sm focus:border-brand-accent focus:ring-4 focus:ring-brand-accent/15 transition-all outline-none" placeholder="Contoh: Ayu Lestari">
                         </div>
                         <div>
                             <label class="block font-medium text-brand-dark mb-2 text-sm">Nama Ayah</label>

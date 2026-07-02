@@ -125,14 +125,14 @@ class PublicInvitationController extends Controller
         // Generate Dummy Data for Preview
         $invitation = new Invitation([
             'slug' => 'preview',
-            'pria_nama' => 'Romeo',
-            'pria_nama_lengkap' => 'Romeo Montague',
-            'pria_ayah' => 'Bapak Montague',
-            'pria_ibu' => 'Ibu Montague',
-            'wanita_nama' => 'Juliet',
-            'wanita_nama_lengkap' => 'Juliet Capulet',
-            'wanita_ayah' => 'Bapak Capulet',
-            'wanita_ibu' => 'Ibu Capulet',
+            'pria_nama' => 'Bima',
+            'pria_nama_lengkap' => 'Bima Saputra',
+            'pria_ayah' => 'Bapak Saputra',
+            'pria_ibu' => 'Ibu Saputra',
+            'wanita_nama' => 'Ayu',
+            'wanita_nama_lengkap' => 'Ayu Lestari',
+            'wanita_ayah' => 'Bapak Lestari',
+            'wanita_ibu' => 'Ibu Lestari',
             'kutipan_sumber' => 'QS. Ar-Rum: 21',
             'kutipan_teks' => 'Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang.',
             'is_galeri_aktif' => true,
@@ -186,8 +186,8 @@ class PublicInvitationController extends Controller
         ]);
 
         $kados = collect([
-            new \App\Models\Kado(['nama_bank' => 'BCA', 'nomor_rekening' => '1234567890', 'atas_nama' => 'Romeo Montague']),
-            new \App\Models\Kado(['nama_bank' => 'Muamalat', 'nomor_rekening' => '089345092832', 'atas_nama' => 'Juliet Capulet']),
+            new \App\Models\Kado(['nama_bank' => 'BCA', 'nomor_rekening' => '1234567890', 'atas_nama' => 'Bima Saputra']),
+            new \App\Models\Kado(['nama_bank' => 'Muamalat', 'nomor_rekening' => '089345092832', 'atas_nama' => 'Ayu Lestari']),
         ]);
 
         $tamu = new \App\Models\Tamu(['nama_tamu' => 'Tamu Spesial', 'kode_qr' => 'PREVIEW-QR-123']);
