@@ -303,12 +303,28 @@
 
         <div class="max-w-xl mx-auto space-y-12">
           
+          @php
+              $eventImg1 = asset('assets/default/default-pasangan.jpg');
+              $eventImg2 = asset('assets/default/default-pasangan2.jpg');
+              if (isset($galeris) && count($galeris) > 0) {
+                  $firstGal = $galeris->first();
+                  $eventImg1 = str_starts_with($firstGal->image_path, 'assets/') ? asset($firstGal->image_path) : asset('storage/' . $firstGal->image_path);
+                  
+                  if (count($galeris) > 1) {
+                      $secondGal = $galeris->get(1);
+                      $eventImg2 = str_starts_with($secondGal->image_path, 'assets/') ? asset($secondGal->image_path) : asset('storage/' . $secondGal->image_path);
+                  } else {
+                      $eventImg2 = $eventImg1;
+                  }
+              }
+          @endphp
+          
           @if($akad)
           <!-- AKAD CARD -->
           <div class="bg-white shadow-2xl rounded-tr-[80px] rounded-tl-[10px] rounded-b-[10px] overflow-hidden" data-aos="fade-up">
             <!-- Top Image -->
             <div class="w-full h-32 md:h-40 overflow-hidden">
-               <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}" class="w-full h-full object-cover" alt="Akad Image">
+               <img src="{{ $eventImg1 }}" class="w-full h-full object-cover" alt="Akad Image">
             </div>
             <!-- Bottom Details Split -->
             <div class="flex flex-row">
@@ -339,7 +355,7 @@
           <div class="bg-white shadow-2xl rounded-tl-[80px] rounded-tr-[10px] rounded-b-[10px] overflow-hidden" data-aos="fade-up">
             <!-- Top Image -->
             <div class="w-full h-32 md:h-40 overflow-hidden">
-               <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}" class="w-full h-full object-cover" alt="Resepsi Image">
+               <img src="{{ $eventImg2 }}" class="w-full h-full object-cover" alt="Resepsi Image">
             </div>
             <!-- Bottom Details Split -->
             <div class="flex flex-row-reverse">
