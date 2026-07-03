@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Undangan Pernikahan — {{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}</title>
 
@@ -778,17 +780,17 @@
 
             <div class="mb-4">
               <span class="text-[9px] uppercase text-stone-500 block tracking-widest">Nomor Rekening</span>
-              <p class="font-mono text-xl tracking-wider text-maroon-900 font-bold">{{ $kado->nomor_rekening }}</p>
+              <p class="font-mono text-xl tracking-wider text-maroon-900 font-bold">{{ $kado->no_rekening }}</p>
             </div>
 
             <div class="flex justify-between items-end">
               <div>
                 <span class="text-[9px] uppercase text-stone-500 block">Atas Nama</span>
-                <p class="font-serif text-sm tracking-wide text-maroon-800 font-bold uppercase font-sans">{{ $kado->atas_nama }}</p>
+                <p class="font-serif text-sm tracking-wide text-maroon-800 font-bold uppercase font-sans">{{ $kado->nama_pemilik }}</p>
               </div>
               <!-- Copy Button Trigger -->
               <button class="btn-copy-account flex items-center gap-1 bg-white/60 hover:bg-white/90 border border-gray-300 text-maroon-900 text-xs px-4 py-2 rounded-xl transition-all cursor-pointer font-sans"
-                data-account="{{ $kado->nomor_rekening }}">
+                data-account="{{ $kado->no_rekening }}">
                 <i class="fa-solid fa-copy text-maroon-700"></i>
                 <span>Salin</span>
               </button>

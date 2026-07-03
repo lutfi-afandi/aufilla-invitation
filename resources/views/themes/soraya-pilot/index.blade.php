@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light">
+
   <title>{{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }} - Undangan Pernikahan</title>
   @php
     $ogUrl  = str_replace('http://', 'https://', url('/' . $invitation->slug));
@@ -304,8 +306,10 @@
         <div class="max-w-xl mx-auto space-y-12">
           
           @php
-              $eventImg1 = asset('assets/default/default-pasangan.jpg');
-              $eventImg2 = asset('assets/default/default-pasangan2.jpg');
+              $coverUrl = $invitation->cover_img ? (str_starts_with($invitation->cover_img, 'assets/') ? asset($invitation->cover_img) : asset('storage/' . $invitation->cover_img)) : asset('assets/default/default-pasangan.jpg');
+              $eventImg1 = $coverUrl;
+              $eventImg2 = $coverUrl;
+              
               if (isset($galeris) && count($galeris) > 0) {
                   $firstGal = $galeris->first();
                   $eventImg1 = str_starts_with($firstGal->image_path, 'assets/') ? asset($firstGal->image_path) : asset('storage/' . $firstGal->image_path);
@@ -323,8 +327,8 @@
           <!-- AKAD CARD -->
           <div class="bg-white shadow-2xl rounded-tr-[80px] rounded-tl-[10px] rounded-b-[10px] overflow-hidden" data-aos="fade-up">
             <!-- Top Image -->
-            <div class="w-full h-32 md:h-40 overflow-hidden">
-               <img src="{{ $eventImg1 }}" class="w-full h-full object-cover" alt="Akad Image">
+            <div class="w-full bg-stone-100 flex items-center justify-center overflow-hidden">
+               <img src="{{ $eventImg1 }}" class="w-full h-auto max-h-[400px] object-contain" alt="Akad Image">
             </div>
             <!-- Bottom Details Split -->
             <div class="flex flex-row">
@@ -354,8 +358,8 @@
           <!-- RESEPSI CARD -->
           <div class="bg-white shadow-2xl rounded-tl-[80px] rounded-tr-[10px] rounded-b-[10px] overflow-hidden" data-aos="fade-up">
             <!-- Top Image -->
-            <div class="w-full h-32 md:h-40 overflow-hidden">
-               <img src="{{ $eventImg2 }}" class="w-full h-full object-cover" alt="Resepsi Image">
+            <div class="w-full bg-stone-100 flex items-center justify-center overflow-hidden">
+               <img src="{{ $eventImg2 }}" class="w-full h-auto max-h-[400px] object-contain" alt="Resepsi Image">
             </div>
             <!-- Bottom Details Split -->
             <div class="flex flex-row-reverse">
@@ -532,10 +536,10 @@
                 <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-brand-800 flex items-center justify-between">
                   <div>
                     <h4 class="font-sans font-bold text-brand-900 uppercase text-xs tracking-widest mb-2">{{ $kado->nama_bank }}</h4>
-                    <p class="font-serif text-2xl font-bold text-stone-800 mb-1">{{ $kado->nomor_rekening ??'Nomor Rekening' }}</p>
-                    <p class="font-sans text-xs text-stone-500 uppercase">A.N. {{ $kado->atas_nama ??'Atas Nama' }}</p>
+                    <p class="font-serif text-2xl font-bold text-stone-800 mb-1">{{ $kado->no_rekening ??'Nomor Rekening' }}</p>
+                    <p class="font-sans text-xs text-stone-500 uppercase">A.N. {{ $kado->nama_pemilik ??'Atas Nama' }}</p>
                   </div>
-                  <button class="btn-copy-account w-12 h-12 rounded-full bg-brand-50 text-brand-800 flex items-center justify-center hover:bg-brand-800 hover:text-white transition-colors" data-account="{{ $kado->nomor_rekening }}">
+                  <button class="btn-copy-account w-12 h-12 rounded-full bg-brand-50 text-brand-800 flex items-center justify-center hover:bg-brand-800 hover:text-white transition-colors" data-account="{{ $kado->no_rekening }}">
                     <i class="fa-regular fa-copy"></i>
                   </button>
                 </div>
@@ -559,10 +563,13 @@
       </section>
 
       <!-- FOOTER -->
-      <footer class="relative min-h-[60vh] md:min-h-[50vh] bg-cover bg-center flex flex-col justify-end items-end" style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
+      <footer class="relative min-h-[60vh] md:min-h-[50vh] bg-black flex flex-col justify-end items-end overflow-hidden">
+        
+        <!-- Fading Background Slider -->
+        <div id="footer-bg-slider" class="absolute inset-0 z-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out" style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}'); opacity: 1;"></div>
         
         <!-- Subtle gradient overlay -->
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+        <div class="absolute inset-0 z-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none"></div>
         
         <!-- White card overlay at bottom right -->
         <div class="relative z-10 w-[90%] md:w-[65%] lg:w-[50%] bg-white rounded-tl-[80px] p-8 md:p-12 pb-10 md:pb-16 mb-0 shadow-2xl" data-aos="fade-up">
@@ -743,12 +750,81 @@
         }, 300);
       });
 
-: (formData.is_attending === 0 ? 'Berhalangan' : 'Ragu');
+      // COPY CLIPBOARD
+      $('.btn-copy-account').on('click', function() {
+        const acc = $(this).data('account');
+        navigator.clipboard.writeText(acc).then(function() {
+          showToast("Nomor rekening disalin!");
+        }).catch(function() {
+          const temp = document.createElement("input");
+          temp.value = acc;
+          document.body.appendChild(temp);
+          temp.select();
+          document.execCommand("copy");
+          document.body.removeChild(temp);
+          showToast("Nomor rekening disalin!");
+        });
+      });
+
+      // BACK TO TOP SCROLL
+      $(window).on('scroll', function() {
+        if ($(this).scrollTop() > 500) {
+          $('#btn-back-to-top').removeClass('opacity-0 pointer-events-none').addClass('opacity-100');
+        } else {
+          $('#btn-back-to-top').removeClass('opacity-100').addClass('opacity-0 pointer-events-none');
+        }
+      });
+      $('#btn-back-to-top').on('click', function() {
+        $('html, body').animate({ scrollTop: 0 }, 800);
+      });
+
+      // TOAST HELPER
+      let toastTimer;
+      function showToast(msg) {
+        $('#toast-message').text(msg);
+        $('#toast').removeClass('opacity-0 translate-y-[-10px] pointer-events-none').addClass('opacity-100 translate-y-0');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function() {
+          $('#toast').removeClass('opacity-100 translate-y-0').addClass('opacity-0 translate-y-[-10px] pointer-events-none');
+        }, 3000);
+      }
+
+      // RSVP AJAX
+      $('#rsvp-form').on('submit', function(e) {
+        e.preventDefault();
+        
+        const btn = $('#btn-submit-rsvp');
+        const txt = $('#btn-submit-text');
+        const origTxt = txt.text();
+        
+        btn.prop('disabled', true);
+        txt.text('Mengirim...');
+        
+        let formData = {
+          _token: $('meta[name="csrf-token"]').attr('content'),
+          name: $('#rsvp-name').val(),
+          is_attending: $('#rsvp-status').val() === 'Hadir' ? 1 : ($('#rsvp-status').val() === 'Tidak Hadir' ? 0 : 2),
+          message: $('#rsvp-message').val()
+        };
+
+        $.ajax({
+          url: '{{ route("public.ucapan.store", $invitation->slug) }}',
+          type: 'POST',
+          data: formData,
+          success: function(res) {
+            showToast(res.message || 'Terkirim!');
+            $('#rsvp-status').val('');
+            $('#rsvp-message').val('');
+            
+            if (res.wish) {
+              const bg = formData.is_attending === 1 ? 'bg-green-100 text-green-700' : (formData.is_attending === 0 ? 'bg-red-100 text-red-700' : 'bg-stone-200 text-stone-700');
+              const icon = formData.is_attending === 1 ? 'fa-check' : (formData.is_attending === 0 ? 'fa-xmark' : 'fa-circle-question');
+              const lbl = formData.is_attending === 1 ? 'Hadir' : (formData.is_attending === 0 ? 'Berhalangan' : 'Ragu');
               
               const newCard = `
                   <div class="bg-white p-5 rounded-xl border border-stone-100 shadow-sm animate-fade-in">
                     <div class="flex items-center justify-between mb-2">
-                      <h4 class="font-serif font-bold text-brand-900">${res.wish.nama}</h4>
+                      <h4 class="font-serif font-bold text-brand-900">${res.wish.nama_tamu || res.wish.nama}</h4>
                       <span class="text-[10px] text-stone-400">Baru saja</span>
                     </div>
                     <div class="mb-2">
@@ -758,11 +834,11 @@
                   </div>`;
               
               $('#empty-wish-msg').remove();
-              $('#wishes-list').prepend(newCard);
+              $('#wishes-container').prepend(newCard); // Fallback to wishes-container if wishes-list doesn't exist
             }
           },
           error: function(err) {
-            showToast('Gagal mengirim ucapan.');
+            showToast(err.responseJSON?.message || 'Terjadi kesalahan');
           },
           complete: function() {
             btn.prop('disabled', false);
@@ -770,8 +846,25 @@
           }
         });
       });
-
-    });
+    // FOOTER SLIDESHOW
+    @if(isset($galeris) && count($galeris) > 0)
+      const galleryImages = [
+          @foreach($galeris as $gal)
+              "{{ str_starts_with($gal->image_path, 'assets/') ? asset($gal->image_path) : asset('storage/' . $gal->image_path) }}",
+          @endforeach
+      ];
+      if (galleryImages.length > 0) {
+          let currentImgIndex = 0;
+          setInterval(function() {
+              currentImgIndex = (currentImgIndex + 1) % galleryImages.length;
+              $('#footer-bg-slider').css('opacity', '0');
+              setTimeout(function() {
+                  $('#footer-bg-slider').css('background-image', `url('${galleryImages[currentImgIndex]}')`).css('opacity', '1');
+              }, 1000);
+          }, 3000); // Changed to 3 seconds as requested
+      }
+    @endif
+  });
   </script>
 </body>
 </html>

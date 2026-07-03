@@ -306,7 +306,7 @@ Variabel yang dikirim dari `PublicInvitationController` ke view Soraya:
 | `$invitation->alamat_kado` | `alamat_kado` | Alamat kirim kado fisik |
 | `$galeris` | Collection of `Galeri` | Gunakan `$galeri->image_path` (BUKAN `file_path`!) |
 | `$wishes` | Collection of `Ucapan` | Gunakan `$wish->kehadiran` (BUKAN `is_attending`!) |
-| `$kados` | Collection of `Kado` | Gunakan `$kado->nomor_rekening` & `$kado->atas_nama` |
+| `$kados` | Collection of `Kado` | Gunakan `$kado->no_rekening` & `$kado->nama_pemilik` |
 | `$tamu` | `Tamu` model | `$tamu->nama_tamu`, `$tamu->kode_qr` |
 | `$qrCode` | Generated QR SVG | Render via `{!! $qrCode !!}` |
 | `$akad` / `$resepsi` | `Acara` model | `->tgl_acara`, `->waktu_mulai`, `->tempat`, `->alamat` |
@@ -342,7 +342,7 @@ Variabel yang dikirim dari `PublicInvitationController` ke view Soraya:
 | Musik error `NotSupportedError` | `<audio src="">` kosong | Gunakan `<source>` dengan `@if/@else` fallback |
 | QR Modal tidak muncul | Query DB langsung di view, data preview tidak masuk | Gunakan `$tamu ?? request('to')` fallback |
 | Wishes tidak tampil | Variabel `$ucapans` salah (harusnya `$wishes`) | Gunakan mapping S5 di atas |
-| Kado A.N kosong | Variabel `nama_pemilik` salah (harusnya `atas_nama`) | Gunakan mapping S5 di atas |
+| Kado A.N kosong | Variabel `nama_pemilik` salah (harusnya `nama_pemilik`) | Gunakan mapping S5 di atas |
 | Footer bertumpuk tombol melayang | White card di kiri bawah, bertabrakan dgn floating music/QR | Pindahkan card ke **kanan bawah** (`items-end`, `rounded-tl-[80px]`) |
 | Section terlalu banyak whitespace | Tidak ada ornamen | Tambahkan `.ornament-dots`, `.ornament-corner`, `.ornament-leaf` |
 
@@ -352,3 +352,27 @@ Variabel yang dikirim dari `PublicInvitationController` ke view Soraya:
 
 - `resources/views/themes/soraya-pilot/index.blade.php` — **SATU-SATUNYA** basis clone untuk semua tema Soraya
 - `future_soraya_themes.md` — daftar calon tema Soraya dan contoh prompt clone
+
+ 
+ # # #   S o r a y a   S p e c i f i c   R u l e s   ( E v e n t s   &   F o o t e r ) 
+ 
+ -   * * E v e n t   I m a g e s   ( A k a d   &   R e s e p s i ) * * :   T h e   i m a g e   c o n t a i n e r   m u s t   h a v e   d y n a m i c   h e i g h t   ( e . g .   \ h - a u t o   m a x - h - [ 4 0 0 p x ]   o b j e c t - c o n t a i n \ )   s o   v e r t i c a l   p h o t o s   a r e   n o t   s e v e r e l y   c r o p p e d .   I t   m u s t   f a l l b a c k   t o   \ c o v e r _ i m g \   i f   t h e   g a l l e r y   i s   e m p t y . 
+ 
+ -   * * F o o t e r   B a c k g r o u n d * * :   T h e   f o o t e r   b a c k g r o u n d   s h o u l d   b e   a   d y n a m i c   f a d i n g   s l i d e s h o w   u s i n g   t h e   g a l l e r y   i m a g e s   ( c h a n g i n g   e v e r y   4 - 5   s e c o n d s ) .   I f   t h e   g a l l e r y   i s   e m p t y ,   f a l l b a c k   t o   \ c o v e r _ i m g \ . 
+ 
+ 
+
+ # #   8 .   A n t i - F o r c e d   D a r k   M o d e   ( M e n c e g a h   I n v e r s i   W a r n a   d i   B r o w s e r   M o b i l e ) 
+ 
+ S e l a l u   p a s t i k a n   s e t i a p   t e m a   b a r u   ( b a i k   A u f i l l a   m a u p u n   S o r a y a )   m e m i l i k i   t a g   m e t a   b e r i k u t   d i   d a l a m   \ < h e a d > \   t e p a t   d i   b a w a h   t a g   \  i e w p o r t \ : 
+ 
+ \ \ \ h t m l 
+ < m e t a   n a m e = \  
+ c o l o r - s c h e m e \   c o n t e n t = \ l i g h t  
+ o n l y \ > 
+ < m e t a   n a m e = \ s u p p o r t e d - c o l o r - s c h e m e s \   c o n t e n t = \ l i g h t \ > 
+ \ \ \ 
+ 
+ * * A l a s a n : * *   B r o w s e r   d i   b e b e r a p a   p e r a n g k a t   A n d r o i d   ( X i a o m i ,   S a m s u n g ,   C h r o m e   a u t o - d a r k   f l a g )   m e m i l i k i   f i t u r   y a n g   m e m a k s a   m o d e   g e l a p   d e n g a n   m e m b a l i k k a n   ( i n v e r s i )   w a r n a   p u t i h   m e n j a d i   h i t a m   j i k a   s i t u s   t i d a k   m e n d e k l a r a s i k a n   s k e m a   w a r n a   y a n g   d i d u k u n g   s e c a r a   e k s p l i s i t . 
+  
+ 
