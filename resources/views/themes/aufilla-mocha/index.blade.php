@@ -32,20 +32,20 @@
   <meta name="twitter:image:src" content="{{ $ogImg }}">
 
   <!-- Favicon -->
-  <link rel="icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
-  <link rel="shortcut icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
+  <link rel="icon" href="{{ assetv('assets/img/logo-icon.png') }}" type="image/png">
+  <link rel="shortcut icon" href="{{ assetv('assets/img/logo-icon.png') }}" type="image/png">
 
   <!-- Local Google Fonts -->
-  <link href="{{ asset('assets/vendor/css/fonts.css') }}" rel="stylesheet">
+  <link href="{{ assetv('assets/vendor/css/fonts.css') }}" rel="stylesheet">
 
   <!-- Local Font Awesome Icons -->
-  <link rel="stylesheet" href="{{ asset('assets/vendor/css/fontawesome.min.css') }}" />
+  <link rel="stylesheet" href="{{ assetv('assets/vendor/css/fontawesome.min.css') }}" />
 
   <!-- Local AOS CSS -->
-  <link href="{{ asset('assets/vendor/css/aos.css') }}" rel="stylesheet">
+  <link href="{{ assetv('assets/vendor/css/aos.css') }}" rel="stylesheet">
 
   <!-- Local Tailwind CSS -->
-  <script src="{{ asset('assets/vendor/js/tailwindcss.min.js') }}"></script>
+  <script src="{{ assetv('assets/vendor/js/tailwindcss.min.js') }}"></script>
 
   <!-- Tailwind Custom Configuration -->
   <script>
@@ -55,14 +55,14 @@
           
       colors: {
         primary: {
-          50: '#F6F3F1', 100: '#E8DFD8', 200: '#D5C4B8', 300: '#BC9F8D', 400: '#A37C64', 500: '#8F6248', 600: '#754B35', 700: '#5E3B29', 800: '#4A3525', 900: '#312115', 950: '#1D120B'
+          50: '#FCF9F5', 100: '#F7F0E6', 200: '#ECDEC5', 300: '#DFC7A0', 400: '#D1AC77', 500: '#C2914F', 600: '#AC7B3F', 700: '#8E6233', 800: '#734E2A', 900: '#5D4024', 950: '#352313'
         },
-        secondary: '#996240',
+        secondary: '#AC7B3F',
         gold: {
-          50: '#FDFBF7', 100: '#F9F4E8', 200: '#F2E4CD', 300: '#E8CEAA', 400: '#DAB27D', 500: '#CA9450', 600: '#B0743C', 700: '#995632', 800: '#80452C', 900: '#683A26'
+          50: '#FAF8F7', 100: '#F2EBE8', 200: '#DFD1CB', 300: '#C7B1A8', 400: '#AD9186', 500: '#967669', 600: '#7C5C50', 700: '#64483E', 800: '#543C34', 900: '#46332C'
         },
         pearl: {
-          50: '#FFFFFF', 100: '#F8F3F0', 200: '#EFE5DF', 300: '#E1D0C6', 450: '#C7AE9F'
+          50: '#FFFFFF', 100: '#FDFCFB', 200: '#F9F5F1', 300: '#EFE7DF', 450: '#DBCCC1'
         },
       },
       fontFamily: {
@@ -87,11 +87,11 @@
     }
 
     ::-webkit-scrollbar-track {
-      background: #F8F3F0;
+      background: #FDFCFB;
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #4A3525;
+      background: #734E2A;
       border-radius: 4px;
     }
 
@@ -164,17 +164,17 @@
   </style>
 </head>
 
-<body class="font-sans text-stone-800 bg-[#F8F3F0] relative selection:bg-primary-800 selection:text-white locked">
+<body class="font-sans text-stone-800 bg-[#FDFCFB] relative selection:bg-primary-800 selection:text-white locked">
 
   <!-- 1. LOADING SCREEN -->
-  <div id="loading-screen" class="fixed inset-0 bg-[#4A3525] z-[99] flex flex-col justify-center items-center transition-all duration-700 ease-out">
+  <div id="loading-screen" class="fixed inset-0 bg-[#734E2A] z-[99] flex flex-col justify-center items-center transition-all duration-700 ease-out">
     <div class="flex flex-col items-center">
       <!-- Floating circular ornaments -->
       <div class="relative w-24 h-24 flex items-center justify-center">
-        <div class="absolute inset-0 border-2 border-gold-500/30 border-t-gold-500 rounded-full animate-spin"></div>
-        <span class="font-serif text-3xl font-bold text-gold-500 relative z-10 leading-none">{{ strtoupper(substr($invitation->pria_nama, 0, 1)) }}&amp;{{ strtoupper(substr($invitation->wanita_nama, 0, 1)) }}</span>
+        <div class="absolute inset-0 border-2 border-white/20 border-t-white rounded-full animate-spin shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
+        <span class="font-serif text-3xl font-bold text-white relative z-10 leading-none drop-shadow-md">{{ strtoupper(substr($invitation->pria_nama, 0, 1)) }}&amp;{{ strtoupper(substr($invitation->wanita_nama, 0, 1)) }}</span>
       </div>
-      <p class="font-serif text-amber-200 mt-6 tracking-widest uppercase text-sm animate-pulse-gentle">Bahagia Marayakan Cinta...</p>
+      <p class="font-serif text-white/90 mt-6 tracking-widest uppercase text-sm animate-pulse-gentle drop-shadow-sm">Bahagia Marayakan Cinta...</p>
     </div>
   </div>
 
@@ -183,11 +183,11 @@
 
 
   <!-- 3. PREMIUM DESKTOP LAYOUT (SPLIT PANEL: left background fixed, right scrollable) -->
-  <div class="min-h-screen lg:flex lg:h-[calc(100vh-2rem)] lg:m-4 lg:rounded-2xl lg:border-[12px] lg:border-[#4A3525] lg:outline lg:outline-[2px] lg:outline-[#D4AF37] lg:outline-offset-[-12px] lg:shadow-2xl lg:overflow-hidden relative bg-[#F8F3F0]">
+  <div class="min-h-screen lg:flex lg:h-[calc(100vh-2rem)] lg:m-4 lg:rounded-2xl lg:border-[12px] lg:border-[#734E2A] lg:outline lg:outline-[2px] lg:outline-[#D4AF37] lg:outline-offset-[-12px] lg:shadow-2xl lg:overflow-hidden relative bg-[#FDFCFB]">
 
     <!-- 2. COVER SCREEN OVERLAY (FADE OUT UPON CLICKING "BUKA UNDANGAN") -->
     <div id="cover-screen" class="fixed lg:absolute inset-0 lg:left-auto lg:w-[480px] lg:right-0 z-50 flex items-center justify-center transition-all duration-1000 ease-in-out bg-cover bg-center"
-      style="background-image: linear-gradient(to bottom, rgba(49,33,21,0.85) 0%, rgba(74,53,37,0.9) 60%, rgba(29,18,11,0.95) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
+      style="background-image: linear-gradient(to bottom, rgba(93,64,36,0.85) 0%, rgba(115,78,42,0.9) 60%, rgba(53,35,19,0.95) 100%), url('{{ $invitation->cover_img ? assetv('storage/' . $invitation->cover_img) : assetv('assets/default/default-pasangan.jpg') }}');">
       <!-- Ornaments -->
       <div class="absolute inset-0 bg-wedding-foliage opacity-20"></div>
 
@@ -210,7 +210,7 @@
         <p class="font-serif text-amber-200 text-xs md:text-sm tracking-[0.25em] uppercase mb-3 text-shadow">UNDANGAN PERNIKAHAN</p>
 
         <h1 class="font-serif text-5xl md:text-6xl text-white font-bold leading-tight tracking-wide mb-2 drop-shadow-lg">
-          {{ $invitation->pria_nama }} <span class="font-serif text-gold-500 block md:inline text-3xl md:text-5xl my-1 md:my-0 font-normal">&amp;</span> {{ $invitation->wanita_nama }}
+          {{ $invitation->pria_nama }} <span class="font-serif text-white/80 block md:inline text-3xl md:text-5xl my-1 md:my-0 font-normal">&amp;</span> {{ $invitation->wanita_nama }}
         </h1>
 
         @if($akad)
@@ -230,7 +230,7 @@
         </div>
 
         <!-- Pulse trigger button -->
-        <button id="btn-open-invitation" class="relative group inline-flex items-center gap-3 bg-gradient-to-r from-gold-600 via-gold-500 to-gold-600 hover:from-gold-500 hover:to-gold-600 text-[#312115] font-semibold tracking-widest uppercase text-xs px-8 py-4 rounded-full shadow-2xl border-2 border-amber-300/50 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer">
+        <button id="btn-open-invitation" class="relative group inline-flex items-center gap-3 bg-white hover:bg-stone-100 text-[#5D4024] font-bold tracking-widest uppercase text-xs px-8 py-4 rounded-full shadow-[0_0_25px_rgba(255,255,255,0.3)] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer border border-white/50">
           <i class="fa-solid fa-envelope-open text-sm animate-bounce"></i>
           <span>Buka Undangan</span>
         </button>
@@ -239,8 +239,8 @@
     </div>
 
     <!-- LEFT COLUMN: Desktop Premium Backdrop Static (Only visible on lg screens) -->
-    <div class="hidden lg:flex lg:flex-1 lg:h-full bg-gradient-to-br from-[#312115] to-[#4A3525] p-16 flex-col justify-between relative bg-cover bg-center overflow-hidden"
-      style="background-image: linear-gradient(to top, rgba(29,18,11, 0.95) 0%, rgba(49,33,21, 0.0) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
+    <div class="hidden lg:flex lg:flex-1 lg:h-full bg-gradient-to-br from-[#5D4024] to-[#734E2A] p-16 flex-col justify-between relative bg-cover bg-center overflow-hidden"
+      style="background-image: linear-gradient(to top, rgba(53,35,19, 0.95) 0%, rgba(93,64,36, 0.0) 100%), url('{{ $invitation->cover_img ? assetv('storage/' . $invitation->cover_img) : assetv('assets/default/default-pasangan.jpg') }}');">
 
       <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
@@ -254,7 +254,7 @@
 
       <!-- Logo / Intro Header -->
       <div class="z-10 bg-black/50 backdrop-blur-md border border-white/10 shadow-2xl p-5 rounded-xl self-start inline-block">
-        <span class="font-serif text-gold-500 text-lg tracking-widest uppercase block mb-1">UNDANGAN PERNIKAHAN</span>
+        <span class="font-serif text-white text-lg tracking-widest uppercase block mb-1 drop-shadow-md">UNDANGAN PERNIKAHAN</span>
         <p class="text-[11px] text-stone-300 tracking-wider">THE WEDDING OF {{ strtoupper($invitation->pria_nama) }} &amp; {{ strtoupper($invitation->wanita_nama) }}</p>
       </div>
 
@@ -263,27 +263,27 @@
         <span class="font-serif text-amber-200 text-sm tracking-widest uppercase block mb-2">PERNIKAHAN IMPIAN</span>
         <h2 class="font-serif text-6xl xl:text-7xl font-bold leading-tight text-white mb-4">
           {{ $invitation->pria_nama }} <br>
-          <span class="font-light text-gold-500 text-4xl xl:text-5xl font-serif block my-1">&amp;</span>
+          <span class="font-light text-white/80 text-4xl xl:text-5xl font-serif block my-1">&amp;</span>
           {{ $invitation->wanita_nama }}
         </h2>
         <div class="w-32 h-[2px] bg-gradient-to-r from-gold-500 to-transparent mb-6"></div>
 
         <div id="desktop-countdown-wrapper" class="flex justify-center gap-3 w-full">
           <div class="text-center w-20 py-3 rounded-xl bg-black/40 border border-[#D4AF37]/30 shadow-md">
-            <span id="dt-days" class="font-serif text-3xl font-bold text-gold-500 block">00</span>
-            <span class="text-[9px] text-[#FDF6D9]/80 uppercase tracking-widest">Hari</span>
+            <span id="dt-days" class="font-serif text-3xl font-bold text-white drop-shadow-sm block">00</span>
+            <span class="text-[9px] text-stone-300 uppercase tracking-widest">Hari</span>
           </div>
           <div class="text-center w-20 py-3 rounded-xl bg-black/40 border border-[#D4AF37]/30 shadow-md">
-            <span id="dt-hours" class="font-serif text-3xl font-bold text-gold-500 block">00</span>
-            <span class="text-[9px] text-[#FDF6D9]/80 uppercase tracking-widest">Jam</span>
+            <span id="dt-hours" class="font-serif text-3xl font-bold text-white drop-shadow-sm block">00</span>
+            <span class="text-[9px] text-stone-300 uppercase tracking-widest">Jam</span>
           </div>
           <div class="text-center w-20 py-3 rounded-xl bg-black/40 border border-[#D4AF37]/30 shadow-md">
-            <span id="dt-minutes" class="font-serif text-3xl font-bold text-gold-500 block">00</span>
-            <span class="text-[9px] text-[#FDF6D9]/80 uppercase tracking-widest">Menit</span>
+            <span id="dt-minutes" class="font-serif text-3xl font-bold text-white drop-shadow-sm block">00</span>
+            <span class="text-[9px] text-stone-300 uppercase tracking-widest">Menit</span>
           </div>
           <div class="text-center w-20 py-3 rounded-xl bg-black/40 border border-[#D4AF37]/30 shadow-md">
-            <span id="dt-seconds" class="font-serif text-3xl font-bold text-gold-500 block">00</span>
-            <span class="text-[9px] text-[#FDF6D9]/80 uppercase tracking-widest">Detik</span>
+            <span id="dt-seconds" class="font-serif text-3xl font-bold text-white drop-shadow-sm block">00</span>
+            <span class="text-[9px] text-stone-300 uppercase tracking-widest">Detik</span>
           </div>
         </div>
       </div>
@@ -308,7 +308,7 @@
     <div id="right-pane" class="w-full lg:w-[480px] lg:min-w-[480px] lg:shrink-0 min-h-screen lg:h-full lg:overflow-y-auto bg-pearl-100 overflow-x-hidden relative shadow-2xl mx-auto">
 
       <!-- A: HERO HEADER (ANCHOR) -->
-      <section id="hero" class="relative min-h-screen flex flex-col justify-center items-center py-20 px-6 text-center select-none bg-[#F8F3F0] overflow-hidden">
+      <section id="hero" class="relative min-h-screen flex flex-col justify-center items-center py-20 px-6 text-center select-none bg-[#FDFCFB] overflow-hidden">
 
         <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
@@ -330,7 +330,7 @@
 
           <!-- Standard round portrait mask -->
           <div class="w-full h-full rounded-full overflow-hidden shadow-2xl gold-border-glow select-none bg-white">
-            <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}"
+            <img src="{{ $invitation->cover_img ? assetv('storage/' . $invitation->cover_img) : assetv('assets/default/default-pasangan.jpg') }}"
               alt="{{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}"
               class="w-full h-full object-cover scale-105 hover:scale-110 transition-transform duration-700"
               referrerpolicy="no-referrer">
@@ -360,19 +360,19 @@
         <div data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000" class="mt-10 w-full max-w-sm">
           <p class="text-xs text-stone-500 uppercase tracking-[0.2em] mb-4 font-semibold">Menghitung Kisah Indah:</p>
           <div class="grid grid-cols-4 gap-3">
-            <div class="bg-[#4A3525] rounded-2xl p-3 border border-[#D4AF37]/35 shadow-md">
+            <div class="bg-[#734E2A] rounded-2xl p-3 border border-[#D4AF37]/35 shadow-md">
               <span id="countdown-days" class="font-serif text-2xl md:text-3xl font-bold text-[#D4AF37] block">00</span>
               <span class="text-[9px] uppercase tracking-wider text-amber-100/80 block font-sans">Hari</span>
             </div>
-            <div class="bg-[#4A3525] rounded-2xl p-3 border border-[#D4AF37]/35 shadow-md">
+            <div class="bg-[#734E2A] rounded-2xl p-3 border border-[#D4AF37]/35 shadow-md">
               <span id="countdown-hours" class="font-serif text-2xl md:text-3xl font-bold text-[#D4AF37] block">00</span>
               <span class="text-[9px] uppercase tracking-wider text-amber-100/80 block font-sans">Jam</span>
             </div>
-            <div class="bg-[#4A3525] rounded-2xl p-3 border border-[#D4AF37]/35 shadow-md">
+            <div class="bg-[#734E2A] rounded-2xl p-3 border border-[#D4AF37]/35 shadow-md">
               <span id="countdown-minutes" class="font-serif text-2xl md:text-3xl font-bold text-[#D4AF37] block">00</span>
               <span class="text-[9px] uppercase tracking-wider text-amber-100/80 block font-sans">Menit</span>
             </div>
-            <div class="bg-[#4A3525] rounded-2xl p-3 border border-[#D4AF37]/35 shadow-md">
+            <div class="bg-[#734E2A] rounded-2xl p-3 border border-[#D4AF37]/35 shadow-md">
               <span id="countdown-seconds" class="font-serif text-2xl md:text-3xl font-bold text-[#D4AF37] block">00</span>
               <span class="text-[9px] uppercase tracking-wider text-amber-100/80 block font-sans">Detik</span>
             </div>
@@ -422,7 +422,7 @@
 
 
       <!-- C: COUPLE DETAILS (ANCHOR) -->
-      <section id="couple" class="relative py-24 px-6 bg-[#F8F3F0] overflow-hidden">
+      <section id="couple" class="relative py-24 px-6 bg-[#FDFCFB] overflow-hidden">
         <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
         <!-- Section Intro -->
@@ -444,7 +444,7 @@
             <div class="relative w-48 h-48 mb-6">
               <div class="absolute inset-0 border-2 border-gold-500 rounded-2xl rotate-3"></div>
               <div class="absolute inset-0 border border-primary-800 rounded-2xl -rotate-2 bg-pearl-50 shadow-md"></div>
-              <img src="{{ $invitation->pria_foto ? asset('storage/' . $invitation->pria_foto) : asset('assets/default/default_pria.jpg') }}"
+              <img src="{{ $invitation->pria_foto ? assetv('storage/' . $invitation->pria_foto) : assetv('assets/default/default_pria.jpg') }}"
                 alt="{{ $invitation->pria_nama_lengkap }}"
                 class="w-full h-full object-cover rounded-2xl relative z-10 border border-gold-500/20 bg-white"
                 referrerpolicy="no-referrer">
@@ -478,7 +478,7 @@
             <div class="relative w-48 h-48 mb-6">
               <div class="absolute inset-0 border-2 border-gold-500 rounded-2xl -rotate-3"></div>
               <div class="absolute inset-0 border border-primary-800 rounded-2xl rotate-2 bg-pearl-50 shadow-md"></div>
-              <img src="{{ $invitation->wanita_foto ? asset('storage/' . $invitation->wanita_foto) : asset('assets/default/default_wanita.jpg') }}"
+              <img src="{{ $invitation->wanita_foto ? assetv('storage/' . $invitation->wanita_foto) : assetv('assets/default/default_wanita.jpg') }}"
                 alt="{{ $invitation->wanita_nama_lengkap }}"
                 class="w-full h-full object-cover rounded-2xl relative z-10 border border-gold-500/20 bg-white"
                 referrerpolicy="no-referrer">
@@ -646,7 +646,7 @@
 
       @if($invitation->is_cerita_aktif && count($ceritas) > 0)
       <!-- E: OUR LOVE STORY TIMELINE (ANCHOR) -->
-      <section id="story" class="relative py-24 px-6 bg-[#F8F3F0] overflow-hidden">
+      <section id="story" class="relative py-24 px-6 bg-[#FDFCFB] overflow-hidden">
         <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
         <!-- Section title -->
@@ -663,7 +663,7 @@
           <div class="flex gap-4 relative" data-aos="fade-up" data-aos-duration="1250">
             <div class="flex flex-col items-center">
               <span class="w-8 h-8 rounded-full bg-gradient-to-r from-gold-500 to-amber-400 border border-white shadow-md flex items-center justify-center shrink-0 z-10 relative mt-1">
-                <i class="fa-solid fa-heart text-[10px] text-[#312115]"></i>
+                <i class="fa-solid fa-heart text-[10px] text-[#5D4024]"></i>
               </span>
               @if(!$loop->last)
               <div class="w-[2px] h-full bg-gold-500/30 mt-[-8px]"></div>
@@ -707,7 +707,7 @@
 
           @foreach($galeris as $galeri)
           @php
-          $galeriUrl = str_starts_with($galeri->image_path, 'assets/') ? asset($galeri->image_path) : asset('storage/' . $galeri->image_path);
+          $galeriUrl = str_starts_with($galeri->image_path, 'assets/') ? assetv($galeri->image_path) : assetv('storage/' . $galeri->image_path);
           @endphp
           <div class="break-inside-avoid relative overflow-hidden rounded-2xl border border-gold-500/20 shadow-md group cursor-pointer gallery-trigger"
             data-aos="zoom-in" data-aos-duration="1200"
@@ -730,7 +730,7 @@
 
       @if($invitation->is_kado_aktif && count($kados) > 0)
       <!-- G: WEDDING GIFT / DIGITAL ENVELOPE (ANCHOR) -->
-      <section id="gift" class="relative py-24 px-6 bg-[#F8F3F0] overflow-hidden">
+      <section id="gift" class="relative py-24 px-6 bg-[#FDFCFB] overflow-hidden">
         <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
         <!-- Section title -->
@@ -893,7 +893,7 @@
 
 
       <!-- J: APPRECIATE FOOTER (ANCHOR) -->
-      <section class="relative pt-20 pb-32 px-6 bg-[#312115] text-white text-center overflow-hidden">
+      <section class="relative pt-20 pb-32 px-6 bg-[#5D4024] text-white text-center overflow-hidden">
         <div class="absolute inset-0 bg-wedding-foliage opacity-10"></div>
 
         <div class="max-w-md mx-auto relative z-10" data-aos="fade-up" data-aos-duration="1200">
@@ -922,7 +922,7 @@
     <!-- QR MODAL (Restricted to Panel on Desktop) -->
     <div id="qr-modal" onclick="this.style.display='none'" class="fixed lg:absolute inset-0 lg:left-auto lg:w-[480px] lg:right-0 z-[10000]" style="display:none; background-color:rgba(0,0,0,0.6); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:1rem; cursor:pointer;">
       <div onclick="event.stopPropagation()" style="background:#fff; border-radius:1rem; box-shadow:0 25px 50px rgba(0,0,0,0.25); width:100%; max-width:24rem; overflow:hidden; text-align:center; margin:auto; cursor:default;">
-        <div style="background-color:#4A3525; padding:1rem; color:#fff; display:flex; justify-content:space-between; align-items:center;">
+        <div style="background-color:#734E2A; padding:1rem; color:#fff; display:flex; justify-content:space-between; align-items:center;">
           <h3 style="font-size:1.125rem; font-weight:700; color:#D4AF37; margin:0; font-family:'Cormorant Garamond',serif;">Tiket Akses Masuk</h3>
           <button onclick="document.getElementById('qr-modal').style.display='none'" style="background:none; border:none; color:#fff; cursor:pointer; padding:4px;">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -936,11 +936,11 @@
             {!! $qrCode !!}
           </div>
           <div style="width:100%; height:1px; background-color:#e5e7eb; margin-bottom:1rem;"></div>
-          <p style="font-weight:700; font-size:1.5rem; color:#4A3525; margin:0; font-family:'Cormorant Garamond',serif;">{{ ucwords($tamu->nama_tamu) }}</p>
+          <p style="font-weight:700; font-size:1.5rem; color:#734E2A; margin:0; font-family:'Cormorant Garamond',serif;">{{ ucwords($tamu->nama_tamu) }}</p>
           <span style="font-size:0.75rem; font-family:monospace; color:#9ca3af; margin-top:0.25rem; text-transform:uppercase; letter-spacing:0.1em;">{{ $tamu->kode_qr }}</span>
           <div style="margin-top:1.5rem;">
             <a href="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data={{ $tamu->kode_qr }}" download="QR_{{ $tamu->nama_tamu }}.png" target="_blank"
-              style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 1.5rem; background-color:#4A3525; color:#D4AF37; border-radius:9999px; text-decoration:none; font-size:0.875rem; font-weight:600;">
+              style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 1.5rem; background-color:#734E2A; color:#D4AF37; border-radius:9999px; text-decoration:none; font-size:0.875rem; font-weight:600;">
               <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
               </svg>
@@ -958,7 +958,7 @@
   <!-- 4. CONTROLS, EFFECTS & FLOATING NOTIFIERS -->
 
   <!-- CUSTOM TOAST NOTIFICATION -->
-  <div id="toast" class="fixed bottom-32 left-1/2 lg:left-auto lg:right-[268px] transform -translate-x-1/2 lg:translate-x-1/2 z-[100] bg-[#4A3525] border border-[#D4AF37] text-amber-100 px-6 py-3 rounded-full shadow-2xl flex items-center gap-2.5 transition-all duration-300 opacity-0 pointer-events-none text-xs tracking-wider">
+  <div id="toast" class="fixed bottom-32 left-1/2 lg:left-auto lg:right-[268px] transform -translate-x-1/2 lg:translate-x-1/2 z-[100] bg-[#734E2A] border border-[#D4AF37] text-amber-100 px-6 py-3 rounded-full shadow-2xl flex items-center gap-2.5 transition-all duration-300 opacity-0 pointer-events-none text-xs tracking-wider">
     <i class="fa-solid fa-circle-check text-[#D4AF37] text-sm animate-pulse"></i>
     <span id="toast-message" class="font-medium">Nomor Rekening Berhasil Disalin!</span>
   </div>
@@ -991,7 +991,7 @@
 
   <!-- FLOATING RIGHT-SIDE CONTROLS (stacked vertically: music -> qr -> back-to-top) -->
   <div id="floating-music-trigger" class="lg:!right-[52px]" style="position:fixed; bottom:104px; right:24px; z-index:48; transition:all 0.5s; transform:translateX(80px); opacity:0;">
-    <button id="btn-toggle-music" style="width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#B08E27,#D4AF37); color:#312115; border:2px solid rgba(255,255,255,0.5); display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; box-shadow:0 8px 24px rgba(0,0,0,0.15);" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+    <button id="btn-toggle-music" style="width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#B08E27,#D4AF37); color:#5D4024; border:2px solid rgba(255,255,255,0.5); display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; box-shadow:0 8px 24px rgba(0,0,0,0.15);" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
       <span style="position:absolute; inset:0; border-radius:50%; border:1px solid #EECD4F; animation:ping 1.5s cubic-bezier(0,0,0.2,1) infinite; opacity:0.6;"></span>
       <i id="music-icon" class="fa-solid fa-compact-disc" style="font-size:1.25rem;"></i>
     </button>
@@ -1001,7 +1001,7 @@
   <!-- FLOATING QR BUTTON -->
   <button id="qr-btn" onclick="document.getElementById('qr-modal').style.display='flex'"
     class="lg:!right-[52px]"
-    style="position:fixed; bottom:48px; right:24px; width:48px; height:48px; z-index:48; background-color:#4A3525; color:#D4AF37; border:1px solid rgba(212,175,55,0.3); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 4px 15px rgba(0,0,0,0.3); padding:0; transition:all 0.5s; transform:translateX(80px); opacity:0;">
+    style="position:fixed; bottom:48px; right:24px; width:48px; height:48px; z-index:48; background-color:#734E2A; color:#D4AF37; border:1px solid rgba(212,175,55,0.3); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 4px 15px rgba(0,0,0,0.3); padding:0; transition:all 0.5s; transform:translateX(80px); opacity:0;">
     <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
     </svg>
@@ -1009,16 +1009,16 @@
   @endif
 
   <!-- BACK TO TOP BUTTON -->
-  <button id="btn-back-to-top" class="lg:!right-[52px]" style="position:fixed; bottom:104px; right:24px; z-index:47; width:40px; height:40px; border-radius:50%; background:rgba(74,53,37,0.9); border:1px solid rgba(212,175,55,0.3); color:#D4AF37; box-shadow:0 4px 12px rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; cursor:pointer; transition:all 0.3s;">
+  <button id="btn-back-to-top" class="lg:!right-[52px]" style="position:fixed; bottom:104px; right:24px; z-index:47; width:40px; height:40px; border-radius:50%; background:rgba(115,78,42,0.9); border:1px solid rgba(212,175,55,0.3); color:#D4AF37; box-shadow:0 4px 12px rgba(0,0,0,0.15); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; cursor:pointer; transition:all 0.3s;">
     <i class="fa-solid fa-arrow-up" style="font-size:0.75rem;"></i>
   </button>
 
   <!-- HIDDEN HTML5 WEDDING MP3 LOOP SINK -->
   <audio id="bg-music" loop preload="auto">
     @if($invitation->music_file)
-    <source src="{{ asset('storage/' . $invitation->music_file) }}" type="audio/mpeg">
+    <source src="{{ assetv('storage/' . $invitation->music_file) }}" type="audio/mpeg">
     @else
-    <source src="{{ asset('assets/default/default-music.mp3') }}" type="audio/mpeg">
+    <source src="{{ assetv('assets/default/default-music.mp3') }}" type="audio/mpeg">
     @endif
   </audio>
 
@@ -1050,10 +1050,10 @@
 
   <!-- ================= IMPORT SCRIPTS SECTION ================= -->
   <!-- Local jQuery Library -->
-  <script src="{{ asset('assets/vendor/js/jquery.min.js') }}"></script>
+  <script src="{{ assetv('assets/vendor/js/jquery.min.js') }}"></script>
 
   <!-- Local AOS Animations Library JS -->
-  <script src="{{ asset('assets/vendor/js/aos.js') }}"></script>
+  <script src="{{ assetv('assets/vendor/js/aos.js') }}"></script>
 
   <!-- Core Script Handler -->
   <script>

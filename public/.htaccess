@@ -29,9 +29,11 @@
         SecRuleRemoveById 1-999999 env=is_crawler
     </IfModule>
 
-    # Cache images for 7 days
+    # Cache images for 1 day, but allow revalidation so updated files
+    # (same filename) are fetched. The assetv() helper appends ?v=... to
+    # force a fresh fetch instantly when ASSET_VERSION is bumped.
     <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
-        Header set Cache-Control "public, max-age=604800, immutable"
+        Header set Cache-Control "public, max-age=86400, must-revalidate"
     </FilesMatch>
 
     # CORS headers for crawlers

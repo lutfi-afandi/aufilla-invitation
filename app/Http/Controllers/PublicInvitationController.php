@@ -167,12 +167,56 @@ class PublicInvitationController extends Controller
             'alamat' => 'Jl. Kebahagiaan No. 2',
         ]);
 
-        $wish1 = new \App\Models\Ucapan(['nama' => 'Admin Aufilla', 'kehadiran' => 'hadir', 'pesan' => 'Selamat menempuh hidup baru!']);
+        $wish1 = new \App\Models\Ucapan([
+            'nama' => 'Admin Aufilla',
+            'kehadiran' => 'hadir',
+            'pesan' => 'Selamat menempuh hidup baru. Semoga menjadi keluarga yang sakinah, mawaddah, dan warahmah.'
+        ]);
         $wish1->created_at = now();
-        $wish2 = new \App\Models\Ucapan(['nama' => 'Fulan', 'kehadiran' => 'hadir', 'pesan' => 'Semoga samawa ya!']);
-        $wish2->created_at = now()->subHours(2);
 
-        $wishes = collect([$wish1, $wish2]);
+        $wish2 = new \App\Models\Ucapan([
+            'nama' => 'Budi Santoso',
+            'kehadiran' => 'hadir',
+            'pesan' => 'MasyaAllah, selamat ya! Semoga acaranya lancar dan selalu diberikan kebahagiaan.'
+        ]);
+        $wish2->created_at = now()->subMinutes(30);
+
+        $wish3 = new \App\Models\Ucapan([
+            'nama' => 'Rina Wulandari',
+            'kehadiran' => 'berhalangan',
+            'pesan' => 'Mohon maaf belum bisa hadir. Semoga menjadi keluarga yang penuh cinta dan keberkahan.'
+        ]);
+        $wish3->created_at = now()->subHours(1);
+
+        $wish4 = new \App\Models\Ucapan([
+            'nama' => 'Ahmad Fauzi',
+            'kehadiran' => 'hadir',
+            'pesan' => 'Happy wedding! Semoga langgeng sampai kakek nenek.'
+        ]);
+        $wish4->created_at = now()->subHours(2);
+
+        $wish5 = new \App\Models\Ucapan([
+            'nama' => 'Dewi Lestari',
+            'kehadiran' => 'hadir',
+            'pesan' => 'Selamat berbahagia untuk kedua mempelai. Semoga selalu diberi kesehatan dan rezeki yang melimpah.'
+        ]);
+        $wish5->created_at = now()->subHours(4);
+
+        $wish6 = new \App\Models\Ucapan([
+            'nama' => 'Andi Prasetyo',
+            'kehadiran' => 'berhalangan',
+            'pesan' => 'Turut berbahagia. Maaf belum bisa datang, semoga acaranya berjalan dengan lancar.'
+        ]);
+        $wish6->created_at = now()->subHours(6);
+
+        $wishes = collect([
+            $wish1,
+            $wish2,
+            $wish3,
+            $wish4,
+            $wish5,
+            $wish6,
+        ]);
 
         $galeris = collect([
             new \App\Models\Galeri(['image_path' => 'assets/default/default-pasangan.jpg']),
@@ -182,9 +226,25 @@ class PublicInvitationController extends Controller
             new \App\Models\Galeri(['image_path' => 'assets/default/default_pria2.jpg']),
             new \App\Models\Galeri(['image_path' => 'assets/default/default_wanita2.jpg']),
         ]);
+
         $ceritas = collect([
-            new \App\Models\Cerita(['judul' => 'Pertama Bertemu', 'tanggal' => '2023-01-10', 'isi_cerita' => 'Kami pertama kali bertemu di sebuah cafe.']),
-            new \App\Models\Cerita(['judul' => 'Lamaran', 'tanggal' => '2024-05-20', 'isi_cerita' => 'Dia melamar saya di pantai.'])
+            new \App\Models\Cerita([
+                'judul' => 'Awal Pertemuan',
+                'tanggal' => '2022-08-14',
+                'isi_cerita' => 'Tak ada yang menyangka, pertemuan sederhana di sebuah acara kampus menjadi awal dari kisah kami. Berawal dari obrolan singkat, kami mulai saling mengenal dan menjalin komunikasi yang semakin erat setiap harinya.'
+            ]),
+
+            new \App\Models\Cerita([
+                'judul' => 'Menjalin Komitmen',
+                'tanggal' => '2023-03-18',
+                'isi_cerita' => 'Seiring berjalannya waktu, kami belajar saling memahami, mendukung dalam setiap langkah, serta tumbuh bersama menghadapi berbagai suka dan duka. Dari situlah kami yakin untuk melangkah ke hubungan yang lebih serius.'
+            ]),
+
+            new \App\Models\Cerita([
+                'judul' => 'Lamaran',
+                'tanggal' => '2024-10-05',
+                'isi_cerita' => 'Dengan restu kedua keluarga, kami melangsungkan acara lamaran dalam suasana hangat dan penuh kebahagiaan. Momen ini menjadi awal perjalanan menuju ikatan suci pernikahan yang kami impikan bersama.'
+            ])
         ]);
 
         $kados = collect([

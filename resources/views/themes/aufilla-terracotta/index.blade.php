@@ -32,20 +32,20 @@
   <meta name="twitter:image:src" content="{{ $ogImg }}">
 
   <!-- Favicon -->
-  <link rel="icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
-  <link rel="shortcut icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
+  <link rel="icon" href="{{ assetv('assets/img/logo-icon.png') }}" type="image/png">
+  <link rel="shortcut icon" href="{{ assetv('assets/img/logo-icon.png') }}" type="image/png">
 
   <!-- Local Google Fonts -->
-  <link href="{{ asset('assets/vendor/css/fonts.css') }}" rel="stylesheet">
+  <link href="{{ assetv('assets/vendor/css/fonts.css') }}" rel="stylesheet">
 
   <!-- Local Font Awesome Icons -->
-  <link rel="stylesheet" href="{{ asset('assets/vendor/css/fontawesome.min.css') }}" />
+  <link rel="stylesheet" href="{{ assetv('assets/vendor/css/fontawesome.min.css') }}" />
 
   <!-- Local AOS CSS -->
-  <link href="{{ asset('assets/vendor/css/aos.css') }}" rel="stylesheet">
+  <link href="{{ assetv('assets/vendor/css/aos.css') }}" rel="stylesheet">
 
   <!-- Local Tailwind CSS -->
-  <script src="{{ asset('assets/vendor/js/tailwindcss.min.js') }}"></script>
+  <script src="{{ assetv('assets/vendor/js/tailwindcss.min.js') }}"></script>
 
   <!-- Tailwind Custom Configuration -->
   <script>
@@ -187,7 +187,7 @@
 
     <!-- 2. COVER SCREEN OVERLAY (FADE OUT UPON CLICKING "BUKA UNDANGAN") -->
     <div id="cover-screen" class="fixed lg:absolute inset-0 lg:left-auto lg:w-[480px] lg:right-0 z-50 flex items-center justify-center transition-all duration-1000 ease-in-out bg-cover bg-center"
-      style="background-image: linear-gradient(to bottom, rgba(91,37,25,0.85) 0%, rgba(140,61,43,0.9) 60%, rgba(48,17,10,0.95) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
+      style="background-image: linear-gradient(to bottom, rgba(91,37,25,0.85) 0%, rgba(140,61,43,0.9) 60%, rgba(48,17,10,0.95) 100%), url('{{ $invitation->cover_img ? assetv('storage/' . $invitation->cover_img) : assetv('assets/default/default-pasangan.jpg') }}');">
       <!-- Ornaments -->
       <div class="absolute inset-0 bg-wedding-foliage opacity-20"></div>
 
@@ -240,7 +240,7 @@
 
     <!-- LEFT COLUMN: Desktop Premium Backdrop Static (Only visible on lg screens) -->
     <div class="hidden lg:flex lg:flex-1 lg:h-full bg-gradient-to-br from-[#5B2519] to-[#8C3D2B] p-16 flex-col justify-between relative bg-cover bg-center overflow-hidden"
-      style="background-image: linear-gradient(135deg, rgba(91,37,25,0.92) 0%, rgba(140,61,43,0.85) 100%), url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
+      style="background-image: linear-gradient(to top, rgba(48,17,10, 0.95) 0%, rgba(91,37,25, 0.0) 100%), url('{{ $invitation->cover_img ? assetv('storage/' . $invitation->cover_img) : assetv('assets/default/default-pasangan.jpg') }}');">
 
       <div class="absolute inset-0 bg-wedding-foliage opacity-15"></div>
 
@@ -253,7 +253,7 @@
       <div class="absolute bottom-12 right-12 w-20 h-20 border-b border-r border-gold-500/40 rounded-br-xl"></div>
 
       <!-- Logo / Intro Header -->
-      <div class="z-10 bg-black/10 backdrop-blur-xs p-4 rounded-lg self-start inline-block">
+      <div class="z-10 bg-black/50 backdrop-blur-md border border-white/10 shadow-2xl p-5 rounded-xl self-start inline-block">
         <span class="font-serif text-gold-500 text-lg tracking-widest uppercase block mb-1">UNDANGAN PERNIKAHAN</span>
         <p class="text-[11px] text-stone-300 tracking-wider">THE WEDDING OF {{ strtoupper($invitation->pria_nama) }} &amp; {{ strtoupper($invitation->wanita_nama) }}</p>
       </div>
@@ -330,7 +330,7 @@
 
           <!-- Standard round portrait mask -->
           <div class="w-full h-full rounded-full overflow-hidden shadow-2xl gold-border-glow select-none bg-white">
-            <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}"
+            <img src="{{ $invitation->cover_img ? assetv('storage/' . $invitation->cover_img) : assetv('assets/default/default-pasangan.jpg') }}"
               alt="{{ $invitation->pria_nama }} &amp; {{ $invitation->wanita_nama }}"
               class="w-full h-full object-cover scale-105 hover:scale-110 transition-transform duration-700"
               referrerpolicy="no-referrer">
@@ -444,7 +444,7 @@
             <div class="relative w-48 h-48 mb-6">
               <div class="absolute inset-0 border-2 border-gold-500 rounded-2xl rotate-3"></div>
               <div class="absolute inset-0 border border-primary-800 rounded-2xl -rotate-2 bg-pearl-50 shadow-md"></div>
-              <img src="{{ $invitation->pria_foto ? asset('storage/' . $invitation->pria_foto) : asset('assets/default/default_pria.jpg') }}"
+              <img src="{{ $invitation->pria_foto ? assetv('storage/' . $invitation->pria_foto) : assetv('assets/default/default_pria.jpg') }}"
                 alt="{{ $invitation->pria_nama_lengkap }}"
                 class="w-full h-full object-cover rounded-2xl relative z-10 border border-gold-500/20 bg-white"
                 referrerpolicy="no-referrer">
@@ -478,7 +478,7 @@
             <div class="relative w-48 h-48 mb-6">
               <div class="absolute inset-0 border-2 border-gold-500 rounded-2xl -rotate-3"></div>
               <div class="absolute inset-0 border border-primary-800 rounded-2xl rotate-2 bg-pearl-50 shadow-md"></div>
-              <img src="{{ $invitation->wanita_foto ? asset('storage/' . $invitation->wanita_foto) : asset('assets/default/default_wanita.jpg') }}"
+              <img src="{{ $invitation->wanita_foto ? assetv('storage/' . $invitation->wanita_foto) : assetv('assets/default/default_wanita.jpg') }}"
                 alt="{{ $invitation->wanita_nama_lengkap }}"
                 class="w-full h-full object-cover rounded-2xl relative z-10 border border-gold-500/20 bg-white"
                 referrerpolicy="no-referrer">
@@ -707,7 +707,7 @@
 
           @foreach($galeris as $galeri)
           @php
-          $galeriUrl = str_starts_with($galeri->image_path, 'assets/') ? asset($galeri->image_path) : asset('storage/' . $galeri->image_path);
+          $galeriUrl = str_starts_with($galeri->image_path, 'assets/') ? assetv($galeri->image_path) : assetv('storage/' . $galeri->image_path);
           @endphp
           <div class="break-inside-avoid relative overflow-hidden rounded-2xl border border-gold-500/20 shadow-md group cursor-pointer gallery-trigger"
             data-aos="zoom-in" data-aos-duration="1200"
@@ -1016,9 +1016,9 @@
   <!-- HIDDEN HTML5 WEDDING MP3 LOOP SINK -->
   <audio id="bg-music" loop preload="auto">
     @if($invitation->music_file)
-    <source src="{{ asset('storage/' . $invitation->music_file) }}" type="audio/mpeg">
+    <source src="{{ assetv('storage/' . $invitation->music_file) }}" type="audio/mpeg">
     @else
-    <source src="{{ asset('assets/default/default-music.mp3') }}" type="audio/mpeg">
+    <source src="{{ assetv('assets/default/default-music.mp3') }}" type="audio/mpeg">
     @endif
   </audio>
 
@@ -1050,10 +1050,10 @@
 
   <!-- ================= IMPORT SCRIPTS SECTION ================= -->
   <!-- Local jQuery Library -->
-  <script src="{{ asset('assets/vendor/js/jquery.min.js') }}"></script>
+  <script src="{{ assetv('assets/vendor/js/jquery.min.js') }}"></script>
 
   <!-- Local AOS Animations Library JS -->
-  <script src="{{ asset('assets/vendor/js/aos.js') }}"></script>
+  <script src="{{ assetv('assets/vendor/js/aos.js') }}"></script>
 
   <!-- Core Script Handler -->
   <script>

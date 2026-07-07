@@ -135,4 +135,18 @@ return [
 
     'activation_wa' => env('ACTIVATION_WA_NUMBER', '6285171097138'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Asset Version (Cache-Busting)
+    |--------------------------------------------------------------------------
+    |
+    | Appended as ?v=... to all image/asset URLs generated in theme Blade
+    | files via the assetv() helper. Bump this value (e.g. 20260707) every
+    | time you replace an image with the SAME filename so browsers and the
+    | Hostinger CDN are forced to fetch the new file.
+    |
+    */
+
+    'asset_version' => env('ASSET_VERSION', '1'),
+
 ];

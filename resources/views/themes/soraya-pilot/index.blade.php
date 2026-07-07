@@ -11,8 +11,8 @@
   @php
     $ogUrl  = str_replace('http://', 'https://', url('/' . $invitation->slug));
     $ogImg  = $invitation->cover_img
-        ? str_replace('http://', 'https://', asset('storage/' . $invitation->cover_img))
-        : str_replace('http://', 'https://', asset('assets/default/default-pasangan.jpg'));
+        ? str_replace('http://', 'https://', assetv('storage/' . $invitation->cover_img))
+        : str_replace('http://', 'https://', assetv('assets/default/default-pasangan.jpg'));
     $ogDesc = 'Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami pada ' . (isset($resepsi) ? $resepsi->tgl_acara->translatedFormat('l, d F Y') : (isset($akad) ? $akad->tgl_acara->translatedFormat('l, d F Y') : 'hari yang telah ditentukan')) . '.';
   @endphp
   <!-- Meta Data & Open Graph untuk WhatsApp / Sosmed -->
@@ -38,8 +38,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- Favicon -->
-  <link rel="icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
-  <link rel="shortcut icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
+  <link rel="icon" href="{{ assetv('assets/img/logo-icon.png') }}" type="image/png">
+  <link rel="shortcut icon" href="{{ assetv('assets/img/logo-icon.png') }}" type="image/png">
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -161,7 +161,7 @@
 
     <!-- COVER SCREEN OVERLAY -->
     <!-- Reference 1 Style: Full image background, dark overlay, white card at bottom left -->
-    <div id="cover-screen" class="fixed inset-0 z-50 transition-all duration-1000 ease-in-out bg-cover bg-center" style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}');">
+    <div id="cover-screen" class="fixed inset-0 z-50 transition-all duration-1000 ease-in-out bg-cover bg-center" style="background-image: url('{{ $invitation->cover_img ? assetv('storage/' . $invitation->cover_img) : assetv('assets/default/default-pasangan.jpg') }}');">
       
       <!-- Gradient overlay to make text readable -->
       <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60"></div>
@@ -206,7 +206,7 @@
       <section id="hero" class="relative w-full min-h-screen flex flex-col items-center justify-center text-center overflow-hidden ornament-leaf">
         <!-- Background Image with Parallax effect -->
         <div class="absolute inset-0 z-0">
-          <img src="{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}" class="w-full h-full object-cover" alt="Hero">
+          <img src="{{ $invitation->cover_img ? assetv('storage/' . $invitation->cover_img) : assetv('assets/default/default-pasangan.jpg') }}" class="w-full h-full object-cover" alt="Hero">
           <div class="absolute inset-0 bg-brand-900/60 mix-blend-multiply"></div>
           <div class="absolute inset-0 bg-gradient-to-t from-[#F9F9F9] via-transparent to-transparent"></div>
         </div>
@@ -241,7 +241,7 @@
                  <span class="text-white text-vertical font-serif tracking-[0.2em] text-sm py-8 uppercase">The Bride</span>
                </div>
                <div class="flex-1 h-[350px] md:h-[450px] rounded-tr-[80px] rounded-bl-[40px] overflow-hidden shadow-lg border-2 border-white">
-                 <img src="{{ $invitation->wanita_foto ? asset('storage/' . $invitation->wanita_foto) : asset('assets/default/default_wanita.jpg') }}" class="w-full h-full object-cover" alt="Bride">
+                 <img src="{{ $invitation->wanita_foto ? assetv('storage/' . $invitation->wanita_foto) : assetv('assets/default/default_wanita.jpg') }}" class="w-full h-full object-cover" alt="Bride">
                </div>
             </div>
             <!-- Text Details -->
@@ -252,9 +252,7 @@
                  Bapak <span class="font-semibold">{{ $invitation->wanita_ayah }}</span> <br>
                  dan Ibu <span class="font-semibold">{{ $invitation->wanita_ibu }}</span>
                </p>
-               <div class="mt-6 flex justify-center md:justify-start gap-3">
-                 <div class="w-8 h-8 rounded-full bg-brand-800 text-white flex items-center justify-center text-xs"><i class="fa-brands fa-instagram"></i></div>
-               </div>
+
             </div>
           </div>
 
@@ -270,7 +268,7 @@
             <!-- Image with Vertical Label -->
             <div class="relative flex w-64 md:w-80 shrink-0">
                <div class="flex-1 h-[350px] md:h-[450px] rounded-tl-[80px] rounded-br-[40px] overflow-hidden shadow-lg border-2 border-white z-10 relative">
-                 <img src="{{ $invitation->pria_foto ? asset('storage/' . $invitation->pria_foto) : asset('assets/default/default_pria.jpg') }}" class="w-full h-full object-cover" alt="Groom">
+                 <img src="{{ $invitation->pria_foto ? assetv('storage/' . $invitation->pria_foto) : assetv('assets/default/default_pria.jpg') }}" class="w-full h-full object-cover" alt="Groom">
                </div>
                <div class="w-12 bg-brand-800 flex items-center justify-center rounded-r-md -ml-2 z-0">
                  <span class="text-white text-vertical font-serif tracking-[0.2em] text-sm py-8 uppercase">The Groom</span>
@@ -284,9 +282,7 @@
                  Bapak <span class="font-semibold">{{ $invitation->pria_ayah }}</span> <br>
                  dan Ibu <span class="font-semibold">{{ $invitation->pria_ibu }}</span>
                </p>
-               <div class="mt-6 flex justify-center md:justify-end gap-3">
-                 <div class="w-8 h-8 rounded-full bg-brand-800 text-white flex items-center justify-center text-xs"><i class="fa-brands fa-instagram"></i></div>
-               </div>
+
             </div>
           </div>
 
@@ -306,17 +302,17 @@
         <div class="max-w-xl mx-auto space-y-12">
           
           @php
-              $coverUrl = $invitation->cover_img ? (str_starts_with($invitation->cover_img, 'assets/') ? asset($invitation->cover_img) : asset('storage/' . $invitation->cover_img)) : asset('assets/default/default-pasangan.jpg');
+              $coverUrl = $invitation->cover_img ? (str_starts_with($invitation->cover_img, 'assets/') ? assetv($invitation->cover_img) : assetv('storage/' . $invitation->cover_img)) : assetv('assets/default/default-pasangan.jpg');
               $eventImg1 = $coverUrl;
               $eventImg2 = $coverUrl;
               
               if (isset($galeris) && count($galeris) > 0) {
                   $firstGal = $galeris->first();
-                  $eventImg1 = str_starts_with($firstGal->image_path, 'assets/') ? asset($firstGal->image_path) : asset('storage/' . $firstGal->image_path);
+                  $eventImg1 = str_starts_with($firstGal->image_path, 'assets/') ? assetv($firstGal->image_path) : assetv('storage/' . $firstGal->image_path);
                   
                   if (count($galeris) > 1) {
                       $secondGal = $galeris->get(1);
-                      $eventImg2 = str_starts_with($secondGal->image_path, 'assets/') ? asset($secondGal->image_path) : asset('storage/' . $secondGal->image_path);
+                      $eventImg2 = str_starts_with($secondGal->image_path, 'assets/') ? assetv($secondGal->image_path) : assetv('storage/' . $secondGal->image_path);
                   } else {
                       $eventImg2 = $eventImg1;
                   }
@@ -440,7 +436,7 @@
            @foreach($galeris as $galeri)
            @if($galeri->image_path)
            @php
-             $galUrl = str_starts_with($galeri->image_path, 'assets/') ? asset($galeri->image_path) : asset('storage/' . $galeri->image_path);
+             $galUrl = str_starts_with($galeri->image_path, 'assets/') ? assetv($galeri->image_path) : assetv('storage/' . $galeri->image_path);
            @endphp
            <div class="relative group rounded-lg overflow-hidden cursor-pointer shadow-sm break-inside-avoid gallery-trigger" data-src="{{ $galUrl }}">
              <img src="{{ $galUrl }}" class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700" alt="Gallery">
@@ -566,7 +562,7 @@
       <footer class="relative min-h-[60vh] md:min-h-[50vh] bg-black flex flex-col justify-end items-end overflow-hidden">
         
         <!-- Fading Background Slider -->
-        <div id="footer-bg-slider" class="absolute inset-0 z-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out" style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg') }}'); opacity: 1;"></div>
+        <div id="footer-bg-slider" class="absolute inset-0 z-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out" style="background-image: url('{{ $invitation->cover_img ? assetv('storage/' . $invitation->cover_img) : assetv('assets/default/default-pasangan.jpg') }}'); opacity: 1;"></div>
         
         <!-- Subtle gradient overlay -->
         <div class="absolute inset-0 z-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none"></div>
@@ -584,8 +580,8 @@
            <div class="border-t border-stone-200 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
              <p class="font-sans text-[10px] md:text-xs text-stone-400">Dibuat dengan dedikasi cinta &copy; 2026 Aufilla Invitation.</p>
              <div class="flex gap-3">
-               <a href="#" class="w-8 h-8 rounded-full bg-brand-50 text-brand-800 flex items-center justify-center hover:bg-brand-800 hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
-               <a href="#" class="w-8 h-8 rounded-full bg-brand-50 text-brand-800 flex items-center justify-center hover:bg-brand-800 hover:text-white transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+               <a href="https://www.instagram.com/lutfi_afandii/" target="_blank" class="w-8 h-8 rounded-full bg-brand-50 text-brand-800 flex items-center justify-center hover:bg-brand-800 hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
+               <a href="https://wa.me/6285171097138" target="_blank" class="w-8 h-8 rounded-full bg-brand-50 text-brand-800 flex items-center justify-center hover:bg-brand-800 hover:text-white transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
              </div>
            </div>
         </div>
@@ -650,9 +646,9 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <audio id="bg-music" loop preload="auto">
     @if($invitation->music_file)
-    <source src="{{ asset('storage/' . $invitation->music_file) }}" type="audio/mpeg">
+    <source src="{{ assetv('storage/' . $invitation->music_file) }}" type="audio/mpeg">
     @else
-    <source src="{{ asset('assets/default/default-music.mp3') }}" type="audio/mpeg">
+    <source src="{{ assetv('assets/default/default-music.mp3') }}" type="audio/mpeg">
     @endif
   </audio>
 
@@ -850,7 +846,7 @@
     @if(isset($galeris) && count($galeris) > 0)
       const galleryImages = [
           @foreach($galeris as $gal)
-              "{{ str_starts_with($gal->image_path, 'assets/') ? asset($gal->image_path) : asset('storage/' . $gal->image_path) }}",
+              "{{ str_starts_with($gal->image_path, 'assets/') ? assetv($gal->image_path) : assetv('storage/' . $gal->image_path) }}",
           @endforeach
       ];
       if (galleryImages.length > 0) {

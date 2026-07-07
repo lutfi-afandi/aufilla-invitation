@@ -9,16 +9,16 @@
     'nama_ayah_wanita' => $invitation->wanita_ayah ?? 'Bapak Wanita',
     'nama_ibu_wanita' => $invitation->wanita_ibu ?? 'Ibu Wanita',
     'instagram_wanita' => null,
-    'foto_wanita' => $invitation->wanita_foto ? asset('storage/' . $invitation->wanita_foto) : asset('assets/default/default_wanita.jpg'),
+    'foto_wanita' => $invitation->wanita_foto ? assetv('storage/' . $invitation->wanita_foto) : assetv('assets/default/default_wanita.jpg'),
 
     'nama_mempelai_pria' => $invitation->pria_nama_lengkap ?? 'Nama Pria Lengkap',
     'nama_panggilan_pria' => $invitation->pria_nama ?? 'Pria',
     'nama_ayah_pria' => $invitation->pria_ayah ?? 'Bapak Pria',
     'nama_ibu_pria' => $invitation->pria_ibu ?? 'Ibu Pria',
     'instagram_pria' => null,
-    'foto_pria' => $invitation->pria_foto ? asset('storage/' . $invitation->pria_foto) : asset('assets/default/default_pria.jpg'),
+    'foto_pria' => $invitation->pria_foto ? assetv('storage/' . $invitation->pria_foto) : assetv('assets/default/default_pria.jpg'),
 
-    'foto_hero' => $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('assets/default/default-pasangan.jpg'),
+    'foto_hero' => $invitation->cover_img ? assetv('storage/' . $invitation->cover_img) : assetv('assets/default/default-pasangan.jpg'),
 
     'tanggal_pernikahan' => $akad && $akad->tgl_acara ? \Carbon\Carbon::parse($akad->tgl_acara) : now(),
     'lokasi_akad' => $akad->lokasi ?? 'Lokasi Akad',
@@ -27,7 +27,7 @@
     'alamat_resepsi' => $resepsi->alamat ?? 'Alamat lengkap resepsi',
     'google_maps_url' => $akad->gmaps_link ?? '#',
 
-    'musik_background' => $invitation->music_file ? asset('storage/' . $invitation->music_file) : asset('assets/default/default-music.mp3'),
+    'musik_background' => $invitation->music_file ? assetv('storage/' . $invitation->music_file) : assetv('assets/default/default-music.mp3'),
 
     'rekening_1_nama' => null,
     'rekening_1_nomor' => null,
@@ -70,14 +70,14 @@
     <meta property="twitter:image" content="{{ $ogImg }}">
 
     <!-- Favicon -->
-    <link rel="icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
+    <link rel="icon" href="{{ assetv('assets/img/logo-icon.png') }}" type="image/png">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link href="{{ asset('themes/aufilla-green/css/tailwind.css') }}" rel="stylesheet" />
-    <link href="{{ asset('themes/aufilla-green/css/google-fonts.css') }}" rel="stylesheet" />
-    <link href="{{ asset('themes/aufilla-green/css/aos.css') }}" rel="stylesheet" />
+    <link href="{{ assetv('themes/aufilla-green/css/tailwind.css') }}" rel="stylesheet" />
+    <link href="{{ assetv('themes/aufilla-green/css/google-fonts.css') }}" rel="stylesheet" />
+    <link href="{{ assetv('themes/aufilla-green/css/aos.css') }}" rel="stylesheet" />
     <style>
-        @import url('{{ asset("assets/css/google-theme.css") }}');
+        @import url('{{ assetv("assets/css/google-theme.css") }}');
 
         body {
             font-family: 'Inter', 'DM Sans', sans-serif;
@@ -674,7 +674,7 @@
 
     <!-- Splash Screen -->
     <div id="splash-screen"
-        style="background-image: url('{{ asset('themes/aufilla-green/images/bg-splash.svg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        style="background-image: url('{{ assetv('themes/aufilla-green/images/bg-splash.svg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
         <div
             style="position: absolute; inset: 0; background-color: rgba(29, 50, 38, 0.85); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);">
         </div>
@@ -849,7 +849,7 @@
         <!-- Hero Section -->
         <section id="hero"
             class="relative min-h-screen flex items-center justify-center text-center py-20 px-4 overflow-hidden"
-            style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('themes/aufilla-green/images/bg-hero.svg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            style="background-image: url('{{ $invitation->cover_img ? assetv('storage/' . $invitation->cover_img) : assetv('themes/aufilla-green/images/bg-hero.svg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div style="position: absolute; inset: 0; background-color: rgba(250, 246, 240, 0.88);"></div>
             <div class="relative z-10 w-full max-w-[800px] flex flex-col items-center" data-aos="fade-up"
                 data-aos-duration="1500">
@@ -859,7 +859,7 @@
                     style="background-color: rgba(255,255,255,0.2); backdrop-filter: blur(4px);">
                     <div class="arch-card w-full h-full relative">
                         <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                            style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('themes/aufilla-green/images/bg-hero.svg') }}'); filter: brightness(0.9) contrast(1.05);">
+                            style="background-image: url('{{ $invitation->cover_img ? assetv('storage/' . $invitation->cover_img) : assetv('themes/aufilla-green/images/bg-hero.svg') }}'); filter: brightness(0.9) contrast(1.05);">
                         </div>
                         <div
                             class="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-[#1d3226]/85 via-transparent to-transparent text-white text-center">
@@ -928,7 +928,7 @@
                         <div class="arch-outline-wrapper shadow-xl bg-white/30"
                             style="width: 200px; height: 280px; margin-bottom: 1.5rem; background-color: rgba(255,255,255,0.3); padding: 8px;">
                             <div class="arch-card w-full h-full">
-                                <img src="{{ $invitation->wanita_foto ? asset('storage/' . $invitation->wanita_foto) : asset('themes/aufilla-green/images/bride.png') }}"
+                                <img src="{{ $invitation->wanita_foto ? assetv('storage/' . $invitation->wanita_foto) : assetv('themes/aufilla-green/images/bride.png') }}"
                                     alt="{{ $invitation->wanita_nama_lengkap ?? 'Mempelai Wanita' }}" class="w-full h-full object-cover"
                                     style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
@@ -974,7 +974,7 @@
                         <div class="arch-outline-wrapper shadow-xl bg-white/30"
                             style="width: 200px; height: 280px; margin-bottom: 1.5rem; background-color: rgba(255,255,255,0.3); padding: 8px;">
                             <div class="arch-card w-full h-full">
-                                <img src="{{ $invitation->pria_foto ? asset('storage/' . $invitation->pria_foto) : asset('themes/aufilla-green/images/groom.png') }}"
+                                <img src="{{ $invitation->pria_foto ? assetv('storage/' . $invitation->pria_foto) : assetv('themes/aufilla-green/images/groom.png') }}"
                                     alt="{{ $invitation->pria_nama_lengkap ?? 'Mempelai Pria' }}" class="w-full h-full object-cover"
                                     style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
@@ -1028,7 +1028,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                     @foreach($galeris as $index => $galeri)
                     <div data-aos="zoom-in" data-aos-delay="{{ $index * 100 }}" class="relative overflow-hidden rounded-2xl group border border-white/10" style="border-radius: 16px; aspect-ratio: 1/1; overflow: hidden;">
-                        <img src="{{ asset('storage/' . $galeri->image_path) }}" alt="Gallery" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s;">
+                        <img src="{{ assetv('storage/' . $galeri->image_path) }}" alt="Gallery" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s;">
                         <div class="absolute inset-0 bg-[#1d3226]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(29,50,38,0.4); opacity: 0; transition: opacity 0.5s;"></div>
                     </div>
                     @endforeach
@@ -1104,7 +1104,7 @@
 
         <!-- Date & Venue Section -->
         <section id="acara" class="py-24 px-6 text-center relative overflow-hidden"
-            style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('themes/aufilla-green/images/bg-hero.svg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            style="background-image: url('{{ $invitation->cover_img ? assetv('storage/' . $invitation->cover_img) : assetv('themes/aufilla-green/images/bg-hero.svg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div
                 style="position: absolute; inset: 0; background-color: rgba(29, 50, 38, 0.85); backdrop-filter: blur(2px);">
             </div>
@@ -1323,7 +1323,7 @@
 
         <!-- RSVP & Wishes Wall Section -->
         <section id="rsvp" class="py-24 px-6 text-center relative overflow-hidden"
-            style="background-image: url('{{ $invitation->cover_img ? asset('storage/' . $invitation->cover_img) : asset('themes/aufilla-green/images/bg-hero.svg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            style="background-image: url('{{ $invitation->cover_img ? assetv('storage/' . $invitation->cover_img) : assetv('themes/aufilla-green/images/bg-hero.svg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div
                 style="position: absolute; inset: 0; background-color: rgba(250, 246, 240, 0.92); backdrop-filter: blur(2px);">
             </div>
@@ -1487,8 +1487,8 @@
 
     </main>
 
-    <script src="{{ asset('themes/aufilla-green/js/aos.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ assetv('themes/aufilla-green/js/aos.js') }}"></script>
+    <script src="{{ assetv('assets/js/jquery-3.7.1.min.js') }}"></script>
     <script>
         // Initialize AOS
         AOS.init({
