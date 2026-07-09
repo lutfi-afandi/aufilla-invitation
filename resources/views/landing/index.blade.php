@@ -151,8 +151,8 @@
     {{-- ═══════════════════════════════════════════════
          NAVBAR
     ═══════════════════════════════════════════════ --}}
-    <nav class="fixed top-0 inset-x-0 z-50 bg-white/85 backdrop-blur-xl border-b border-brand-accent/10 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 lg:px-10 h-[75px] flex items-center justify-between">
+    <nav x-data="{ mobileMenuOpen: false }" @click.outside="mobileMenuOpen = false" class="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-xl border-b border-brand-accent/10 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 h-[75px] flex items-center justify-between relative z-50">
             {{-- Logo --}}
             <a href="/" class="flex items-center gap-3 hover:-translate-y-0.5 transition-transform duration-300">
                 <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Aufilla Logo" class="h-10 md:h-12 w-auto object-contain">
@@ -178,11 +178,11 @@
             <div class="flex items-center gap-4">
                 @auth
                 <a href="{{ route('dashboard') }}"
-                    class="px-6 py-2.5 rounded-full bg-brand-dark text-white text-[13px] font-semibold hover:bg-brand-accent transition-colors duration-300 shadow-lg shadow-brand-dark/20 hover:-translate-y-0.5 transform">
+                    class="hidden md:inline-flex px-6 py-2.5 rounded-full bg-brand-dark text-white text-[13px] font-semibold hover:bg-brand-accent transition-colors duration-300 shadow-lg shadow-brand-dark/20 hover:-translate-y-0.5 transform">
                     Dashboard
                 </a>
                 @else
-                <a href="{{ route('login') }}" class="w-[42px] h-[42px] rounded-full flex items-center justify-center bg-brand-bg/50 backdrop-blur-md border border-brand-accent/30 text-brand-dark hover:bg-brand-accent hover:border-brand-accent hover:text-white transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-brand-accent/40 group relative overflow-hidden" title="Masuk (Login)">
+                <a href="{{ route('login') }}" class="hidden md:flex w-[42px] h-[42px] rounded-full items-center justify-center bg-brand-bg/50 backdrop-blur-md border border-brand-accent/30 text-brand-dark hover:bg-brand-accent hover:border-brand-accent hover:text-white transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-brand-accent/40 group relative overflow-hidden" title="Masuk (Login)">
                     {{-- Shine Effect --}}
                     <div class="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 transform -translate-x-full group-hover:translate-x-full ease-out"></div>
                     <svg class="w-5 h-5 relative z-10 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
@@ -190,10 +190,51 @@
                     </svg>
                 </a>
                 <button onclick="openRegisterModal()"
-                    class="px-6 py-2.5 rounded-full bg-brand-dark text-white text-[13px] font-semibold hover:bg-brand-accent transition-all duration-300 shadow-lg shadow-brand-dark/20 hover:shadow-brand-accent/30 hover:-translate-y-0.5 transform">
+                    class="hidden md:inline-flex px-6 py-2.5 rounded-full bg-brand-dark text-white text-[13px] font-semibold hover:bg-brand-accent transition-all duration-300 shadow-lg shadow-brand-dark/20 hover:shadow-brand-accent/30 hover:-translate-y-0.5 transform">
                     Buat Undangan
                 </button>
                 @endauth
+
+                {{-- Elegant Mobile Menu Toggle --}}
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden relative w-10 h-10 flex items-center justify-center text-brand-dark focus:outline-none focus:text-brand-accent bg-brand-dark/5 hover:bg-brand-dark/10 rounded-full transition-colors duration-300" aria-label="Toggle Menu">
+                    {{-- Hamburger Icon --}}
+                    <svg class="w-5 h-5 absolute transition-all duration-500 ease-in-out" :class="mobileMenuOpen ? 'opacity-0 rotate-90 scale-50' : 'opacity-100 rotate-0 scale-100'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                    {{-- Close (X) Icon --}}
+                    <svg class="w-5 h-5 absolute transition-all duration-500 ease-in-out" :class="mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        {{-- Mobile Menu Dropdown with Smooth Alpine Transition --}}
+        <div x-show="mobileMenuOpen" x-cloak
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 -translate-y-6"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-4"
+             class="md:hidden bg-white/95 backdrop-blur-2xl border-t border-brand-accent/10 absolute top-[75px] left-0 w-full shadow-[0_15px_30px_rgb(0,0,0,0.08)] origin-top z-40">
+            <div class="flex flex-col p-6 gap-3 text-[13px] font-bold tracking-wide text-brand-dark/90 uppercase text-center">
+                <a @click="mobileMenuOpen = false" href="#" class="mobile-link hover:text-brand-accent hover:bg-brand-dark/5 rounded-xl py-3 transition-colors">Home</a>
+                <a @click="mobileMenuOpen = false" href="#fitur" class="mobile-link hover:text-brand-accent hover:bg-brand-dark/5 rounded-xl py-3 transition-colors">Fitur</a>
+                <a @click="mobileMenuOpen = false" href="#tema" class="mobile-link hover:text-brand-accent hover:bg-brand-dark/5 rounded-xl py-3 transition-colors">Katalog Tema</a>
+                <a @click="mobileMenuOpen = false" href="#harga" class="mobile-link hover:text-brand-accent hover:bg-brand-dark/5 rounded-xl py-3 transition-colors">Harga</a>
+                
+                <div class="pt-4 flex flex-col gap-3 border-t border-brand-dark/5 mt-2">
+                    @auth
+                    <a @click="mobileMenuOpen = false" href="{{ route('dashboard') }}" class="mobile-link px-6 py-3.5 rounded-xl bg-brand-dark text-white text-[13px] font-semibold shadow-lg shadow-brand-dark/20 hover:scale-[1.02] transition-transform">Dashboard</a>
+                    @else
+                    <button @click="openRegisterModal(); mobileMenuOpen = false" class="px-6 py-3.5 rounded-xl bg-brand-dark text-white text-[13px] font-semibold shadow-lg shadow-brand-dark/20 border-none hover:scale-[1.02] transition-transform">Buat Undangan</button>
+                    <a @click="mobileMenuOpen = false" href="{{ route('login') }}" class="mobile-link flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-brand-bg border border-brand-dark/10 text-brand-dark font-semibold hover:border-brand-accent hover:text-brand-accent transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                        Login
+                    </a>
+                    @endauth
+                </div>
             </div>
         </div>
     </nav>
@@ -415,36 +456,36 @@
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lp-reveal lp-delay-1">
-                @foreach($themes as $theme)
-                <div class="bg-white rounded-2xl shadow-sm border border-brand-dark/5 overflow-hidden group hover:shadow-xl transition-all duration-300 flex flex-col">
+            <div class="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-6">
+                @foreach($themes as $index => $theme)
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-brand-dark/5 overflow-hidden group hover:shadow-xl transition-all duration-300 flex flex-col lp-reveal lp-delay-{{ $index % 4 }}">
                     <div class="relative bg-brand-bg/30 aspect-[3/4] flex items-center justify-center overflow-hidden">
                         {{-- Theme Thumbnail --}}
                         <img src="{{ $theme->thumbnail ? asset('storage/' . $theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png') }}" onerror="this.src=`{{ asset('assets/img/thumbnail-tema/demo1.png') }}`" alt="{{ $theme->name }}" class="w-full h-full object-cover scale-[1.15] group-hover:scale-[1.20] transition-transform duration-500 origin-center relative z-0">
 
                         {{-- Tag Label --}}
-                        <div class="absolute top-0 left-0 bg-brand-dark text-white text-[11px] font-bold px-4 py-2 rounded-br-2xl shadow-sm z-10">
+                        <div class="absolute top-0 left-0 bg-brand-dark text-white text-[11px] font-bold px-4 py-2 rounded-br-2xl shadow-sm z-10 hidden sm:block">
                             {{ $theme->name }}
                         </div>
 
                         {{-- Ribbon (Terpopuler / NEW) --}}
                         @if(isset($theme->invitations_count) && $theme->invitations_count > 0 && $theme->invitations_count == $themes->max('invitations_count'))
-                        <div class="absolute top-5 -right-10 bg-brand-accent text-white text-[8px] md:text-[9px] font-bold py-1 w-36 text-center transform rotate-45 shadow-md z-10 uppercase tracking-widest">
+                        <div class="absolute top-2 -right-10 sm:top-5 bg-brand-accent text-white text-[7px] sm:text-[9px] font-bold py-0.5 sm:py-1 w-32 sm:w-36 text-center transform rotate-45 shadow-md z-10 uppercase tracking-widest">
                             TERPOPULER
                         </div>
                         @elseif($theme->created_at && $theme->created_at->isCurrentMonth())
-                        <div class="absolute top-5 -right-8 bg-[#E63946] text-white text-[9px] font-bold py-1 w-32 text-center transform rotate-45 shadow-md z-10 uppercase tracking-widest">
+                        <div class="absolute top-2 -right-8 sm:top-5 bg-[#E63946] text-white text-[7px] sm:text-[9px] font-bold py-0.5 sm:py-1 w-28 sm:w-32 text-center transform rotate-45 shadow-md z-10 uppercase tracking-widest">
                             NEW
                         </div>
                         @endif
                     </div>
-                    <div class="p-5 text-center flex flex-col items-center border-t border-brand-dark/5 mt-auto bg-white relative z-10">
-                        <h3 class="font-bold text-brand-dark text-[15px] mb-4">{{ $theme->name }}</h3>
-                        <div class="grid grid-cols-2 gap-2 w-full">
-                            <a href="{{ route('theme.preview', $theme->code) }}" target="_blank" class="w-full py-2.5 rounded-xl border border-brand-dark/20 text-brand-dark text-[11px] md:text-[12px] font-bold uppercase tracking-widest hover:border-brand-dark hover:bg-brand-dark hover:text-white hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center">
+                    <div class="p-2 sm:p-5 text-center flex flex-col items-center border-t border-brand-dark/5 mt-auto bg-white relative z-10">
+                        <h3 class="font-bold text-brand-dark text-[10px] sm:text-[15px] mb-2 sm:mb-4 truncate w-full">{{ $theme->name }}</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-2 w-full">
+                            <a href="{{ route('theme.preview', $theme->code) }}" target="_blank" class="w-full py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl border border-brand-dark/20 text-brand-dark text-[8px] sm:text-[12px] font-bold uppercase tracking-widest hover:border-brand-dark hover:bg-brand-dark hover:text-white transition-all duration-300 flex items-center justify-center">
                                 Preview
                             </a>
-                            <button onclick="openRegisterModal({{ $theme->id }}, `{{ addslashes($theme->name) }}`, `{{ $theme->thumbnail ? asset('storage/' . $theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png') }}`)" type="button" class="w-full py-2.5 rounded-xl bg-brand-dark text-white text-[11px] md:text-[12px] font-bold uppercase tracking-widest hover:bg-brand-accent hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand-accent/30 transition-all duration-300 flex items-center justify-center">
+                            <button onclick="openRegisterModal({{ $theme->id }}, `{{ addslashes($theme->name) }}`, `{{ $theme->thumbnail ? asset('storage/' . $theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png') }}`)" type="button" class="w-full py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl bg-brand-dark text-white text-[8px] sm:text-[12px] font-bold uppercase tracking-widest hover:bg-brand-accent hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 flex items-center justify-center">
                                 Coba
                             </button>
                         </div>
@@ -452,6 +493,28 @@
                 </div>
                 @endforeach
             </div>
+            
+            {{-- CTA Custom Tema --}}
+            <div class="mt-16 bg-white border border-brand-dark/5 rounded-[2rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col md:flex-row items-center justify-between gap-8 lp-reveal lp-delay-2 relative overflow-hidden group">
+                <div class="absolute -right-20 -top-20 w-64 h-64 bg-brand-accent/10 rounded-full blur-[60px] pointer-events-none group-hover:bg-brand-accent/20 transition-colors duration-700"></div>
+                <div class="absolute -left-20 -bottom-20 w-48 h-48 bg-brand-dark/5 rounded-full blur-[50px] pointer-events-none"></div>
+                
+                <div class="text-center md:text-left z-10">
+                    <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-brand-accent mb-3 block">Butuh Bantuan?</span>
+                    <h3 class="font-serif text-2xl md:text-3xl text-brand-dark mb-3">Mau Terima Beres?</h3>
+                    <p class="text-[13px] md:text-[14px] text-brand-dark/70 max-w-xl leading-relaxed">
+                        Tidak punya waktu luang untuk mengatur undangan sendiri? Tim Aufilla siap membantu membuatkan undangan Anda sampai jadi. Konsultasikan tema pilihan Anda sekarang!
+                    </p>
+                </div>
+                <a href="https://wa.me/6285171097138?text=Halo%20Admin%2C%20saya%20tertarik%20membuat%20undangan%20dengan%20tema..." target="_blank" class="shrink-0 flex items-center gap-3 bg-brand-dark hover:bg-brand-accent text-white px-8 py-4 rounded-full font-bold text-[13px] md:text-[14px] transition-all duration-500 shadow-xl shadow-brand-dark/20 hover:shadow-brand-accent/30 hover:-translate-y-1 z-10">
+                    <svg class="w-5 h-5 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.964 9.964 0 001.333 4.993L2 22l5.233-1.337a9.957 9.957 0 004.779 1.216h.004c5.505 0 9.988-4.478 9.989-9.984 0-5.505-4.483-9.983-9.993-9.983zm0 18.232h-.003a8.271 8.271 0 01-4.218-1.144l-.302-.178-3.136.8.84-3.036-.197-.31a8.272 8.272 0 01-1.272-4.428c.001-4.57 3.731-8.293 8.31-8.294 4.568 0 8.294 3.722 8.295 8.293.001 4.57-3.727 8.294-8.317 8.294z"/>
+                        <path d="M16.574 13.565c-.252-.126-1.492-.736-1.722-.82-.23-.085-.398-.126-.566.126-.168.252-.65 .82-.797.989-.147.168-.293.189-.546.063-2.18-.949-3.329-2.67-3.72-3.342-.147-.252-.016-.388.11-.513.113-.112.252-.294.378-.44.126-.148.168-.252.252-.421.084-.168.042-.315-.021-.44-.063-.126-.566-1.365-.776-1.87-.205-.494-.413-.427-.566-.435l-.482-.008c-.168 0-.441.063-.672.315-.23.252-.881.86-1.07 1.968-.04.237-.023.791.439 1.637.525 1.056 1.884 3.292 4.417 4.354 1.341.562 2.115.82 2.85 1.05.615.19 1.173.163 1.614.1.495-.072 1.492-.609 1.703-1.197.21-.588.21-1.092.147-1.197-.063-.105-.23-.168-.482-.294z"/>
+                    </svg>
+                    Konsultasi via WA
+                </a>
+            </div>
+
         </div>
     </section>
     {{-- ═══════════════════════════════════════════════
@@ -631,59 +694,59 @@
     ═══════════════════════════════════════════════ --}}
     <footer class="bg-white border-t border-brand-dark/5 pt-20 pb-10 px-6 lg:px-10">
         <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-16 lp-reveal lp-delay-1">
+            <div class="grid grid-cols-2 md:grid-cols-12 gap-y-10 gap-x-4 md:gap-8 mb-16 lp-reveal lp-delay-1">
 
                 {{-- Left: Logo & Text (Col-span 5) --}}
-                <div class="md:col-span-5 text-center flex flex-col items-center justify-center">
+                <div class="col-span-2 md:col-span-5 text-center flex flex-col items-center md:items-start justify-center md:justify-start">
                     <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Aufilla" class="w-16 h-16 object-contain mb-3">
-                    <p class="text-[13px] leading-relaxed text-brand-dark/80 max-w-sm">
-                        <strong class="font-bold text-brand-dark">Aufilla Invitation</strong> adalah penyedia jasa pembuatan undangan pernikahan digital. Kami menyediakan undangan website dengan desain yang premium dan fitur yang lengkap.
+                    <p class="text-[13px] leading-relaxed text-brand-dark/80 max-w-sm md:text-left">
+                        <strong class="font-bold text-brand-dark">Aufilla Invitation</strong> adalah platform undangan digital berdesain premium yang sangat praktis digunakan. Cukup isi data diri & unggah foto, undangan Anda langsung siap disebarkan tanpa ribet mengatur komponen desain!
                     </p>
                 </div>
 
                 {{-- Middle: Contact (Col-span 4) --}}
-                <div class="md:col-span-4 flex flex-col items-center md:items-start pl-0 md:pl-8">
-                    <h4 class="text-[14px] md:text-[15px] font-bold text-brand-dark mb-6">Lebih Dekat dengan Kami</h4>
-                    <ul class="space-y-4 text-[13px] text-brand-dark/80">
-                        <li class="flex items-center gap-4">
-                            <div class="w-8 h-8 rounded-full bg-brand-bg flex items-center justify-center shrink-0 text-brand-accent">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <div class="col-span-1 md:col-span-4 flex flex-col items-start">
+                    <h4 class="text-[14px] md:text-[15px] font-bold text-brand-dark mb-4 md:mb-6 pl-1 md:pl-0">Kontak Kami</h4>
+                    <ul class="space-y-4 text-[11px] md:text-[13px] text-brand-dark/80 w-full">
+                        <li class="flex items-center gap-2 md:gap-4">
+                            <div class="w-6 h-6 md:w-8 md:h-8 rounded-full bg-brand-bg flex items-center justify-center shrink-0 text-brand-accent">
+                                <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                 </svg>
                             </div>
-                            <span>(+62) 857 6584 2510</span>
+                            <span class="break-all md:break-normal">638517097138</span>
                         </li>
-                        <li class="flex items-center gap-4">
-                            <div class="w-8 h-8 rounded-full bg-brand-bg flex items-center justify-center shrink-0 text-brand-accent">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <li class="flex items-center gap-2 md:gap-4">
+                            <div class="w-6 h-6 md:w-8 md:h-8 rounded-full bg-brand-bg flex items-center justify-center shrink-0 text-brand-accent">
+                                <svg class="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                                 </svg>
                             </div>
-                            <span>Lutfi Afandi Rizal</span>
+                            <span class="break-words">Aufilla Studio</span>
                         </li>
-                        <li class="flex items-center gap-4">
-                            <div class="w-8 h-8 rounded-full bg-brand-bg flex items-center justify-center shrink-0 text-brand-accent">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <li class="flex items-center gap-2 md:gap-4">
+                            <div class="w-6 h-6 md:w-8 md:h-8 rounded-full bg-brand-bg flex items-center justify-center shrink-0 text-brand-accent">
+                                <svg class="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
                                 </svg>
                             </div>
-                            <span>lutfi_afandii</span>
+                            <span class="break-words">aufilla.studio</span>
                         </li>
-                        <li class="flex items-center gap-4">
-                            <div class="w-8 h-8 rounded-full bg-brand-bg flex items-center justify-center shrink-0 text-brand-accent">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <li class="flex items-center gap-2 md:gap-4">
+                            <div class="w-6 h-6 md:w-8 md:h-8 rounded-full bg-brand-bg flex items-center justify-center shrink-0 text-brand-accent">
+                                <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
                             </div>
-                            <span>aufilla@gmail.com</span>
+                            <span class="break-all md:break-normal">aufilla.web@gmail.com</span>
                         </li>
                     </ul>
                 </div>
 
                 {{-- Right: Explore (Col-span 3) --}}
-                <div class="md:col-span-3 flex flex-col items-center md:items-start pl-0 md:pl-4">
-                    <h4 class="text-[14px] md:text-[15px] font-bold text-brand-dark mb-6">Explore</h4>
-                    <ul class="space-y-4 text-[13px] text-brand-dark/80 text-center md:text-left w-full">
+                <div class="col-span-1 md:col-span-3 flex flex-col items-start md:pl-4">
+                    <h4 class="text-[14px] md:text-[15px] font-bold text-brand-dark mb-4 md:mb-6">Explore</h4>
+                    <ul class="space-y-4 text-[11px] md:text-[13px] text-brand-dark/80 text-left w-full">
                         <li><a href="#" class="hover:text-brand-accent transition-colors block w-full">Home</a></li>
                         <li><a href="#fitur" class="hover:text-brand-accent transition-colors block w-full">Fitur</a></li>
                         <li><a href="#tema" class="hover:text-brand-accent transition-colors block w-full">Tema</a></li>
@@ -713,7 +776,7 @@
                 <h3 class="font-serif text-[28px] text-brand-dark mb-2">Buat Undangan</h3>
                 <p class="text-[13px] text-brand-dark/70">Mulai masa trial 24 jam gratis!</p>
             </div>
-            <form action="{{ route('landing.register') }}" method="POST" class="space-y-5">
+            <form action="{{ route('landing.register') }}" method="POST" class="space-y-5" autocomplete="off">
                 @csrf
                 @if($errors->any())
                 <div class="bg-red-50 border border-red-100 text-red-600 px-5 py-4 rounded-xl text-[12px] font-medium">
@@ -752,12 +815,14 @@
                         class="w-full bg-brand-bg border border-brand-dark/5 rounded-xl px-5 py-3.5 text-[13px] text-brand-dark focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/30 transition-all placeholder:text-brand-dark/20">
                     <div id="landing-url-preview-container" class="mt-3 hidden transition-all duration-300">
                         <div class="flex flex-col gap-1.5 p-3.5 bg-brand-bg/50 border border-brand-dark/5 rounded-xl shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">
-                            <div class="flex items-center gap-2 text-[11.5px] font-medium">
-                                <div class="w-5 h-5 rounded-full bg-brand-accent/10 flex items-center justify-center shrink-0">
-                                    <svg class="w-3 h-3 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                            <div class="flex flex-col gap-1 text-[11.5px] font-medium">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-5 h-5 rounded-full bg-brand-accent/10 flex items-center justify-center shrink-0">
+                                        <svg class="w-3 h-3 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                                    </div>
+                                    <span class="text-brand-dark/50">Akses URL:</span>
                                 </div>
-                                <span class="text-brand-dark/50">Akses URL:</span>
-                                <span class="text-brand-dark font-bold truncate">{{ request()->getSchemeAndHttpHost() }}/<span id="landing-username-value" class="text-brand-accent underline decoration-brand-accent/30 underline-offset-2"></span></span>
+                                <span class="text-brand-dark font-bold break-all pl-7">{{ request()->getSchemeAndHttpHost() }}/<span id="landing-username-value" class="text-brand-accent underline decoration-brand-accent/30 underline-offset-2"></span></span>
                             </div>
                             <div id="landing-username-feedback" class="text-[11px] font-medium pl-7"></div>
                         </div>
@@ -766,7 +831,7 @@
                 <div>
                     <label class="block text-[11px] font-bold tracking-widest uppercase text-brand-dark/80 mb-2">Email</label>
                     <input type="email" name="email" required placeholder="email@contoh.com"
-                        class="w-full bg-brand-bg border border-brand-dark/5 rounded-xl px-5 py-3.5 text-[13px] text-brand-dark focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/30 transition-all placeholder:text-brand-dark/20">
+                        class="w-full bg-brand-bg border border-brand-dark/5 rounded-xl px-5 py-3.5 text-[13px] text-brand-dark focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/30 transition-all placeholder:text-brand-dark/20" autocomplete="new-password">
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
@@ -944,6 +1009,9 @@
 
             document.querySelectorAll('.lp-reveal').forEach(el => observer.observe(el));
         });
+
+        // Advanced Scroll Reveal (Vanilla JS)
+
         // Register Live Username Check
         const landingUsername = document.getElementById('landing-username');
         const landingFeedback = document.getElementById('landing-username-feedback');

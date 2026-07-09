@@ -16,6 +16,7 @@
 # /public/build (Di-comment agar CSS & JS hasil build ikut ter-upload ke Git/Hostinger)
 /public/hot
 /public/storage
+/public/build
 /storage/*.key
 /storage/pail
 /vendor
