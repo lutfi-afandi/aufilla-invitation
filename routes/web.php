@@ -42,6 +42,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/receptionists', [\App\Http\Controllers\Admin\ReceptionistController::class, 'store'])->name('receptionists.store');
         Route::put('/receptionists/{id}', [\App\Http\Controllers\Admin\ReceptionistController::class, 'update'])->name('receptionists.update');
         Route::delete('/receptionists/{id}', [\App\Http\Controllers\Admin\ReceptionistController::class, 'destroy'])->name('receptionists.destroy');
+
+        // Users
+        Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+        Route::post('/users', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');
+        Route::get('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'show'])->name('users.show');
+        Route::put('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
     });
 
     // Client Routes

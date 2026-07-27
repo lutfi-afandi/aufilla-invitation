@@ -27,7 +27,8 @@ class DashboardController extends Controller
     public function index()
     {
         $invitation = $this->getInvitation();
-        return view('client.dashboard', compact('invitation'));
+        $recentUcapans = \App\Models\Ucapan::where('invitation_id', $invitation->id)->latest()->take(5)->get();
+        return view('client.dashboard', compact('invitation', 'recentUcapans'));
     }
 
     public function pengantin()

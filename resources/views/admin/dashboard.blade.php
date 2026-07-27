@@ -21,7 +21,7 @@
 @endpush
 
 @section('content')
-<div class="max-w-7xl mx-auto w-full space-y-8">
+<div class="w-full space-y-8">
     <!-- Welcome Banner -->
     <div class="animate-fade-in-up relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-admin-dark via-admin-medium to-admin-light text-white p-8 sm:p-10 border border-white/10 shadow-2xl shadow-admin-dark/20 group">
         <div class="relative z-10 transition-transform duration-500 group-hover:translate-x-2">

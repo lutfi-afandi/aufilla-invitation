@@ -3,7 +3,7 @@
 @section('title', 'Overview - Aufilla Invitation')
 
 @section('content')
-<div class="max-w-7xl mx-auto w-full">
+<div class="w-full">
     <!-- Welcome Panel (Luxury Edition) -->
     <div class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#0d2a1a] via-[#0a2214] to-[#04120a] text-white p-8 sm:p-12 mb-10 border border-[#c5a880]/20 shadow-[0_20px_50px_rgba(10,34,20,0.4)]">
         
@@ -108,7 +108,7 @@
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
                 <div>
-                    <h3 class="text-3xl font-bold text-brand-dark leading-tight">0</h3>
+                    <h3 class="text-3xl font-bold text-brand-dark leading-tight">{{ $invitation->ucapans()->where('kehadiran', 'hadir')->count() ?? 0 }}</h3>
                     <p class="text-gray-500 font-medium text-xs uppercase tracking-wider mt-1">Hadir</p>
                 </div>
             </div>
@@ -122,7 +122,7 @@
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                 </div>
                 <div>
-                    <h3 class="text-3xl font-bold text-brand-dark leading-tight">0</h3>
+                    <h3 class="text-3xl font-bold text-brand-dark leading-tight">{{ $invitation->ucapans()->count() ?? 0 }}</h3>
                     <p class="text-gray-500 font-medium text-xs uppercase tracking-wider mt-1">Ucapan</p>
                 </div>
             </div>
@@ -142,6 +142,51 @@
             </div>
             <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/3 group-hover:scale-150 transition-transform duration-700"></div>
         </a>
+    </div>
+
+    <!-- Ucapan Terbaru -->
+    <div class="bg-white rounded-[2rem] border border-brand-accent/20 shadow-sm p-6 lg:p-8 relative overflow-hidden group">
+        <div class="flex items-center justify-between mb-6 border-b border-gray-100 pb-5">
+            <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400 flex items-center gap-2">
+                <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                Ucapan & Doa Terbaru
+            </h3>
+            <span class="text-xs text-brand-dark bg-brand-dark/5 px-3 py-1 rounded-full font-bold ring-1 ring-brand-dark/10">{{ $invitation->ucapans()->count() }} Pesan</span>
+        </div>
+        
+        <div class="pt-2">
+            @if(isset($recentUcapans) && $recentUcapans->isEmpty())
+                <div class="h-40 flex flex-col items-center justify-center text-gray-400">
+                    <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    </div>
+                    <p class="text-sm font-medium">Belum ada ucapan yang masuk dari tamu undangan Anda.</p>
+                </div>
+            @else
+                <div class="space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar pr-2">
+                    @foreach($recentUcapans as $ucapan)
+                    <div class="flex gap-4 p-5 rounded-2xl bg-gray-50/50 border border-gray-100 hover:bg-white hover:border-brand-accent/30 hover:shadow-md transition-all duration-300">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-accent/10 to-brand-accent/30 flex items-center justify-center text-brand-dark font-extrabold text-lg flex-shrink-0 shadow-sm">
+                            {{ strtoupper(substr($ucapan->nama ?? '?', 0, 1)) }}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between gap-2 mb-1.5">
+                                <span class="text-base font-bold text-gray-800 truncate">{{ $ucapan->nama }}</span>
+                                <span class="text-[11px] font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-lg flex-shrink-0">{{ $ucapan->created_at->diffForHumans() }}</span>
+                            </div>
+                            <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed mb-2">"{{ $ucapan->pesan ?? '-' }}"</p>
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-md {{ $ucapan->kehadiran === 'hadir' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : ($ucapan->kehadiran === 'tidak' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-amber-50 text-amber-600 border border-amber-100') }}">
+                                    <span class="w-1.5 h-1.5 rounded-full {{ $ucapan->kehadiran === 'hadir' ? 'bg-emerald-500' : ($ucapan->kehadiran === 'tidak' ? 'bg-red-500' : 'bg-amber-500') }}"></span>
+                                    {{ $ucapan->kehadiran }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
     </div>
 </div>
 @endsection

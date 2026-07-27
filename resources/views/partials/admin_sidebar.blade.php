@@ -65,7 +65,13 @@
     </nav>
 
     <!-- Bottom -->
-    <div class="p-4 border-t border-white/5">
+    <div class="p-4 border-t border-white/5 space-y-1">
+        <a href="{{ route('admin.users.index') }}" 
+           class="w-full flex items-center gap-3 px-4 py-2.5 text-sm rounded-xl transition-all duration-200 {{ Request::routeIs('admin.users.*') ? 'bg-admin-accent/15 text-admin-accent font-semibold shadow-sm' : 'text-slate-400 hover:bg-white/5 hover:text-white' }}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            Kelola Admin
+        </a>
+
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all duration-200">
