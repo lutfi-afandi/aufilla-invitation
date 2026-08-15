@@ -95,6 +95,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/tamu', [\App\Http\Controllers\Client\TamuController::class, 'store'])->name('tamu.store');
             Route::delete('/tamu/{id}', [\App\Http\Controllers\Client\TamuController::class, 'destroy'])->name('tamu.destroy');
             Route::post('/tamu/{id}/toggle-wa', [\App\Http\Controllers\Client\TamuController::class, 'toggleWa'])->name('tamu.toggleWa');
+            Route::post('/tamu/track-wa-send', [\App\Http\Controllers\Client\TamuController::class, 'trackWaSend'])->name('tamu.trackWaSend');
             Route::post('/tamu/import-excel', [\App\Http\Controllers\Client\TamuController::class, 'importExcel'])->name('tamu.import');
         });
     });

@@ -15,6 +15,7 @@ class Undangan extends Model
         'paket_id',
         'slug',
         'status',
+        'wa_send_count',
         'expired_at',
         'pria_nama',
         'pria_nama_lengkap',
@@ -38,6 +39,7 @@ class Undangan extends Model
 
     protected $casts = [
         'expired_at' => 'datetime',
+        'wa_send_count' => 'integer',
         'is_galeri_aktif' => 'boolean',
         'is_cerita_aktif' => 'boolean',
         'is_kado_aktif' => 'boolean',
@@ -104,6 +106,18 @@ class Undangan extends Model
     public function isExpired()
     {
         return $this->expired_at && $this->expired_at->isPast();
+    }
+
+    public function canSendWa(): bool
+    {
+        $max = $this->paket ? $this->paket->max_wa_send : 99999;
+        return $this->wa_send_count < $max;
+    }
+
+    public function getRemainingWaCount(): int
+    {
+        $max = $this->paket ? $this->paket->max_wa_send : 99999;
+        return max(0, $max - $this->wa_send_count);
     }
 
     public function getFeatureAccess(): array

@@ -48,6 +48,10 @@
                 <ul class="space-y-2.5 text-xs text-slate-600">
                     <li class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Limit Kirim WA: <span class="font-bold text-slate-800">{{ $paket->max_wa_send > 10000 ? 'Unlimited' : $paket->max_wa_send . ' Kirim' }}</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                         Maksimal {{ $paket->max_gallery_photos }} Foto Galeri
                     </li>
                     <li class="flex items-center gap-2">
@@ -123,9 +127,15 @@
                 </div>
             </div>
 
-            <div>
-                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Maksimal Foto Galeri</label>
-                <input type="number" name="max_gallery_photos" id="paket_max_gallery_photos" required min="0" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-admin-accent focus:outline-none">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Maks Kirim WA</label>
+                    <input type="number" name="max_wa_send" id="paket_max_wa_send" required min="1" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-admin-accent focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Maks Foto Galeri</label>
+                    <input type="number" name="max_gallery_photos" id="paket_max_gallery_photos" required min="0" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-admin-accent focus:outline-none">
+                </div>
             </div>
 
             <div class="space-y-2 pt-2 border-t border-slate-100">
@@ -166,6 +176,7 @@
         document.getElementById('paket_name').value = '';
         document.getElementById('paket_price').value = 0;
         document.getElementById('paket_active_days').value = 30;
+        document.getElementById('paket_max_wa_send').value = 99999;
         document.getElementById('paket_max_gallery_photos').value = 10;
         document.getElementById('paket_has_love_story').checked = false;
         document.getElementById('paket_can_custom_music').checked = false;
@@ -181,6 +192,7 @@
         document.getElementById('paket_name').value = paket.name;
         document.getElementById('paket_price').value = paket.price;
         document.getElementById('paket_active_days').value = paket.active_days;
+        document.getElementById('paket_max_wa_send').value = paket.max_wa_send || 99999;
         document.getElementById('paket_max_gallery_photos').value = paket.max_gallery_photos;
         document.getElementById('paket_has_love_story').checked = !!paket.has_love_story;
         document.getElementById('paket_can_custom_music').checked = !!paket.can_custom_music;

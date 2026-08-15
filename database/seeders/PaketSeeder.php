@@ -14,16 +14,18 @@ class PaketSeeder extends Seeder
                 'name' => 'Trial',
                 'price' => 0.00,
                 'active_days' => 3,
+                'max_wa_send' => 3,
                 'max_gallery_photos' => 5,
                 'has_love_story' => true,
                 'can_custom_music' => true,
                 'is_priority_support' => false,
-                'description' => 'Paket uji coba gratis 3 hari untuk mencoba fitur pembuatan undangan.',
+                'description' => 'Paket uji coba gratis 3 hari (maksimal kirim undangan 3x) untuk mencoba fitur pembuatan undangan.',
             ],
             [
                 'name' => 'Basic',
                 'price' => 35000.00,
-                'active_days' => 90, // 3 Bulan
+                'active_days' => 90,
+                'max_wa_send' => 99999,
                 'max_gallery_photos' => 5,
                 'has_love_story' => false,
                 'can_custom_music' => false,
@@ -33,7 +35,8 @@ class PaketSeeder extends Seeder
             [
                 'name' => 'Premium',
                 'price' => 50000.00,
-                'active_days' => 180, // 6 Bulan
+                'active_days' => 180,
+                'max_wa_send' => 99999,
                 'max_gallery_photos' => 10,
                 'has_love_story' => true,
                 'can_custom_music' => false,
@@ -43,8 +46,9 @@ class PaketSeeder extends Seeder
             [
                 'name' => 'VIP',
                 'price' => 80000.00,
-                'active_days' => 36500, // 100 Tahun (Permanen)
-                'max_gallery_photos' => 999, // Unlimited
+                'active_days' => 36500,
+                'max_wa_send' => 99999,
+                'max_gallery_photos' => 999,
                 'has_love_story' => true,
                 'can_custom_music' => true,
                 'is_priority_support' => true,

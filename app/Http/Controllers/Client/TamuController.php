@@ -63,6 +63,31 @@ class TamuController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function trackWaSend(Request $request)
+    {
+        $undangan = Auth::user()->undangans()->first();
+        if (!$undangan) {
+            return response()->json(['success' => false, 'message' => 'Undangan tidak ditemukan.'], 404);
+        }
+
+        if (!$undangan->canSendWa()) {
+            $max = $undangan->paket->max_wa_send ?? 3;
+            return response()->json([
+                'success' => false,
+                'error' => 'limit_reached',
+                'message' => "Kuota kirim undangan Paket {$undangan->paket->name} Anda sudah habis (maksimal {$max}x). Silakan upgrade paket Anda untuk membuka kuota kirim tanpa batas."
+            ], 403);
+        }
+
+        $undangan->increment('wa_send_count');
+
+        return response()->json([
+            'success' => true,
+            'wa_send_count' => $undangan->wa_send_count,
+            'remaining' => $undangan->getRemainingWaCount()
+        ]);
+    }
+
     private function generateWaLink($slug, $namaTamu)
     {
         $link = url('/' . $slug . '?to=' . urlencode($namaTamu));

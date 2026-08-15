@@ -13,6 +13,7 @@ class Paket extends Model
         'name',
         'price',
         'active_days',
+        'max_wa_send',
         'max_gallery_photos',
         'has_love_story',
         'can_custom_music',
@@ -23,6 +24,7 @@ class Paket extends Model
     protected $casts = [
         'price' => 'decimal:2',
         'active_days' => 'integer',
+        'max_wa_send' => 'integer',
         'max_gallery_photos' => 'integer',
         'has_love_story' => 'boolean',
         'can_custom_music' => 'boolean',

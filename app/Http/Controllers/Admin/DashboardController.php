@@ -7,6 +7,7 @@ use App\Models\Undangan;
 use App\Models\Tamu;
 use App\Models\Ucapan;
 use App\Models\User;
+use App\Models\ExpiredLog;
 
 class DashboardController extends Controller
 {
@@ -22,6 +23,9 @@ class DashboardController extends Controller
         $pctTrial = $totalInvitations > 0 ? round(($trialInvitations / $totalInvitations) * 100) : 0;
         $pctExpired = $totalInvitations > 0 ? round(($expiredInvitations / $totalInvitations) * 100) : 0;
 
+        $lastCronRun = ExpiredLog::latest('executed_at')->first();
+        $recentExpiredLogs = ExpiredLog::latest('executed_at')->take(5)->get();
+
         return view('admin.dashboard', [
             'totalClients'       => $totalClients,
             'activeInvitations'  => $activeInvitations,
@@ -34,6 +38,8 @@ class DashboardController extends Controller
             'totalGuests'        => Tamu::count(),
             'totalUcapan'        => Ucapan::count(),
             'recentUcapans'      => Ucapan::with('undangan')->latest()->take(5)->get(),
+            'lastCronRun'        => $lastCronRun,
+            'recentExpiredLogs'  => $recentExpiredLogs,
         ]);
     }
 }

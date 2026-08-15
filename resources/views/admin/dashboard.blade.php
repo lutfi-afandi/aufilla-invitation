@@ -99,7 +99,7 @@
         </div>
     </div>
 
-    <!-- Bottom Grid -->
+    <!-- Middle Grid: Status & Cron Monitoring -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Visual Progress Bar Status Undangan -->
         <div class="animate-fade-in-up delay-300 bg-white rounded-[2rem] border border-slate-200/80 shadow-sm p-8 hover:shadow-lg transition-shadow duration-300 relative overflow-hidden">
@@ -153,50 +153,109 @@
             </div>
         </div>
 
-        <!-- Ucapan Terbaru -->
-        <div class="animate-fade-in-up delay-400 lg:col-span-2 bg-white rounded-[2rem] border border-slate-200/80 shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col overflow-hidden">
-            <div class="p-8 pb-5 flex items-center justify-between border-b border-slate-100">
-                <h3 class="text-sm font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                    Live: Ucapan Terbaru
-                </h3>
-                <span class="text-xs text-admin-accent bg-indigo-50 px-3 py-1 rounded-full font-bold ring-1 ring-indigo-200/50">{{ $totalUcapan }} Respon Global</span>
-            </div>
-            
-            <div class="flex-1 p-8 pt-4">
-                @if($recentUcapans->isEmpty())
-                    <div class="h-full flex flex-col items-center justify-center text-slate-400 animate-pulse">
-                        <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-                            <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                        </div>
-                        <p class="text-sm font-medium">Belum ada ucapan yang masuk.</p>
+        <!-- Cron Health & Expired Log Widget -->
+        <div class="animate-fade-in-up delay-400 lg:col-span-2 bg-white rounded-[2rem] border border-slate-200/80 shadow-sm p-8 hover:shadow-lg transition-shadow duration-300 flex flex-col justify-between overflow-hidden">
+            <div>
+                <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Status Cronjob & Log Expired
+                    </h3>
+                    @if($lastCronRun)
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Terakhir Jalan: {{ $lastCronRun->executed_at->diffForHumans() }}
+                        </span>
+                    @else
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-200">
+                            Belum Ada Log Eksekusi
+                        </span>
+                    @endif
+                </div>
+
+                @if($recentExpiredLogs->isEmpty())
+                    <div class="py-8 text-center text-slate-400">
+                        <svg class="w-12 h-12 text-slate-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <p class="text-sm font-medium">Log eksekusi cronjob belum tercatat. Jalankan <code class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded">php artisan invitation:check-expired</code></p>
                     </div>
                 @else
-                    <div class="space-y-4 max-h-[320px] overflow-y-auto custom-scrollbar pr-2">
-                        @foreach($recentUcapans as $ucapan)
-                        <div class="flex gap-4 p-5 rounded-2xl bg-slate-50/50 border border-slate-100 hover:bg-white hover:border-indigo-100 hover:shadow-md transition-all duration-300 group">
-                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-50 to-admin-accent/10 flex items-center justify-center text-admin-accent-dark font-extrabold text-lg flex-shrink-0 group-hover:scale-110 group-hover:-rotate-6 transition-transform shadow-sm">
-                                {{ strtoupper(substr($ucapan->nama ?? '?', 0, 1)) }}
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <div class="flex items-center justify-between gap-2 mb-1.5">
-                                    <span class="text-base font-bold text-slate-800 truncate">{{ $ucapan->nama }}</span>
-                                    <span class="text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-lg flex-shrink-0">{{ $ucapan->created_at->diffForHumans() }}</span>
-                                </div>
-                                <p class="text-sm text-slate-600 line-clamp-2 leading-relaxed mb-2">"{{ $ucapan->ucapan ?? $ucapan->pesan ?? '-' }}"</p>
-                                <div class="flex items-center gap-2">
-                                    <span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-md {{ $ucapan->kehadiran === 'hadir' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : ($ucapan->kehadiran === 'tidak_hadir' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-amber-50 text-amber-600 border border-amber-100') }}">
-                                        <span class="w-1.5 h-1.5 rounded-full {{ $ucapan->kehadiran === 'hadir' ? 'bg-emerald-500' : ($ucapan->kehadiran === 'tidak_hadir' ? 'bg-red-500' : 'bg-amber-500') }}"></span>
-                                        {{ $ucapan->kehadiran }}
-                                    </span>
-                                    <span class="text-xs text-slate-400 font-medium">via {{ $ucapan->undangan->slug ?? 'Unknown' }}</span>
+                    <div class="space-y-3">
+                        @foreach($recentExpiredLogs as $log)
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs">
+                                    {{ $log->total_expired }}
+                                </span>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-700">{{ $log->notes }}</p>
+                                    <p class="text-[11px] text-slate-400">{{ $log->executed_at->format('d M Y H:i:s') }}</p>
                                 </div>
                             </div>
+                            @if(!empty($log->affected_invitations) && count($log->affected_invitations) > 0)
+                            <div class="flex flex-wrap gap-1">
+                                @foreach($log->affected_invitations as $item)
+                                <span class="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-md font-mono font-bold" title="Paket: {{ $item['paket'] ?? '-' }}">
+                                    {{ $item['slug'] ?? 'ID:'.$item['id'] }}
+                                </span>
+                                @endforeach
+                            </div>
+                            @endif
                         </div>
                         @endforeach
                     </div>
                 @endif
             </div>
+
+            <div class="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between">
+                <span>Cron Command: <code class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-mono">invitation:check-expired</code></span>
+                <span>Jadwal Recommended: Setiap Jam / Harian</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ucapan Terbaru -->
+    <div class="bg-white rounded-[2rem] border border-slate-200/80 shadow-sm p-8 hover:shadow-lg transition-shadow duration-300 flex flex-col overflow-hidden">
+        <div class="pb-5 flex items-center justify-between border-b border-slate-100">
+            <h3 class="text-sm font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                Live: Ucapan Terbaru
+            </h3>
+            <span class="text-xs text-admin-accent bg-indigo-50 px-3 py-1 rounded-full font-bold ring-1 ring-indigo-200/50">{{ $totalUcapan }} Respon Global</span>
+        </div>
+        
+        <div class="pt-4">
+            @if($recentUcapans->isEmpty())
+                <div class="h-32 flex flex-col items-center justify-center text-slate-400 animate-pulse">
+                    <div class="w-14 h-14 bg-slate-50 rounded-full flex items-center justify-center mb-2">
+                        <svg class="w-7 h-7 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    </div>
+                    <p class="text-sm font-medium">Belum ada ucapan yang masuk.</p>
+                </div>
+            @else
+                <div class="space-y-4 max-h-[320px] overflow-y-auto custom-scrollbar pr-2">
+                    @foreach($recentUcapans as $ucapan)
+                    <div class="flex gap-4 p-5 rounded-2xl bg-slate-50/50 border border-slate-100 hover:bg-white hover:border-indigo-100 hover:shadow-md transition-all duration-300 group">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-50 to-admin-accent/10 flex items-center justify-center text-admin-accent-dark font-extrabold text-lg flex-shrink-0 group-hover:scale-110 group-hover:-rotate-6 transition-transform shadow-sm">
+                            {{ strtoupper(substr($ucapan->nama ?? '?', 0, 1)) }}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between gap-2 mb-1.5">
+                                <span class="text-base font-bold text-slate-800 truncate">{{ $ucapan->nama }}</span>
+                                <span class="text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-lg flex-shrink-0">{{ $ucapan->created_at->diffForHumans() }}</span>
+                            </div>
+                            <p class="text-sm text-slate-600 line-clamp-2 leading-relaxed mb-2">"{{ $ucapan->ucapan ?? $ucapan->pesan ?? '-' }}"</p>
+                            <div class="flex items-center gap-2">
+                                <span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-md {{ $ucapan->kehadiran === 'hadir' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : ($ucapan->kehadiran === 'tidak_hadir' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-amber-50 text-amber-600 border border-amber-100') }}">
+                                    <span class="w-1.5 h-1.5 rounded-full {{ $ucapan->kehadiran === 'hadir' ? 'bg-emerald-500' : ($ucapan->kehadiran === 'tidak_hadir' ? 'bg-red-500' : 'bg-amber-500') }}"></span>
+                                    {{ $ucapan->kehadiran }}
+                                </span>
+                                <span class="text-xs text-slate-400 font-medium">via {{ $ucapan->undangan->slug ?? 'Unknown' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
 </div>
