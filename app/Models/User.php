@@ -36,6 +36,11 @@ class User extends Authenticatable
         return $this->hasMany(Undangan::class);
     }
 
+    public function invitation()
+    {
+        return $this->hasOne(Undangan::class)->latestOfMany();
+    }
+
     public function transaksis()
     {
         return $this->hasMany(Transaksi::class);
