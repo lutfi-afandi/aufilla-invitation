@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Cerita extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'invitation_id',
-        'tanggal',
+        'undangan_id',
         'judul',
-        'isi_cerita',
+        'tanggal',
+        'isi',
     ];
 
-    public function invitation()
+    public function undangan()
     {
-        return $this->belongsTo(Invitation::class);
+        return $this->belongsTo(Undangan::class);
     }
 }

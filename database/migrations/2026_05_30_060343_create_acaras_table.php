@@ -6,14 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('acaras', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('invitation_id')->constrained('invitations')->cascadeOnDelete();
+            $table->foreignId('undangan_id')->constrained('undangans')->cascadeOnDelete();
+            $table->string('nama_acara')->nullable();
             $table->enum('tipe_acara', ['akad', 'resepsi']);
             $table->date('tgl_acara')->nullable();
             $table->time('waktu_mulai')->nullable();
@@ -25,9 +23,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('acaras');

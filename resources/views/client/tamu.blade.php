@@ -12,7 +12,18 @@
     <div class="bg-white border border-brand-accent/15 rounded-[20px] shadow-[0_10px_30px_rgba(10,34,20,0.03)] overflow-hidden">
         <!-- Card Header -->
         <div class="bg-gradient-to-r from-brand-dark/5 to-transparent border-b border-brand-accent/15 px-4 md:px-7 py-4 md:py-5 flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4 md:gap-0">
-            <h3 class="text-[1.15rem] font-semibold text-brand-dark" style="font-family: 'Playfair Display', serif;">Buku Tamu</h3>
+            <div class="flex items-center gap-3">
+                <h3 class="text-[1.15rem] font-semibold text-brand-dark" style="font-family: 'Playfair Display', serif;">Buku Tamu</h3>
+                @php
+                    $undanganUser = Auth::user()->undangans()->first();
+                    $maxWa = $undanganUser && $undanganUser->paket ? $undanganUser->paket->max_wa_send : 99999;
+                    $sendCount = $undanganUser ? $undanganUser->wa_send_count : 0;
+                @endphp
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold {{ $sendCount >= $maxWa ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-amber-100 text-amber-800 border border-amber-200' }}">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                    Kirim WA: <strong id="badge-wa-count">{{ $sendCount }}</strong> / {{ $maxWa > 10000 ? '∞' : $maxWa }}
+                </span>
+            </div>
             <div class="flex flex-wrap items-center gap-2 md:gap-3 w-full md:w-auto">
                 <a href="{{ route('client.tamu.export') }}" class="flex-1 md:flex-none justify-center bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-3 md:px-4 py-2 rounded-xl text-xs md:text-sm font-medium transition-colors shadow-sm flex items-center gap-1.5 md:gap-2">
                     <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -454,26 +465,55 @@
 
         // Open WA Link
         $(document).on('click', '.btn-wa', function() {
-            var slug = $(this).data('slug');
-            var nama = $(this).data('nama');
+            var btn = $(this);
+            var slug = btn.data('slug');
+            var nama = btn.data('nama');
+            var noWa = btn.data('wa');
             var link = window.location.origin + "/" + slug + "?to=" + encodeURIComponent(nama);
             
-            // Replace placeholder in template
             var text = currentWaTemplate.replace('[nama_tamu]', nama).replace('[link_undangan]', link);
             
-            // Jika ada nomor WA, langsung buka chat ke nomor tersebut
-            var noWa = $(this).data('wa');
             var waUrl;
             if (noWa) {
-                // Normalisasi format nomor: hapus 0 di depan, ganti jadi 62
-                var normalized = String(noWa).replace(/\D/g, ''); // hapus non-angka
+                var normalized = String(noWa).replace(/\D/g, '');
                 if (normalized.startsWith('0')) normalized = '62' + normalized.slice(1);
                 if (!normalized.startsWith('62')) normalized = '62' + normalized;
                 waUrl = "https://wa.me/" + normalized + "?text=" + encodeURIComponent(text);
             } else {
                 waUrl = "https://wa.me/?text=" + encodeURIComponent(text);
             }
-            window.open(waUrl, "_blank");
+
+            // Track WA Send via Backend
+            $.ajax({
+                url: "{{ route('client.tamu.trackWaSend') }}",
+                method: "POST",
+                data: { _token: "{{ csrf_token() }}" },
+                success: function(response) {
+                    if (response.wa_send_count !== undefined) {
+                        $('#badge-wa-count').text(response.wa_send_count);
+                    }
+                    window.open(waUrl, "_blank");
+                },
+                error: function(xhr) {
+                    let errorMsg = 'Kuota kirim undangan Paket Trial Anda sudah habis.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    }
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Kuota Kirim Habis!',
+                        text: errorMsg,
+                        confirmButtonText: 'Upgrade Paket',
+                        confirmButtonColor: '#0a2214',
+                        showCancelButton: true,
+                        cancelButtonText: 'Tutup'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "https://wa.me/{{ config('app.activation_wa') }}?text=" + encodeURIComponent("Halo Admin Aufilla, saya ingin upgrade paket undangan.");
+                        }
+                    });
+                }
+            });
         });
 
         // Copy Link

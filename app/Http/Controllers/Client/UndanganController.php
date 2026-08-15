@@ -5,8 +5,12 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use App\Models\Undangan;
+use App\Models\User;
 
-class InvitationController extends Controller
+class UndanganController extends Controller
 {
     public function updateMempelai(Request $request)
     {
@@ -26,8 +30,8 @@ class InvitationController extends Controller
             'cover_img' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:6144',
         ]);
 
-        $invitation = Auth::user()->invitation;
-        if (!$invitation) {
+        $undangan = Auth::user()->undangans()->first();
+        if (!$undangan) {
             return response()->json(['error' => 'Data undangan tidak ditemukan.'], 404);
         }
         
@@ -43,29 +47,28 @@ class InvitationController extends Controller
             'wanita_ibu' => $request->wanita_ibu,
         ];
 
-        // Handle File Uploads
         if ($request->hasFile('pria_foto')) {
-            if ($invitation->pria_foto && \Illuminate\Support\Facades\Storage::disk('public')->exists($invitation->pria_foto)) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($invitation->pria_foto);
+            if ($undangan->pria_foto && Storage::disk('public')->exists($undangan->pria_foto)) {
+                Storage::disk('public')->delete($undangan->pria_foto);
             }
             $updateData['pria_foto'] = $request->file('pria_foto')->store('pengantin', 'public');
         }
 
         if ($request->hasFile('wanita_foto')) {
-            if ($invitation->wanita_foto && \Illuminate\Support\Facades\Storage::disk('public')->exists($invitation->wanita_foto)) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($invitation->wanita_foto);
+            if ($undangan->wanita_foto && Storage::disk('public')->exists($undangan->wanita_foto)) {
+                Storage::disk('public')->delete($undangan->wanita_foto);
             }
             $updateData['wanita_foto'] = $request->file('wanita_foto')->store('pengantin', 'public');
         }
 
         if ($request->hasFile('cover_img')) {
-            if ($invitation->cover_img && \Illuminate\Support\Facades\Storage::disk('public')->exists($invitation->cover_img)) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($invitation->cover_img);
+            if ($undangan->cover_img && Storage::disk('public')->exists($undangan->cover_img)) {
+                Storage::disk('public')->delete($undangan->cover_img);
             }
             $updateData['cover_img'] = $request->file('cover_img')->store('pengantin', 'public');
         }
 
-        $invitation->update($updateData);
+        $undangan->update($updateData);
 
         return response()->json(['success' => true]);
     }
@@ -90,13 +93,12 @@ class InvitationController extends Controller
             'resepsi_gmaps' => 'nullable|url',
         ]);
 
-        $invitation = Auth::user()->invitation;
-        if (!$invitation) {
+        $undangan = Auth::user()->undangans()->first();
+        if (!$undangan) {
             return response()->json(['error' => 'Data undangan tidak ditemukan.'], 404);
         }
 
-        // Update or Create Akad
-        $invitation->acaras()->updateOrCreate(
+        $undangan->acaras()->updateOrCreate(
             ['tipe_acara' => 'akad'],
             [
                 'nama_acara' => $request->akad_nama,
@@ -109,8 +111,7 @@ class InvitationController extends Controller
             ]
         );
 
-        // Update or Create Resepsi
-        $invitation->acaras()->updateOrCreate(
+        $undangan->acaras()->updateOrCreate(
             ['tipe_acara' => 'resepsi'],
             [
                 'nama_acara' => $request->resepsi_nama,
@@ -129,27 +130,25 @@ class InvitationController extends Controller
     public function updateSettings(Request $request)
     {
         $request->validate([
-            'music_file' => 'nullable|file|mimes:mp3,wav|max:10240', // Max 10MB
+            'slug' => 'nullable|string|max:50',
+            'music_file' => 'nullable|file|mimes:mp3,wav|max:10240',
             'kutipan_sumber' => 'nullable|string|max:100',
             'kutipan_teks' => 'nullable|string|max:1000',
         ]);
 
-        $invitation = Auth::user()->invitation;
-        if (!$invitation) {
+        $undangan = Auth::user()->undangans()->first();
+        if (!$undangan) {
             return response()->json(['error' => 'Data undangan tidak ditemukan.'], 404);
         }
 
-        $canCerita = \App\Helpers\PackageHelper::canAccessLoveStory($invitation);
-        $canMusic = \App\Helpers\PackageHelper::canAccessCustomMusic($invitation);
+        $canCerita = $undangan->paket ? $undangan->paket->has_love_story : false;
+        $canMusic = $undangan->paket ? $undangan->paket->can_custom_music : false;
 
         if ($request->has('is_cerita_aktif') && !$canCerita) {
             return response()->json(['error' => 'Paket Anda tidak mendukung fitur Cerita Cinta.'], 403);
         }
 
         if ($request->hasFile('music_file') && !$canMusic) {
-            if (\App\Helpers\PackageHelper::isTrial($invitation)) {
-                return response()->json(['error' => 'Anda tidak dapat mengubah musik latar dalam mode Trial.'], 403);
-            }
             return response()->json(['error' => 'Paket Anda tidak mendukung kustomisasi musik latar.'], 403);
         }
 
@@ -161,15 +160,32 @@ class InvitationController extends Controller
             'kutipan_teks' => $request->input('kutipan_teks'),
         ];
 
+        if ($request->filled('slug')) {
+            $newSlug = Str::slug($request->slug);
+            $reserved = ['admin', 'login', 'register', 'preview', 'receptionist', 'dashboard', 'api', 'welcome-screen', 'kado', 'tamu'];
+            if (in_array($newSlug, $reserved)) {
+                return response()->json(['error' => 'URL custom ini tidak dapat digunakan.'], 422);
+            }
+
+            $existsUndangan = Undangan::where('slug', $newSlug)->where('id', '!=', $undangan->id)->exists();
+            $existsUser = User::where('username', $newSlug)->where('id', '!=', Auth::id())->exists();
+
+            if ($existsUndangan || $existsUser) {
+                return response()->json(['error' => 'URL custom / link ini sudah digunakan oleh akun lain.'], 422);
+            }
+
+            $updateData['slug'] = $newSlug;
+        }
+
         if ($request->hasFile('music_file')) {
-            if ($invitation->music_file && \Illuminate\Support\Facades\Storage::disk('public')->exists($invitation->music_file)) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($invitation->music_file);
+            if ($undangan->music_file && Storage::disk('public')->exists($undangan->music_file)) {
+                Storage::disk('public')->delete($undangan->music_file);
             }
             $updateData['music_file'] = $request->file('music_file')->store('music', 'public');
         }
 
-        $invitation->update($updateData);
+        $undangan->update($updateData);
 
-        return response()->json(['success' => true, 'slug' => $invitation->slug]);
+        return response()->json(['success' => true, 'slug' => $undangan->slug]);
     }
 }

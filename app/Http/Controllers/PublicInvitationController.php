@@ -3,74 +3,49 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Invitation;
+use App\Models\Undangan;
+use App\Models\Tema;
 
 class PublicInvitationController extends Controller
 {
     public function show($slug)
     {
-        $invitation = Invitation::with(['user', 'theme', 'acaras', 'galeris', 'ucapans'])->where('slug', $slug)->firstOrFail();
+        $invitation = Undangan::with(['user', 'tema', 'acaras', 'galeris', 'ucapans'])->where('slug', $slug)->firstOrFail();
 
-        // If theme is not set, fallback or 404
-        if (!$invitation->theme) {
+        if (!$invitation->tema) {
             abort(404, 'Tema belum dikonfigurasi.');
         }
 
-        // If status is draft, only owner can see
-        if ($invitation->status === 'draft') {
-            if (!auth()->check() || auth()->id() !== $invitation->user_id) {
-                abort(403, 'Undangan ini masih dalam status Draft.');
-            }
-        }
-
-        // Cek apakah data pengantin sudah lengkap
-        if (!$invitation->isDataPengantinComplete()) {
-            abort(403, 'Undangan belum bisa diakses karena Data Pengantin belum lengkap. Jika Anda pemilik undangan, silakan lengkapi profil mempelai melalui Panel Klien.');
-        }
-
-        // Cek apakah data acara sudah lengkap
-        if (!$invitation->isDataAcaraComplete()) {
-            abort(403, 'Undangan belum bisa diakses karena Data Acara belum lengkap. Jika Anda pemilik undangan, silakan lengkapi data acara (Akad & Resepsi) melalui Panel Klien.');
-        }
-
-        // If trial expired, blocked completely for everyone
-        if ($invitation->status === 'trial' && $invitation->trial_habis_at && $invitation->trial_habis_at->isPast()) {
-            abort(403, 'Masa trial undangan ini telah habis. Silakan hubungi Admin untuk aktivasi.');
-        }
-
-        // If nonaktif
-        if ($invitation->status === 'nonaktif') {
-            abort(404, 'Undangan ini sedang tidak aktif.');
+        // Cek status kedaluwarsa
+        if ($invitation->status === 'kedaluwarsa' || $invitation->isExpired()) {
+            abort(403, 'Masa aktif undangan ini telah habis. Silakan hubungi Admin/Pemilik untuk perpanjangan.');
         }
 
         $akad = $invitation->acaras->where('tipe_acara', 'akad')->first();
         $resepsi = $invitation->acaras->where('tipe_acara', 'resepsi')->first();
-        $wishes = $invitation->ucapans()->orderBy('created_at', 'desc')->get(); // Fetch wishes
-        $maxGaleris = \App\Helpers\PackageHelper::getMaxGalleryPhotos($invitation);
+        $wishes = $invitation->ucapans()->orderBy('created_at', 'desc')->get();
+        $maxGaleris = $invitation->paket ? $invitation->paket->max_gallery_photos : 5;
         $galeris = $invitation->galeris()->orderBy('created_at', 'desc')->limit($maxGaleris)->get();
 
-        if (\App\Helpers\PackageHelper::canAccessLoveStory($invitation)) {
+        if ($invitation->paket && $invitation->paket->has_love_story) {
             $ceritas = $invitation->ceritas()->orderBy('created_at', 'asc')->get();
         } else {
             $ceritas = collect([]);
         }
         $kados = $invitation->kados()->orderBy('created_at', 'asc')->get();
 
-        // Dynamically load the view based on the theme code
-        $viewPath = 'themes.' . $invitation->theme->code . '.index';
+        $viewPath = 'themes.' . $invitation->tema->code . '.index';
 
         if (!view()->exists($viewPath)) {
-            abort(500, 'File tema (' . $invitation->theme->code . ') tidak ditemukan di server.');
+            abort(500, 'File tema (' . $invitation->tema->code . ') tidak ditemukan di server.');
         }
 
-        // Handle Guest and QR Code
         $tamu = null;
         $qrCode = null;
         if (request()->has('to')) {
             $namaTamu = request()->query('to');
             $tamu = $invitation->tamus()->where('nama_tamu', $namaTamu)->first();
-            if ($tamu) {
-                // Generate QR Code containing the Tamu Kode QR
+            if ($tamu && $tamu->kode_qr) {
                 $qrCode = \SimpleSoftwareIO\QrCode\Facades\QrCode::size(250)->margin(2)->generate($tamu->kode_qr);
             }
         }
@@ -90,7 +65,7 @@ class PublicInvitationController extends Controller
             ]);
         }
 
-        $invitation = Invitation::where('slug', $slug)->firstOrFail();
+        $invitation = Undangan::where('slug', $slug)->firstOrFail();
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -100,8 +75,8 @@ class PublicInvitationController extends Controller
 
         $wish = $invitation->ucapans()->create([
             'nama' => $request->name,
-            'kehadiran' => $request->is_attending ? 'hadir' : 'tidak',
-            'pesan' => $request->message,
+            'kehadiran' => $request->is_attending ? 'hadir' : 'tidak_hadir',
+            'ucapan' => $request->message,
         ]);
 
         return response()->json([
@@ -115,15 +90,14 @@ class PublicInvitationController extends Controller
 
     public function preview($themeCode)
     {
-        $theme = \App\Models\Theme::where('code', $themeCode)->firstOrFail();
+        $theme = Tema::where('code', $themeCode)->firstOrFail();
 
         $viewPath = 'themes.' . $theme->code . '.index';
         if (!view()->exists($viewPath)) {
             abort(500, 'File tema (' . $theme->code . ') tidak ditemukan di server.');
         }
 
-        // Generate Dummy Data for Preview
-        $invitation = new Invitation([
+        $invitation = new Undangan([
             'slug' => 'preview',
             'pria_nama' => 'Bima',
             'pria_nama_lengkap' => 'Bima Saputra',
@@ -141,11 +115,8 @@ class PublicInvitationController extends Controller
             'alamat_kado' => 'Jl. Cinta Sejati No. 12, Lampung',
             'music_file' => null,
         ]);
-        // Set dummy ID for route generation (e.g. og-image)
         $invitation->id = 9999;
-
-        // Relationship mock (this might not be perfect for all eloquent relations but works for standard property access)
-        $invitation->setRelation('theme', $theme);
+        $invitation->setRelation('tema', $theme);
 
         $akad = new \App\Models\Acara([
             'tipe_acara' => 'akad',
@@ -153,7 +124,7 @@ class PublicInvitationController extends Controller
             'tgl_acara' => now()->addDays(14)->format('Y-m-d'),
             'waktu_mulai' => '08:00',
             'waktu_selesai' => '10:00',
-            'tempat' => 'Masjid Raya Verona',
+            'lokasi' => 'Masjid Raya Verona',
             'alamat' => 'Jl. Masjid Raya No. 1',
         ]);
 
@@ -163,93 +134,34 @@ class PublicInvitationController extends Controller
             'tgl_acara' => now()->addDays(14)->format('Y-m-d'),
             'waktu_mulai' => '11:00',
             'waktu_selesai' => '14:00',
-            'tempat' => 'Gedung Serbaguna',
+            'lokasi' => 'Gedung Serbaguna',
             'alamat' => 'Jl. Kebahagiaan No. 2',
         ]);
 
-        $wish1 = new \App\Models\Ucapan([
-            'nama' => 'Admin Aufilla',
-            'kehadiran' => 'hadir',
-            'pesan' => 'Selamat menempuh hidup baru. Semoga menjadi keluarga yang sakinah, mawaddah, dan warahmah.'
-        ]);
-        $wish1->created_at = now();
-
-        $wish2 = new \App\Models\Ucapan([
-            'nama' => 'Budi Santoso',
-            'kehadiran' => 'hadir',
-            'pesan' => 'MasyaAllah, selamat ya! Semoga acaranya lancar dan selalu diberikan kebahagiaan.'
-        ]);
-        $wish2->created_at = now()->subMinutes(30);
-
-        $wish3 = new \App\Models\Ucapan([
-            'nama' => 'Rina Wulandari',
-            'kehadiran' => 'berhalangan',
-            'pesan' => 'Mohon maaf belum bisa hadir. Semoga menjadi keluarga yang penuh cinta dan keberkahan.'
-        ]);
-        $wish3->created_at = now()->subHours(1);
-
-        $wish4 = new \App\Models\Ucapan([
-            'nama' => 'Ahmad Fauzi',
-            'kehadiran' => 'hadir',
-            'pesan' => 'Happy wedding! Semoga langgeng sampai kakek nenek.'
-        ]);
-        $wish4->created_at = now()->subHours(2);
-
-        $wish5 = new \App\Models\Ucapan([
-            'nama' => 'Dewi Lestari',
-            'kehadiran' => 'hadir',
-            'pesan' => 'Selamat berbahagia untuk kedua mempelai. Semoga selalu diberi kesehatan dan rezeki yang melimpah.'
-        ]);
-        $wish5->created_at = now()->subHours(4);
-
-        $wish6 = new \App\Models\Ucapan([
-            'nama' => 'Andi Prasetyo',
-            'kehadiran' => 'berhalangan',
-            'pesan' => 'Turut berbahagia. Maaf belum bisa datang, semoga acaranya berjalan dengan lancar.'
-        ]);
-        $wish6->created_at = now()->subHours(6);
-
         $wishes = collect([
-            $wish1,
-            $wish2,
-            $wish3,
-            $wish4,
-            $wish5,
-            $wish6,
+            new \App\Models\Ucapan([
+                'nama' => 'Admin Aufilla',
+                'kehadiran' => 'hadir',
+                'ucapan' => 'Selamat menempuh hidup baru. Semoga menjadi keluarga yang sakinah, mawaddah, dan warahmah.'
+            ]),
         ]);
 
         $galeris = collect([
             new \App\Models\Galeri(['image_path' => 'assets/default/default-pasangan.jpg']),
             new \App\Models\Galeri(['image_path' => 'assets/default/default_pria.jpg']),
             new \App\Models\Galeri(['image_path' => 'assets/default/default_wanita.jpg']),
-            new \App\Models\Galeri(['image_path' => 'assets/default/default-pasangan2.jpg']),
-            new \App\Models\Galeri(['image_path' => 'assets/default/default_pria2.jpg']),
-            new \App\Models\Galeri(['image_path' => 'assets/default/default_wanita2.jpg']),
         ]);
 
         $ceritas = collect([
             new \App\Models\Cerita([
                 'judul' => 'Awal Pertemuan',
                 'tanggal' => '2022-08-14',
-                'isi_cerita' => 'Tak ada yang menyangka, pertemuan sederhana di sebuah acara kampus menjadi awal dari kisah kami. Berawal dari obrolan singkat, kami mulai saling mengenal dan menjalin komunikasi yang semakin erat setiap harinya.'
+                'isi' => 'Tak ada yang menyangka, pertemuan sederhana di sebuah acara kampus menjadi awal dari kisah kami.'
             ]),
-
-            new \App\Models\Cerita([
-                'judul' => 'Menjalin Komitmen',
-                'tanggal' => '2023-03-18',
-                'isi_cerita' => 'Seiring berjalannya waktu, kami belajar saling memahami, mendukung dalam setiap langkah, serta tumbuh bersama menghadapi berbagai suka dan duka. Dari situlah kami yakin untuk melangkah ke hubungan yang lebih serius.'
-            ]),
-
-            new \App\Models\Cerita([
-                'judul' => 'Lamaran',
-                'tanggal' => '2024-10-05',
-                'isi_cerita' => 'Dengan restu kedua keluarga, kami melangsungkan acara lamaran dalam suasana hangat dan penuh kebahagiaan. Momen ini menjadi awal perjalanan menuju ikatan suci pernikahan yang kami impikan bersama.'
-            ])
         ]);
 
         $kados = collect([
-            new \App\Models\Kado(['nama_bank' => 'BCA', 'nomor_rekening' => '1234567890', 'atas_nama' => 'Bima Saputra']),
-            new \App\Models\Kado(['nama_bank' => 'Muamalat', 'nomor_rekening' => '089345092832', 'atas_nama' => 'Ayu Lestari']),
+            new \App\Models\Kado(['nama_bank' => 'BCA', 'no_rekening' => '1234567890', 'nama_pemilik' => 'Bima Saputra']),
         ]);
 
         $tamu = new \App\Models\Tamu(['nama_tamu' => 'Tamu Spesial', 'kode_qr' => 'PREVIEW-QR-123']);

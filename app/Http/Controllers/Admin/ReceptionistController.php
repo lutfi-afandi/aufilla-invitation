@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Invitation;
+use App\Models\Undangan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +24,7 @@ class ReceptionistController extends Controller
 
         $receptionists = $query->latest()->paginate(10)->withQueryString();
 
-        $invitations = Invitation::with('user')->where('status', 'active')->get();
+        $invitations = Undangan::with('user')->where('status', 'aktif')->get();
 
         if ($request->ajax()) {
             return response()->json([

@@ -6,23 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Models\Tamu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class TamuController extends Controller
 {
     public function index(Request $request)
     {
-        $invitation = Auth::user()->invitation;
-        if (!$invitation) {
+        $undangan = Auth::user()->undangans()->first();
+        if (!$undangan) {
             return response()->json(['data' => []]);
         }
 
-        $query = $invitation->tamus()->orderBy('created_at', 'desc');
+        $query = $undangan->tamus()->orderBy('created_at', 'desc');
 
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('nama_tamu', 'like', "%{$search}%")
-                  ->orWhere('no_wa', 'like', "%{$search}%");
+                  ->orWhere('no_whatsapp', 'like', "%{$search}%");
             });
         }
 
@@ -37,48 +38,67 @@ class TamuController extends Controller
             'no_wa' => 'nullable|string|max:20',
         ]);
 
-        $invitation = Auth::user()->invitation;
+        $undangan = Auth::user()->undangans()->first();
         
-        if (!\App\Helpers\PackageHelper::canAddGuest($invitation)) {
-            $max = \App\Helpers\PackageHelper::getMaxGuests($invitation);
-            return response()->json(['error' => 'Anda telah mencapai batas maksimal tamu untuk paket ini ('.$max.' tamu).'], 403);
-        }
-        
-        $tamu = $invitation->tamus()->create([
+        $tamu = $undangan->tamus()->create([
             'nama_tamu' => $request->nama_tamu,
-            'no_wa' => $this->sanitizeWaNumber($request->no_wa),
+            'slug' => Str::slug($request->nama_tamu),
+            'no_whatsapp' => $this->sanitizeWaNumber($request->no_wa),
+            'kode_qr' => 'QR-' . strtoupper(Str::random(10)),
         ]);
 
         return response()->json([
             'success' => true,
             'tamu' => $tamu,
-            'wa_link' => $this->generateWaLink($invitation->slug, $tamu->nama_tamu)
+            'wa_link' => $this->generateWaLink($undangan->slug, $tamu->nama_tamu)
         ]);
     }
 
     public function destroy($id)
     {
-        $invitation = Auth::user()->invitation;
-        $tamu = $invitation->tamus()->findOrFail($id);
+        $undangan = Auth::user()->undangans()->first();
+        $tamu = $undangan->tamus()->findOrFail($id);
         $tamu->delete();
 
         return response()->json(['success' => true]);
     }
 
+    public function trackWaSend(Request $request)
+    {
+        $undangan = Auth::user()->undangans()->first();
+        if (!$undangan) {
+            return response()->json(['success' => false, 'message' => 'Undangan tidak ditemukan.'], 404);
+        }
+
+        if (!$undangan->canSendWa()) {
+            $max = $undangan->paket->max_wa_send ?? 3;
+            return response()->json([
+                'success' => false,
+                'error' => 'limit_reached',
+                'message' => "Kuota kirim undangan Paket {$undangan->paket->name} Anda sudah habis (maksimal {$max}x). Silakan upgrade paket Anda untuk membuka kuota kirim tanpa batas."
+            ], 403);
+        }
+
+        $undangan->increment('wa_send_count');
+
+        return response()->json([
+            'success' => true,
+            'wa_send_count' => $undangan->wa_send_count,
+            'remaining' => $undangan->getRemainingWaCount()
+        ]);
+    }
+
     private function generateWaLink($slug, $namaTamu)
     {
-        // Construct the invitation link
         $link = url('/' . $slug . '?to=' . urlencode($namaTamu));
-        
-        // Default text for sending via WhatsApp
         $text = "Halo, kami mengundang Anda ke pernikahan kami! Silakan lihat detailnya di: " . $link;
         return "https://wa.me/?text=" . urlencode($text);
     }
 
     public function toggleWa(Request $request, $id)
     {
-        $invitation = Auth::user()->invitation;
-        $tamu = $invitation->tamus()->findOrFail($id);
+        $undangan = Auth::user()->undangans()->first();
+        $tamu = $undangan->tamus()->findOrFail($id);
         
         $tamu->update([
             'is_wa_sent' => !$tamu->is_wa_sent
@@ -89,15 +109,15 @@ class TamuController extends Controller
 
     public function exportExcel()
     {
-        $invitation = Auth::user()->invitation;
-        $tamus = $invitation->tamus()->orderBy('created_at', 'desc')->get();
+        $undangan = Auth::user()->undangans()->first();
+        $tamus = $undangan->tamus()->orderBy('created_at', 'desc')->get();
 
         $filename = "data_tamu_" . date('Ymd_His') . ".xlsx";
 
         return (new \Rap2hpoutre\FastExcel\FastExcel($tamus))->download($filename, function ($tamu) {
             return [
                 'Nama Tamu' => $tamu->nama_tamu,
-                'No WhatsApp' => $tamu->no_wa,
+                'No WhatsApp' => $tamu->no_whatsapp,
                 'Status WA' => $tamu->is_wa_sent ? 'Sudah Dikirim' : 'Belum'
             ];
         });
@@ -109,24 +129,20 @@ class TamuController extends Controller
             'excel_file' => 'required|file|mimes:xlsx,xls,csv|max:2048',
         ]);
 
-        $invitation = Auth::user()->invitation;
+        $undangan = Auth::user()->undangans()->first();
         
         $collection = (new \Rap2hpoutre\FastExcel\FastExcel)->import($request->file('excel_file'));
         
         foreach ($collection as $row) {
-            if (!\App\Helpers\PackageHelper::canAddGuest($invitation)) {
-                // Berhenti mengimpor jika limit tercapai
-                break;
-            }
-
-            // Support both exact name and variation
             $nama_tamu = $row['Nama Tamu'] ?? $row['nama tamu'] ?? $row['nama_tamu'] ?? '';
             $no_wa = $row['No WhatsApp'] ?? $row['no whatsapp'] ?? $row['no_wa'] ?? '';
 
             if (!empty($nama_tamu)) {
-                $invitation->tamus()->create([
+                $undangan->tamus()->create([
                     'nama_tamu' => $nama_tamu,
-                    'no_wa' => $this->sanitizeWaNumber($no_wa)
+                    'slug' => Str::slug($nama_tamu),
+                    'no_whatsapp' => $this->sanitizeWaNumber($no_wa),
+                    'kode_qr' => 'QR-' . strtoupper(Str::random(10)),
                 ]);
             }
         }

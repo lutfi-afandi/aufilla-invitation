@@ -6,26 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('themes', function (Blueprint $table) {
+        Schema::create('temas', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('code')->unique();
             $table->string('thumbnail')->nullable();
+            $table->string('category')->default('General');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('themes');
+        Schema::dropIfExists('temas');
     }
 };

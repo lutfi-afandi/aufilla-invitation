@@ -12,13 +12,11 @@ class CheckClientExpired
     {
         $user = Auth::user();
         if ($user && $user->role === 'client') {
-            $invitation = $user->invitation;
+            $undangan = $user->undangans()->first();
             
             $isExpired = false;
-            if ($invitation) {
-                if ($invitation->status === 'expired' || $invitation->status === 'nonaktif') {
-                    $isExpired = true;
-                } elseif ($invitation->status === 'trial' && $invitation->trial_habis_at && $invitation->trial_habis_at->isPast()) {
+            if ($undangan) {
+                if ($undangan->status === 'kedaluwarsa' || $undangan->isExpired()) {
                     $isExpired = true;
                 }
             }

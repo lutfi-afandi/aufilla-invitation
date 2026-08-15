@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Invitation;
+use App\Models\Undangan;
+use App\Models\Paket;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -17,10 +18,8 @@ class InvitationService
     public function quickRegister(array $data)
     {
         return DB::transaction(function () use ($data) {
-            // Use the provided username (which is already slugified by the controller/frontend)
             $username = Str::slug($data['username']);
             
-            // Create the user
             $user = User::create([
                 'username' => $username,
                 'email' => $data['email'],
@@ -28,17 +27,16 @@ class InvitationService
                 'role' => 'client',
             ]);
 
-            // Cari ID Paket VIP untuk Trial
-            $vipPackage = \App\Models\Package::where('name', 'VIP')->first();
-            $packageId = $vipPackage ? $vipPackage->id : null;
+            $trialPaket = Paket::where('name', 'Trial')->first() ?? Paket::first();
+            $activeDays = $trialPaket ? $trialPaket->active_days : 3;
 
-            $invitation = Invitation::create([
+            $invitation = Undangan::create([
                 'user_id' => $user->id,
-                'theme_id' => $data['theme_id'] ?? null,
-                'package_id' => $packageId,
+                'tema_id' => $data['theme_id'] ?? null,
+                'paket_id' => $trialPaket ? $trialPaket->id : null,
                 'slug' => $username,
-                'status' => 'trial',
-                'trial_habis_at' => Carbon::now()->addDay(),
+                'status' => 'aktif',
+                'expired_at' => Carbon::now()->addDays($activeDays),
                 'pria_nama' => 'Pria',
                 'wanita_nama' => 'Wanita',
             ]);

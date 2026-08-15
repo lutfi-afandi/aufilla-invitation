@@ -173,9 +173,8 @@
                 <div>
                     <label class="block font-bold text-xs tracking-wider text-slate-600 uppercase mb-2">Status <span class="text-red-500">*</span></label>
                     <select name="status" id="edit-status" required class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:bg-white focus:ring-2 focus:ring-admin-accent/30 focus:border-admin-accent transition-all text-slate-700">
-                        <option value="trial">Trial</option>
-                        <option value="active">Aktif</option>
-                        <option value="expired">Nonaktif/Expired</option>
+                        <option value="aktif">Aktif</option>
+                        <option value="kedaluwarsa">Kedaluwarsa</option>
                     </select>
                 </div>
                 <div>
@@ -240,7 +239,6 @@
 <script>
 $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
 
-// Fetch clients via AJAX
 function fetchClients(page_url) {
     const search = $('#search-client').val();
     const url = page_url || "{{ route('admin.clients.index') }}";
@@ -252,8 +250,6 @@ function fetchClients(page_url) {
         data: { search: search },
         success: function(res) {
             $('#table-content-wrapper').html(res.html).css('opacity', '1');
-            
-            // Push state so URL matches
             if (history.pushState) {
                 const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?search=' + encodeURIComponent(search);
                 window.history.pushState({path:newurl}, '', newurl);
@@ -262,7 +258,6 @@ function fetchClients(page_url) {
     });
 }
 
-// Live Search
 let searchTimeout;
 $('#search-client').on('input', function() {
     clearTimeout(searchTimeout);
@@ -271,13 +266,12 @@ $('#search-client').on('input', function() {
     }, 400);
 });
 
-// Pagination Clicks
 $(document).on('click', '.pagination-container a', function(e) {
     e.preventDefault();
     fetchClients($(this).attr('href'));
 });
 
-let currentPickerTarget = 'create'; // 'create' or 'edit'
+let currentPickerTarget = 'create';
 
 function openCreateModal() { 
     $('#create-form')[0].reset();
@@ -297,14 +291,16 @@ function openEditModal(client) {
     $('#edit-username').val(client.username);
     $('#edit-email').val(client.email);
     
-    if (client.invitation) {
-        $('#edit-status').val(client.invitation.status);
-        $('#edit-package').val(client.invitation.package_id || '');
-        if (client.invitation.theme) {
-            $('#edit-theme-id').val(client.invitation.theme_id);
-            $('#edit-theme-name').text(client.invitation.theme.name).removeClass('text-slate-600').addClass('text-slate-800 font-bold');
-            if (client.invitation.theme.thumbnail) {
-                $('#edit-theme-icon').html(`<img src="/storage/${client.invitation.theme.thumbnail}" class="w-full h-full object-cover">`);
+    const und = client.undangans ? client.undangans[0] : null;
+
+    if (und) {
+        $('#edit-status').val(und.status);
+        $('#edit-package').val(und.paket_id || '');
+        if (und.tema) {
+            $('#edit-theme-id').val(und.tema_id);
+            $('#edit-theme-name').text(und.tema.name).removeClass('text-slate-600').addClass('text-slate-800 font-bold');
+            if (und.tema.thumbnail) {
+                $('#edit-theme-icon').html(`<img src="/storage/${und.tema.thumbnail}" class="w-full h-full object-cover">`);
             } else {
                 $('#edit-theme-icon').html(`<svg class="w-6 h-6 text-slate-400 group-hover:text-admin-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`);
             }
@@ -314,14 +310,13 @@ function openEditModal(client) {
             $('#edit-theme-icon').html(`<svg class="w-6 h-6 text-slate-400 group-hover:text-admin-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`);
         }
     } else {
-        $('#edit-status').val('trial');
+        $('#edit-status').val('aktif');
         $('#edit-package').val('');
         $('#edit-theme-id').val('');
         $('#edit-theme-name').text('Belum memilih tema').removeClass('text-slate-800 font-bold').addClass('text-slate-600');
         $('#edit-theme-icon').html(`<svg class="w-6 h-6 text-slate-400 group-hover:text-admin-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`);
     }
     
-    // Trigger preview for edit
     document.getElementById('edit-username').dispatchEvent(new Event('keyup'));
     $('#edit-form').find('button[type=submit]').prop('disabled', false);
     
@@ -336,7 +331,7 @@ function openDetailModal(id) {
     $.get("/admin/clients/" + id)
         .done(function(res) {
             const client = res.client;
-            const inv = res.invitation;
+            const inv = res.undangan;
             
             let statusBadge = '<span class="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded">Belum ada</span>';
             let themeName = '-';
@@ -345,27 +340,14 @@ function openDetailModal(id) {
             
             if (inv) {
                 const s = inv.status;
-                const colors = { active: 'bg-emerald-100 text-emerald-700', trial: 'bg-amber-100 text-amber-700', expired: 'bg-red-100 text-red-600' };
+                const colors = { aktif: 'bg-emerald-100 text-emerald-700', kedaluwarsa: 'bg-red-100 text-red-600' };
                 statusBadge = `<span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${colors[s] || 'bg-slate-100 text-slate-500'}">${s}</span>`;
                 
-                if (inv.theme) themeName = inv.theme.name;
-                if (inv.package) packageName = inv.package.name;
+                if (inv.tema) themeName = inv.tema.name;
+                if (inv.paket) packageName = inv.paket.name;
                 
-                if (s === 'trial' && inv.trial_habis_at) {
-                    trialHabis = new Date(inv.trial_habis_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute:'2-digit'});
-                } else if (s === 'active' && inv.package) {
-                    if (inv.package.active_days > 10000) {
-                        trialHabis = '<span class="text-emerald-600 font-semibold">Aktif Permanen</span>';
-                    } else {
-                        const expDate = new Date(client.created_at);
-                        expDate.setDate(expDate.getDate() + inv.package.active_days);
-                        trialHabis = expDate.toLocaleDateString('id-ID', {day: '2-digit', month: 'short', year: 'numeric'});
-                    }
-                } else if (s === 'active') {
-                    // Fallback jika tidak ada paket
-                    trialHabis = '<span class="text-emerald-600 font-semibold">Aktif</span>';
-                } else if (s === 'expired') {
-                    trialHabis = '<span class="text-red-600 font-semibold">Kadaluarsa</span>';
+                if (inv.expired_at) {
+                    trialHabis = new Date(inv.expired_at).toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
                 }
             }
 
@@ -400,7 +382,7 @@ function openDetailModal(id) {
                         <p class="font-bold text-slate-700">${new Date(client.created_at).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'})}</p>
                     </div>
                     <div class="col-span-2 bg-slate-50 rounded-2xl p-4 border border-slate-100/60">
-                        <span class="block text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1.5">Batas Masa Aktif / Trial</span>
+                        <span class="block text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1.5">Masa Aktif Berakhir</span>
                         <p class="font-bold text-slate-700">${trialHabis}</p>
                     </div>
                 </div>
@@ -418,7 +400,6 @@ function openThemePicker(target) {
     currentPickerTarget = target;
     const currentThemeId = $('#' + target + '-theme-id').val();
     
-    // Highlight selected theme
     $('.theme-card').removeClass('border-admin-accent ring-2 ring-admin-accent/20');
     $('.selected-overlay').removeClass('opacity-100').addClass('opacity-0');
     
@@ -457,7 +438,6 @@ function filterThemes() {
     });
 }
 
-// URL Preview Logic
 let checkTimeout;
 
 function bindUsernameCheck(inputId, containerId, valueId, feedbackId, formId, excludeIdInputId = null) {
@@ -542,13 +522,11 @@ $('#create-form').on('submit', function(e) {
             Swal.fire({ icon: 'success', title: 'Berhasil', text: res.message, timer: 1500, showConfirmButton: false });
             closeModal('create-modal');
             
-            // Remove empty state if it exists
             const tbody = $('#clients-table-container tbody');
             if(tbody.find('tr').length === 1 && tbody.find('tr td').attr('colspan') === '7') {
                 tbody.empty();
             }
             
-            // Inject new row at the top
             if(res.html) {
                 tbody.prepend(res.html);
             }
@@ -584,7 +562,6 @@ $('#edit-form').on('submit', function(e) {
         Swal.fire({ icon: 'success', title: 'Berhasil', text: res.message, timer: 1500, showConfirmButton: false });
         closeModal('edit-modal');
         
-        // Replace existing row
         if(res.html && id) {
             $('#client-row-' + id).replaceWith(res.html);
         }

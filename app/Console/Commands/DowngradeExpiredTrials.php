@@ -3,59 +3,51 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Models\Undangan;
+use App\Models\ExpiredLog;
 
 class DowngradeExpiredTrials extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'invitation:downgrade-expired-trials';
+    protected $signature = 'invitation:check-expired';
+    protected $description = 'Periksa dan ubah status undangan yang masa aktifnya telah habis menjadi kedaluwarsa';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Downgrade expired trial invitations to Basic package';
-
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
-        $this->info('Starting check for expired trial invitations...');
+        $this->info('Mengecek undangan kedaluwarsa...');
 
-        // Cari paket Basic
-        $basicPackage = \App\Models\Package::where('name', 'Basic')->first();
-        if (!$basicPackage) {
-            $this->error('Paket "Basic" tidak ditemukan di database. Pastikan seeder sudah dijalankan.');
-            return;
-        }
-
-        // Ambil semua undangan yang statusnya trial dan trial_habis_at sudah lewat
-        $expiredInvitations = \App\Models\Invitation::where('status', 'trial')
-            ->whereNotNull('trial_habis_at')
-            ->where('trial_habis_at', '<', now())
-            ->where('package_id', '!=', $basicPackage->id) // Hindari update yang sudah Basic
+        $now = now();
+        $expiredInvitations = Undangan::with(['user', 'paket'])
+            ->where('status', 'aktif')
+            ->whereNotNull('expired_at')
+            ->where('expired_at', '<', $now)
             ->get();
 
-        if ($expiredInvitations->isEmpty()) {
-            $this->info('Tidak ada undangan trial kedaluwarsa yang perlu di-downgrade.');
-            return;
-        }
-
+        $affected = [];
         $count = 0;
+
         foreach ($expiredInvitations as $invitation) {
             $invitation->update([
-                'package_id' => $basicPackage->id,
-                // Status dibiarkan 'trial' agar Admin tetap tahu dia trial yang expired
+                'status' => 'kedaluwarsa',
             ]);
             $count++;
-            $this->line("Downgraded invitation ID: {$invitation->id} ({$invitation->slug}) to Basic package.");
+            $affected[] = [
+                'id' => $invitation->id,
+                'slug' => $invitation->slug,
+                'username' => $invitation->user->username ?? '-',
+                'paket' => $invitation->paket->name ?? '-',
+                'expired_at' => $invitation->expired_at ? $invitation->expired_at->format('Y-m-d H:i:s') : null,
+            ];
+            $this->line("Undangan ID {$invitation->id} ({$invitation->slug}) telah diubah ke status kedaluwarsa.");
         }
 
-        $this->info("Proses selesai. Berhasil me-downgrade {$count} undangan.");
+        ExpiredLog::create([
+            'executed_at' => $now,
+            'total_expired' => $count,
+            'affected_invitations' => $affected,
+            'status' => 'success',
+            'notes' => $count > 0 ? "Berhasil me-nonaktifkan {$count} undangan kedaluwarsa." : "Cronjob berjalan normal. Tidak ada undangan kedaluwarsa.",
+        ]);
+
+        $this->info("Selesai. Berhasil memperbarui {$count} undangan dan mencatat log eksekusi.");
     }
 }

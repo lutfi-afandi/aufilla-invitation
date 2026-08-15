@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Kado extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'invitation_id',
+        'undangan_id',
         'nama_bank',
         'no_rekening',
         'nama_pemilik',
     ];
 
-    public function invitation()
+    public function undangan()
     {
-        return $this->belongsTo(Invitation::class);
+        return $this->belongsTo(Undangan::class);
     }
 }
