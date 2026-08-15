@@ -6,24 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('tamus', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('invitation_id')->constrained('invitations')->cascadeOnDelete();
+            $table->foreignId('undangan_id')->constrained('undangans')->cascadeOnDelete();
             $table->string('nama_tamu');
-            $table->string('no_wa')->nullable();
+            $table->string('slug');
+            $table->string('no_whatsapp')->nullable();
+            $table->string('kode_qr')->nullable();
             $table->boolean('is_wa_sent')->default(false);
+            $table->timestamp('waktu_hadir')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('tamus');

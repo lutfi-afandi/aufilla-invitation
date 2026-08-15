@@ -3,22 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Theme;
+use App\Models\Tema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class ThemeController extends Controller
+class TemaController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Theme::withCount('invitations');
+        $query = Tema::withCount('undangans');
 
         if ($search = $request->input('search')) {
             $query->where('name', 'like', "%{$search}%")
                 ->orWhere('code', 'like', "%{$search}%");
         }
 
-        // Urutkan berdasarkan yang terbaru, dan gunakan pagination
         $themes = $query->latest()->paginate(12)->withQueryString();
 
         if ($request->ajax()) {
@@ -32,7 +31,7 @@ class ThemeController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:100',
-            'code' => 'required|string|max:50|unique:themes,code',
+            'code' => 'required|string|max:50|unique:temas,code',
             'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'is_active' => 'boolean',
         ]);
@@ -47,14 +46,14 @@ class ThemeController extends Controller
             $data['thumbnail'] = $request->file('thumbnail')->store('themes/thumbnails', 'public');
         }
 
-        Theme::create($data);
+        Tema::create($data);
 
         return response()->json(['message' => 'Tema berhasil ditambahkan.']);
     }
 
     public function update(Request $request, $id)
     {
-        $theme = Theme::findOrFail($id);
+        $theme = Tema::findOrFail($id);
 
         $validated = $request->validate([
             'name' => 'required|string|max:100',
@@ -79,7 +78,7 @@ class ThemeController extends Controller
 
     public function toggleActive($id)
     {
-        $theme = Theme::findOrFail($id);
+        $theme = Tema::findOrFail($id);
         $theme->is_active = ! $theme->is_active;
         $theme->save();
 
@@ -91,11 +90,11 @@ class ThemeController extends Controller
 
     public function destroy($id)
     {
-        $theme = Theme::withCount('invitations')->findOrFail($id);
+        $theme = Tema::withCount('undangans')->findOrFail($id);
 
-        if ($theme->invitations_count > 0) {
+        if ($theme->undangans_count > 0) {
             return response()->json([
-                'message' => 'Gagal menghapus! Tema ini sedang digunakan oleh '.$theme->invitations_count.' klien.',
+                'message' => 'Gagal menghapus! Tema ini sedang digunakan oleh '.$theme->undangans_count.' klien.',
             ], 422);
         }
 

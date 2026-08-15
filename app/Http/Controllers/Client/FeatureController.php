@@ -18,20 +18,23 @@ class FeatureController extends Controller
     public function storeGaleri(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:6144'
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:6144'
         ]);
 
-        $invitation = Auth::user()->invitation;
-        
-        if (!\App\Helpers\PackageHelper::canAddGalleryPhoto($invitation)) {
-            $max = \App\Helpers\PackageHelper::getMaxGalleryPhotos($invitation);
-            return response()->json(['error' => 'Anda telah mencapai batas maksimal unggahan galeri untuk paket ini ('.$max.' foto).'], 403);
+        $undangan = Auth::user()->undangans()->first();
+        if (!$undangan) {
+            return response()->json(['error' => 'Undangan tidak ditemukan.'], 404);
+        }
+
+        $maxGaleris = $undangan->paket ? $undangan->paket->max_gallery_photos : 5;
+        if ($undangan->galeris()->count() >= $maxGaleris) {
+            return response()->json(['error' => 'Anda telah mencapai batas maksimal unggahan galeri untuk paket ini ('.$maxGaleris.' foto).'], 403);
         }
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('galeri', 'public');
             
-            $galeri = $invitation->galeris()->create([
+            $galeri = $undangan->galeris()->create([
                 'image_path' => $path
             ]);
 
@@ -47,8 +50,8 @@ class FeatureController extends Controller
 
     public function destroyGaleri($id)
     {
-        $invitation = Auth::user()->invitation;
-        $galeri = $invitation->galeris()->findOrFail($id);
+        $undangan = Auth::user()->undangans()->first();
+        $galeri = $undangan->galeris()->findOrFail($id);
 
         if (Storage::disk('public')->exists($galeri->image_path)) {
             Storage::disk('public')->delete($galeri->image_path);
@@ -70,16 +73,16 @@ class FeatureController extends Controller
             'isi_cerita' => 'required|string'
         ]);
 
-        $invitation = Auth::user()->invitation;
+        $undangan = Auth::user()->undangans()->first();
         
-        if (!\App\Helpers\PackageHelper::canAccessLoveStory($invitation)) {
+        if (!$undangan->paket || !$undangan->paket->has_love_story) {
             return response()->json(['error' => 'Paket Anda tidak mendukung fitur Cerita Cinta.'], 403);
         }
 
-        $cerita = $invitation->ceritas()->create([
+        $cerita = $undangan->ceritas()->create([
             'tanggal' => $request->tanggal,
             'judul' => $request->judul,
-            'isi_cerita' => $request->isi_cerita
+            'isi' => $request->isi_cerita
         ]);
 
         return response()->json([
@@ -97,13 +100,13 @@ class FeatureController extends Controller
             'isi_cerita' => 'required|string'
         ]);
 
-        $invitation = Auth::user()->invitation;
-        $cerita = $invitation->ceritas()->findOrFail($id);
+        $undangan = Auth::user()->undangans()->first();
+        $cerita = $undangan->ceritas()->findOrFail($id);
 
         $cerita->update([
             'tanggal' => $request->tanggal,
             'judul' => $request->judul,
-            'isi_cerita' => $request->isi_cerita
+            'isi' => $request->isi_cerita
         ]);
 
         return response()->json([
@@ -115,8 +118,8 @@ class FeatureController extends Controller
 
     public function destroyCerita($id)
     {
-        $invitation = Auth::user()->invitation;
-        $cerita = $invitation->ceritas()->findOrFail($id);
+        $undangan = Auth::user()->undangans()->first();
+        $cerita = $undangan->ceritas()->findOrFail($id);
         $cerita->delete();
 
         return response()->json(['success' => true, 'message' => 'Cerita berhasil dihapus']);
@@ -131,8 +134,8 @@ class FeatureController extends Controller
             'alamat_kado' => 'required|string'
         ]);
 
-        $invitation = Auth::user()->invitation;
-        $invitation->update([
+        $undangan = Auth::user()->undangans()->first();
+        $undangan->update([
             'alamat_kado' => $request->alamat_kado
         ]);
 
@@ -147,9 +150,9 @@ class FeatureController extends Controller
             'nama_pemilik' => 'required|string|max:255'
         ]);
 
-        $invitation = Auth::user()->invitation;
+        $undangan = Auth::user()->undangans()->first();
 
-        $kado = $invitation->kados()->create([
+        $kado = $undangan->kados()->create([
             'nama_bank' => $request->nama_bank,
             'no_rekening' => $request->no_rekening,
             'nama_pemilik' => $request->nama_pemilik
@@ -164,8 +167,8 @@ class FeatureController extends Controller
 
     public function destroyKado($id)
     {
-        $invitation = Auth::user()->invitation;
-        $kado = $invitation->kados()->findOrFail($id);
+        $undangan = Auth::user()->undangans()->first();
+        $kado = $undangan->kados()->findOrFail($id);
         $kado->delete();
 
         return response()->json(['success' => true, 'message' => 'Rekening berhasil dihapus']);

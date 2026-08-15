@@ -3,13 +3,23 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Paket;
 
-class PackageSeeder extends Seeder
+class PaketSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('packages')->insert([
+        $pakets = [
+            [
+                'name' => 'Trial',
+                'price' => 0.00,
+                'active_days' => 3,
+                'max_gallery_photos' => 5,
+                'has_love_story' => true,
+                'can_custom_music' => true,
+                'is_priority_support' => false,
+                'description' => 'Paket uji coba gratis 3 hari untuk mencoba fitur pembuatan undangan.',
+            ],
             [
                 'name' => 'Basic',
                 'price' => 35000.00,
@@ -19,8 +29,6 @@ class PackageSeeder extends Seeder
                 'can_custom_music' => false,
                 'is_priority_support' => false,
                 'description' => 'Paket ekonomis dengan fitur dasar untuk menyebarkan undangan digital dengan mudah.',
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Premium',
@@ -31,8 +39,6 @@ class PackageSeeder extends Seeder
                 'can_custom_music' => false,
                 'is_priority_support' => false,
                 'description' => 'Pilihan tepat dengan masa aktif lebih lama dan fitur ekstra untuk melengkapi momen spesial Anda.',
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'VIP',
@@ -43,9 +49,11 @@ class PackageSeeder extends Seeder
                 'can_custom_music' => true,
                 'is_priority_support' => true,
                 'description' => 'Paket paling lengkap tanpa batasan. Aktif selamanya dengan dukungan penuh dan kebebasan kustomisasi.',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
-        ]);
+            ],
+        ];
+
+        foreach ($pakets as $paket) {
+            Paket::updateOrCreate(['name' => $paket['name']], $paket);
+        }
     }
 }

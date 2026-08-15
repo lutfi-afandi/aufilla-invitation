@@ -5,18 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Galeri extends Model
+class Tema extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'undangan_id',
-        'image_path',
-        'caption',
+        'name',
+        'code',
+        'thumbnail',
+        'category',
+        'is_active',
     ];
 
-    public function undangan()
+    public function undangans()
     {
-        return $this->belongsTo(Undangan::class);
+        return $this->hasMany(Undangan::class);
     }
 }

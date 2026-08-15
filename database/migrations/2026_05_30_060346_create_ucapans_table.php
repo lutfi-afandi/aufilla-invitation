@@ -6,25 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('ucapans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('invitation_id')->constrained('invitations')->cascadeOnDelete();
+            $table->foreignId('undangan_id')->constrained('undangans')->cascadeOnDelete();
             $table->string('nama');
-            $table->enum('kehadiran', ['hadir', 'tidak', 'ragu']);
-            $table->text('pesan');
-            $table->boolean('is_hidden')->default(false);
+            $table->text('ucapan');
+            $table->enum('kehadiran', ['hadir', 'tidak_hadir', 'ragu'])->default('hadir');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('ucapans');

@@ -2,21 +2,27 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Acara extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'invitation_id', 'tipe_acara', 'nama_acara', 'tgl_acara', 'waktu_mulai', 
-        'waktu_selesai', 'lokasi', 'alamat', 'gmaps_link'
+        'undangan_id',
+        'nama_acara',
+        'tipe_acara',
+        'tgl_acara',
+        'waktu_mulai',
+        'waktu_selesai',
+        'lokasi',
+        'alamat',
+        'gmaps_link',
     ];
 
-    protected $casts = [
-        'tgl_acara' => 'date',
-    ];
-
-    public function invitation()
+    public function undangan()
     {
-        return $this->belongsTo(Invitation::class);
+        return $this->belongsTo(Undangan::class);
     }
 }

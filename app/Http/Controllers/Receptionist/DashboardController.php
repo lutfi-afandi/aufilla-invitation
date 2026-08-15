@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Receptionist;
 
 use App\Http\Controllers\Controller;
+use App\Models\Undangan;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -11,8 +12,8 @@ class DashboardController extends Controller
     {
         $search = $request->input('search');
         
-        $query = \App\Models\Invitation::with(['user'])
-                    ->whereIn('status', ['active', 'trial'])
+        $query = Undangan::with(['user'])
+                    ->where('status', 'aktif')
                     ->orderBy('created_at', 'desc');
 
         if ($search) {

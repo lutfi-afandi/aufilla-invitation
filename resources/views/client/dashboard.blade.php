@@ -27,17 +27,15 @@
                 </h2>
                 
                 <p class="text-white/60 text-[15px] sm:text-base leading-relaxed font-light max-w-xl">
-                    @if($invitation->status === 'trial')
-                        @if($invitation->trial_habis_at && $invitation->trial_habis_at->isPast())
-                            Masa trial Anda telah habis. Paket Anda telah diturunkan ke Basic. Beberapa fitur premium kini terkunci. Lakukan aktivasi untuk mengembalikan fitur tanpa batas.
-                        @else
-                            Anda sedang menikmati Trial Paket <strong class="text-[#e8d5b5] font-semibold">{{ $invitation->package->name ?? 'VIP' }}</strong> hingga <strong class="text-[#e8d5b5] font-semibold">{{ $invitation->trial_habis_at ? $invitation->trial_habis_at->format('d M Y') : '-' }}</strong>. Lakukan aktivasi sebelum kedaluwarsa agar fitur tidak terkunci.
-                        @endif
-                    @elseif($invitation->status === 'aktif' && $invitation->package)
-                        Paket <strong class="text-[#e8d5b5] font-semibold">{{ $invitation->package->name }}</strong> Anda aktif hingga {{ $invitation->package->active_days > 10000 ? 'selamanya' : $invitation->created_at->addDays($invitation->package->active_days)->format('d M Y') }}. 
-                        @if($invitation->package->name === 'Basic')
+                    @if($invitation->status === 'kedaluwarsa' || $invitation->isExpired())
+                        Masa aktif undangan Anda telah habis. Beberapa fitur premium kini terkunci. Silakan hubungi Admin untuk aktivasi perpanjangan.
+                    @elseif($invitation->paket)
+                        Paket <strong class="text-[#e8d5b5] font-semibold">{{ $invitation->paket->name }}</strong> Anda aktif hingga <strong class="text-[#e8d5b5] font-semibold">{{ $invitation->paket->active_days > 10000 ? 'selamanya' : ($invitation->expired_at ? $invitation->expired_at->format('d M Y') : '-') }}</strong>.
+                        @if($invitation->paket->name === 'Trial')
+                            Anda sedang dalam masa uji coba (Trial). Hubungi Admin untuk upgrade ke paket permanen.
+                        @elseif($invitation->paket->name === 'Basic')
                             Tingkatkan ke Premium atau VIP untuk membuka lebih banyak fitur eksklusif.
-                        @elseif($invitation->package->name === 'Premium')
+                        @elseif($invitation->paket->name === 'Premium')
                             Tingkatkan ke VIP untuk mendapatkan kapasitas foto galeri tanpa batas.
                         @else
                             Nikmati seluruh fitur eksklusif VIP tanpa batas untuk hari bahagia Anda.
@@ -53,17 +51,11 @@
                 
                 <!-- Action 1: Lihat Undangan -->
                 <div class="flex flex-col items-center gap-3 group">
-                    @if($invitation->isDataPengantinComplete())
-                        <a href="{{ route('public.invitation', $invitation->slug) }}" target="_blank" class="w-16 h-16 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#c5a880] to-[#e8d5b5] text-[#0a2214] flex items-center justify-center shadow-[0_0_30px_rgba(197,168,128,0.2)] group-hover:shadow-[0_0_40px_rgba(197,168,128,0.5)] transition-all duration-500 transform group-hover:-translate-y-2 relative overflow-hidden">
-                            <div class="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            <svg class="w-7 h-7 sm:w-6 sm:h-6 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                        </a>
-                    @else
-                        <button type="button" onclick="Swal.fire({icon: 'warning', title: 'Data Belum Lengkap!', text: 'Silakan lengkapi seluruh Data Pengantin terlebih dahulu.', confirmButtonText: 'Lengkapi Sekarang', confirmButtonColor: '#C5A880'}).then((result) => { if (result.isConfirmed) { window.location.href = '{{ route('client.pengantin') }}'; } })" class="w-16 h-16 sm:w-14 sm:h-14 rounded-full bg-white/5 border border-white/10 text-white/30 flex items-center justify-center cursor-not-allowed">
-                            <svg class="w-7 h-7 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                        </button>
-                    @endif
-                    <span class="text-[10px] sm:text-[11px] uppercase tracking-[0.15em] font-semibold {{ $invitation->isDataPengantinComplete() ? 'text-[#c5a880]' : 'text-white/30' }} group-hover:-translate-y-1 transition-transform duration-500">Undangan</span>
+                    <a href="{{ route('public.invitation', $invitation->slug) }}" target="_blank" class="w-16 h-16 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#c5a880] to-[#e8d5b5] text-[#0a2214] flex items-center justify-center shadow-[0_0_30px_rgba(197,168,128,0.2)] group-hover:shadow-[0_0_40px_rgba(197,168,128,0.5)] transition-all duration-500 transform group-hover:-translate-y-2 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <svg class="w-7 h-7 sm:w-6 sm:h-6 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    </a>
+                    <span class="text-[10px] sm:text-[11px] uppercase tracking-[0.15em] font-semibold text-[#c5a880] group-hover:-translate-y-1 transition-transform duration-500">Undangan</span>
                 </div>
 
                 <!-- Action 2: Pengaturan Tema -->
@@ -174,10 +166,10 @@
                                 <span class="text-base font-bold text-gray-800 truncate">{{ $ucapan->nama }}</span>
                                 <span class="text-[11px] font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-lg flex-shrink-0">{{ $ucapan->created_at->diffForHumans() }}</span>
                             </div>
-                            <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed mb-2">"{{ $ucapan->pesan ?? '-' }}"</p>
+                            <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed mb-2">"{{ $ucapan->ucapan ?? $ucapan->pesan ?? '-' }}"</p>
                             <div class="flex items-center gap-2">
-                                <span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-md {{ $ucapan->kehadiran === 'hadir' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : ($ucapan->kehadiran === 'tidak' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-amber-50 text-amber-600 border border-amber-100') }}">
-                                    <span class="w-1.5 h-1.5 rounded-full {{ $ucapan->kehadiran === 'hadir' ? 'bg-emerald-500' : ($ucapan->kehadiran === 'tidak' ? 'bg-red-500' : 'bg-amber-500') }}"></span>
+                                <span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-md {{ $ucapan->kehadiran === 'hadir' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : ($ucapan->kehadiran === 'tidak_hadir' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-amber-50 text-amber-600 border border-amber-100') }}">
+                                    <span class="w-1.5 h-1.5 rounded-full {{ $ucapan->kehadiran === 'hadir' ? 'bg-emerald-500' : ($ucapan->kehadiran === 'tidak_hadir' ? 'bg-red-500' : 'bg-amber-500') }}"></span>
                                     {{ $ucapan->kehadiran }}
                                 </span>
                             </div>

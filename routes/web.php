@@ -30,12 +30,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('/clients/{id}/status', [\App\Http\Controllers\Admin\ClientController::class, 'updateStatus'])->name('clients.status');
         Route::get('/clients/{id}/impersonate', [\App\Http\Controllers\Admin\ClientController::class, 'impersonate'])->name('clients.impersonate');
 
-        // Themes
-        Route::get('/themes', [\App\Http\Controllers\Admin\ThemeController::class, 'index'])->name('themes.index');
-        Route::post('/themes', [\App\Http\Controllers\Admin\ThemeController::class, 'store'])->name('themes.store');
-        Route::put('/themes/{id}', [\App\Http\Controllers\Admin\ThemeController::class, 'update'])->name('themes.update');
-        Route::patch('/themes/{id}/toggle', [\App\Http\Controllers\Admin\ThemeController::class, 'toggleActive'])->name('themes.toggle');
-        Route::delete('/themes/{id}', [\App\Http\Controllers\Admin\ThemeController::class, 'destroy'])->name('themes.destroy');
+        // Themes (Temas)
+        Route::get('/themes', [\App\Http\Controllers\Admin\TemaController::class, 'index'])->name('themes.index');
+        Route::post('/themes', [\App\Http\Controllers\Admin\TemaController::class, 'store'])->name('themes.store');
+        Route::put('/themes/{id}', [\App\Http\Controllers\Admin\TemaController::class, 'update'])->name('themes.update');
+        Route::patch('/themes/{id}/toggle', [\App\Http\Controllers\Admin\TemaController::class, 'toggleActive'])->name('themes.toggle');
+        Route::delete('/themes/{id}', [\App\Http\Controllers\Admin\TemaController::class, 'destroy'])->name('themes.destroy');
+
+        // Pakets
+        Route::get('/pakets', [\App\Http\Controllers\Admin\PaketController::class, 'index'])->name('pakets.index');
+        Route::post('/pakets', [\App\Http\Controllers\Admin\PaketController::class, 'store'])->name('pakets.store');
+        Route::put('/pakets/{id}', [\App\Http\Controllers\Admin\PaketController::class, 'update'])->name('pakets.update');
+        Route::delete('/pakets/{id}', [\App\Http\Controllers\Admin\PaketController::class, 'destroy'])->name('pakets.destroy');
 
         // Receptionists
         Route::get('/receptionists', [\App\Http\Controllers\Admin\ReceptionistController::class, 'index'])->name('receptionists.index');
@@ -69,9 +75,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/kado', [\App\Http\Controllers\Client\DashboardController::class, 'kado'])->name('kado');
 
             // Form Data endpoints (AJAX Submissions)
-            Route::post('/mempelai', [\App\Http\Controllers\Client\InvitationController::class, 'updateMempelai'])->name('mempelai.update');
-            Route::post('/acara', [\App\Http\Controllers\Client\InvitationController::class, 'updateAcara'])->name('acara.update');
-            Route::post('/pengaturan', [\App\Http\Controllers\Client\InvitationController::class, 'updateSettings'])->name('pengaturan.update');
+            Route::post('/mempelai', [\App\Http\Controllers\Client\UndanganController::class, 'updateMempelai'])->name('mempelai.update');
+            Route::post('/acara', [\App\Http\Controllers\Client\UndanganController::class, 'updateAcara'])->name('acara.update');
+            Route::post('/pengaturan', [\App\Http\Controllers\Client\UndanganController::class, 'updateSettings'])->name('pengaturan.update');
 
             // Feature endpoints
             Route::post('/galeri', [\App\Http\Controllers\Client\FeatureController::class, 'storeGaleri'])->name('galeri.store');
@@ -92,8 +98,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/tamu/import-excel', [\App\Http\Controllers\Client\TamuController::class, 'importExcel'])->name('tamu.import');
         });
     });
-
-
 
     // Receptionist Routes
     Route::middleware(['role:resepsionis'])->prefix('receptionist')->name('receptionist.')->group(function () {

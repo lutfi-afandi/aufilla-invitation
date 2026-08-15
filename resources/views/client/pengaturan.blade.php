@@ -14,7 +14,7 @@ $access['can_cerita'] = \App\Helpers\PackageHelper::canAccessLoveStory($invitati
     <div class="bg-white border border-brand-accent/15 rounded-[20px] shadow-[0_10px_30px_rgba(10,34,20,0.03)] overflow-hidden">
         <!-- Card Header -->
         <div class="bg-gradient-to-r from-brand-dark/5 to-transparent border-b border-brand-accent/15 px-7 py-5">
-            <h3 class="text-[1.15rem] font-semibold text-brand-dark" style="font-family: 'Playfair Display', serif;">Pengaturan Tampilan Undangan</h3>
+            <h3 class="text-[1.15rem] font-semibold text-brand-dark" style="font-family: 'Playfair Display', serif;">Pengaturan Tampilan & Link Undangan</h3>
         </div>
 
         <!-- Card Body -->
@@ -23,42 +23,51 @@ $access['can_cerita'] = \App\Helpers\PackageHelper::canAccessLoveStory($invitati
                 @csrf
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-                    <!-- Kiri: Tema & Status -->
+                    <!-- Kiri: Tema, Slug & Status -->
                     <div class="space-y-6">
                         <div class="bg-brand-bg/50 p-5 rounded-2xl border border-brand-accent/20">
                             <h4 class="font-semibold text-brand-dark mb-4 text-md flex items-center gap-2">
                                 <svg class="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
                                 </svg>
-                                Tema & Status Publikasi
+                                Link & Status Publikasi
                             </h4>
 
                             <div class="space-y-4">
                                 <div>
+                                    <label class="block font-medium text-brand-dark mb-2 text-sm">Link Custom Undangan (URL Slug)</label>
+                                    <div class="flex items-center">
+                                        <span class="bg-gray-100 border border-r-0 border-brand-accent/30 rounded-l-xl px-3 py-2.5 text-xs text-gray-500 font-mono shrink-0">{{ url('/') }}/</span>
+                                        <input type="text" name="slug" value="{{ old('slug', $invitation->slug) }}" placeholder="nama-custom-anda" class="w-full bg-white border border-brand-accent/30 rounded-r-xl px-3 py-2.5 text-sm focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 transition-all outline-none font-medium text-brand-dark">
+                                    </div>
+                                    <p class="text-[11px] text-gray-500 mt-1">*Ubah tautan unik untuk membuka undangan Anda (contoh: romeo-juliet).</p>
+                                </div>
+
+                                <div>
                                     <label class="block font-medium text-brand-dark mb-2 text-sm">Tema Undangan</label>
                                     <div class="w-full bg-gray-100 border-1.5 border-brand-accent/30 rounded-xl px-4 py-2.5 text-sm text-gray-600 font-medium cursor-not-allowed">
-                                        {{ $invitation->theme ? $invitation->theme->name . ' (' . $invitation->theme->code . ')' : 'Belum Ada Tema' }}
+                                        {{ $invitation->tema ? $invitation->tema->name . ' (' . $invitation->tema->code . ')' : 'Belum Ada Tema' }}
                                     </div>
-                                    <p class="text-xs text-gray-500 mt-1">*Tema ditentukan oleh Admin / saat pendaftaran.</p>
+                                    <p class="text-xs text-gray-500 mt-1">*Tema ditentukan saat pendaftaran / dikelola oleh Admin.</p>
                                 </div>
 
                                 <div>
                                     <label class="block font-medium text-brand-dark mb-2 text-sm">Paket & Status</label>
                                     <div class="w-full bg-gray-100 border-1.5 border-brand-accent/30 rounded-xl px-4 py-2.5 text-sm text-gray-600 font-medium cursor-not-allowed flex justify-between items-center">
                                         <span>
-                                            <strong class="uppercase text-brand-dark">{{ $invitation->package->name ?? '-' }}</strong>
+                                            <strong class="uppercase text-brand-dark">{{ $invitation->paket->name ?? '-' }}</strong>
                                             <span class="uppercase text-xs ml-1">({{ $invitation->status }})</span>
                                         </span>
-                                        @if($invitation->status === 'trial' && $invitation->trial_habis_at && $invitation->trial_habis_at->isPast())
+                                        @if($invitation->status === 'kedaluwarsa' || $invitation->isExpired())
                                         <span class="text-xs font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded">EXPIRED</span>
                                         @endif
                                     </div>
-                                    <p class="text-xs text-gray-500 mt-1">*Status mutlak hak akses Admin.</p>
+                                    <p class="text-xs text-gray-500 mt-1">*Masa aktif berakhir: {{ $invitation->expired_at ? $invitation->expired_at->format('d M Y') : '-' }}</p>
                                 </div>
 
                                 <div>
                                     <label class="block font-medium text-brand-dark mb-2 text-sm">Musik Latar (MP3/WAV)</label>
-                                    @if(\App\Helpers\PackageHelper::canAccessCustomMusic(Auth::user()->invitation))
+                                    @if(\App\Helpers\PackageHelper::canAccessCustomMusic(Auth::user()->undangans()->first()))
                                     <div class="flex items-center gap-3 mb-2">
                                         <audio id="audio-preview" controls class="w-full h-10" style="border-radius: 0.75rem;">
                                             <source id="audio-source" src="{{ $invitation->music_url }}" type="audio/mpeg">
@@ -72,7 +81,7 @@ $access['can_cerita'] = \App\Helpers\PackageHelper::canAccessLoveStory($invitati
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                         </svg>
-                                        Tidak tersedia di paket/status Anda
+                                        Tidak tersedia di paket Anda
                                     </div>                          
                                     @endif
                                 </div>
@@ -165,7 +174,7 @@ $access['can_cerita'] = \App\Helpers\PackageHelper::canAccessLoveStory($invitati
                 </div>
 
                 <div class="mt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
-                    <div class="text-sm w-full md:w-auto break-all">
+                    <div class="text-sm w-full md:w-auto break-all" id="preview-link">
                         <span class="text-gray-500 block mb-1">Lihat undangan publik: </span>
                         <a href="{{ route('public.invitation', $invitation->slug) }}" target="_blank" class="font-semibold text-brand-accent hover:underline">
                             {{ route('public.invitation', $invitation->slug) }}
@@ -184,14 +193,12 @@ $access['can_cerita'] = \App\Helpers\PackageHelper::canAccessLoveStory($invitati
 </div>
 
 <style>
-    /* Custom Toggle CSS */
     input:checked~.dot {
         transform: translateX(100%);
     }
 
     input:checked~.toggle-bg {
         background-color: #0a2214;
-        /* brand-dark */
     }
 </style>
 @endsection
@@ -218,7 +225,7 @@ $access['can_cerita'] = \App\Helpers\PackageHelper::canAccessLoveStory($invitati
                     btn.html(originalText).prop('disabled', false);
 
                     if (response.slug) {
-                        $('#preview-link').html('Lihat undangan publik: <a href="/' + response.slug + '" target="_blank" class="text-brand-dark font-bold hover:underline">' + window.location.origin + '/' + response.slug + '</a>');
+                        $('#preview-link').html('<span class="text-gray-500 block mb-1">Lihat undangan publik: </span><a href="/' + response.slug + '" target="_blank" class="font-semibold text-brand-accent hover:underline">' + window.location.origin + '/' + response.slug + '</a>');
                     }
 
                     Swal.fire({
@@ -237,7 +244,9 @@ $access['can_cerita'] = \App\Helpers\PackageHelper::canAccessLoveStory($invitati
                     btn.html(originalText).prop('disabled', false);
                     let errorMsg = 'Gagal menyimpan pengaturan.';
 
-                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        errorMsg = xhr.responseJSON.error;
+                    } else if (xhr.responseJSON && xhr.responseJSON.errors) {
                         let errors = xhr.responseJSON.errors;
                         let firstError = Object.values(errors)[0][0];
                         errorMsg = firstError;
@@ -257,7 +266,6 @@ $access['can_cerita'] = \App\Helpers\PackageHelper::canAccessLoveStory($invitati
             });
         });
 
-        // Audio preview updater
         $('#music_file').on('change', function(e) {
             if (this.files && this.files[0]) {
                 var file = this.files[0];
@@ -266,12 +274,9 @@ $access['can_cerita'] = \App\Helpers\PackageHelper::canAccessLoveStory($invitati
                 var audioPreview = document.getElementById('audio-preview');
                 var audioSource = document.getElementById('audio-source');
 
-                // Stop current audio if playing
                 audioPreview.pause();
-
-                // Update source and load
                 audioSource.src = objectUrl;
-                audioPreview.load(); // Reload the new source
+                audioPreview.load();
             }
         });
     });

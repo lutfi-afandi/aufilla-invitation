@@ -2,20 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Ucapan extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'invitation_id', 'nama', 'kehadiran', 'pesan', 'is_hidden'
+        'undangan_id',
+        'nama',
+        'ucapan',
+        'kehadiran',
     ];
 
-    protected $casts = [
-        'is_hidden' => 'boolean',
-    ];
-
-    public function invitation()
+    public function undangan()
     {
-        return $this->belongsTo(Invitation::class);
+        return $this->belongsTo(Undangan::class);
     }
 }

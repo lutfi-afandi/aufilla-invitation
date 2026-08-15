@@ -1,3 +1,6 @@
+@php
+    $undangan = $client->undangans->first();
+@endphp
 <tr class="hover:bg-slate-50/50 transition-colors group" id="client-row-{{ $client->id }}">
     <td class="px-6 py-4 whitespace-nowrap">
         <div class="flex items-center gap-3">
@@ -11,40 +14,31 @@
         </div>
     </td>
     <td class="px-6 py-4 whitespace-nowrap">
-        @if($client->invitation && $client->invitation->package)
+        @if($undangan && $undangan->paket)
             <div class="flex flex-col gap-1">
                 <span class="text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 w-fit">
-                    {{ $client->invitation->package->name }}
+                    {{ $undangan->paket->name }}
                 </span>
-                @if($client->invitation->status === 'trial')
-                <span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 w-fit">
-                    Trial Limit
-                </span>
-                @endif
             </div>
-        @elseif($client->invitation && $client->invitation->status === 'trial')
-            <span class="text-xs font-bold text-amber-700 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200">
-                Trial
-            </span>
         @else
             <span class="text-xs text-slate-400">—</span>
         @endif
     </td>
     <td class="px-6 py-4 whitespace-nowrap">
-        @if($client->invitation && $client->invitation->theme)
+        @if($undangan && $undangan->tema)
         <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50/80 border border-indigo-100">
             <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div>
-            <span class="text-xs font-bold text-indigo-700">{{ $client->invitation->theme->name }}</span>
+            <span class="text-xs font-bold text-indigo-700">{{ $undangan->tema->name }}</span>
         </div>
         @else
         <span class="text-xs text-slate-400 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">—</span>
         @endif
     </td>
     <td class="px-6 py-4 whitespace-nowrap">
-        @if($client->invitation)
-        @php $s = $client->invitation->status; @endphp
-        <span class="inline-flex w-fit items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-lg border {{ $s === 'aktif' ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : '' }} {{ $s === 'trial' ? 'bg-amber-50 border-amber-200 text-amber-700' : '' }} {{ $s === 'draft' ? 'bg-slate-50 border-slate-200 text-slate-500' : '' }} {{ $s === 'nonaktif' ? 'bg-red-50 border-red-200 text-red-600' : '' }}">
-            <span class="shrink-0 w-1.5 h-1.5 rounded-full {{ $s === 'aktif' ? 'bg-emerald-500' : '' }} {{ $s === 'trial' ? 'bg-amber-500' : '' }} {{ $s === 'draft' ? 'bg-slate-500' : '' }} {{ $s === 'nonaktif' ? 'bg-red-500' : '' }}"></span>
+        @if($undangan)
+        @php $s = $undangan->status; @endphp
+        <span class="inline-flex w-fit items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-lg border {{ $s === 'aktif' ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-red-50 border-red-200 text-red-600' }}">
+            <span class="shrink-0 w-1.5 h-1.5 rounded-full {{ $s === 'aktif' ? 'bg-emerald-500' : 'bg-red-500' }}"></span>
             <span>{{ $s }}</span>
         </span>
         @else
@@ -53,16 +47,14 @@
     </td>
     <td class="px-6 py-4 whitespace-nowrap text-slate-500 text-xs font-medium">{{ $client->created_at->format('d M Y') }}</td>
     <td class="px-6 py-4 whitespace-nowrap text-slate-500 text-xs font-medium">
-        @if($client->invitation && $client->invitation->status === 'trial')
-        {{ $client->invitation->trial_habis_at ? $client->invitation->trial_habis_at->format('d M Y') : '—' }}
-        @elseif($client->invitation && $client->invitation->package)
-        @if($client->invitation->package->active_days > 10000)
-        <span class="text-emerald-600 font-semibold">Selamanya</span>
+        @if($undangan && $undangan->expired_at)
+            @if($undangan->paket && $undangan->paket->active_days > 10000)
+                <span class="text-emerald-600 font-semibold">Selamanya</span>
+            @else
+                {{ $undangan->expired_at->format('d M Y') }}
+            @endif
         @else
-        {{ $client->created_at->addDays($client->invitation->package->active_days)->format('d M Y') }}
-        @endif
-        @else
-        —
+            —
         @endif
     </td>
     <td class="px-6 py-4 whitespace-nowrap">
@@ -75,7 +67,7 @@
             </button>
             <button onclick="openEditModal({{ json_encode($client) }})" class="w-8 h-8 rounded-lg bg-white hover:bg-amber-50 text-slate-400 hover:text-amber-600 flex items-center justify-center transition-all shadow-sm border border-slate-200 hover:border-amber-200" title="Edit">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 01-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                 </svg>
             </button>
             <a href="{{ route('admin.clients.impersonate', $client->id) }}" class="w-8 h-8 rounded-lg bg-white hover:bg-emerald-50 text-slate-400 hover:text-emerald-600 flex items-center justify-center transition-all shadow-sm border border-slate-200 hover:border-emerald-200" title="Login sebagai klien">

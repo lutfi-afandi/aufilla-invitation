@@ -2,16 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Tamu extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'invitation_id',
+        'undangan_id',
         'nama_tamu',
-        'no_wa',
-        'is_wa_sent',
+        'slug',
+        'no_whatsapp',
         'kode_qr',
+        'is_wa_sent',
         'waktu_hadir',
     ];
 
@@ -20,19 +24,13 @@ class Tamu extends Model
         'waktu_hadir' => 'datetime',
     ];
 
-    public function invitation()
+    public function undangan()
     {
-        return $this->belongsTo(Invitation::class);
+        return $this->belongsTo(Undangan::class);
     }
 
-    protected static function boot()
+    public function getUrlKehadiranAttribute()
     {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->kode_qr)) {
-                $model->kode_qr = \Illuminate\Support\Str::random(10);
-            }
-        });
+        return route('public.invitation', ['slug' => $this->undangan->slug, 'to' => $this->nama_tamu]);
     }
 }

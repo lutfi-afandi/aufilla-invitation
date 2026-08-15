@@ -1,0 +1,22 @@
+Alasan:
+- aplikasi sudah terlalu banyak logic tapi karena dari awal aku mengandalkan AI sepenuhnya aku malah jadi kesulitan untuk debuging secara manual ketika ada kesalahan atau ada request perubahan.
+- terlalu berantakan file dan folder yang bukan projek tapi penting baik untuk ai agent atau unutk ku mengingat konteks dan panduannya
+
+Tujuan refraktor kode:
+- bisa memahami kode dengan baik
+- bisa dengan mudah debuging secara manual
+- bisa dengan mudah menambahkan fitur baru
+- buat penamaan file dan folder atau variabel atau model dsb menggunakan nama yang campuran bahasa indonesia dan inggris misal: getTamuAll, Tamu, TemaController, UserController. beberapa memang sudah sesuai dengan harapan kok
+
+Tujuan proses bisnis:
+- refraktor aplikasi yg sudah jadi untuk proses bisnisnya.
+- Buat paket bisa di edit harga dan waktunya
+- Jadikan trial dan paket berbayar di 1 tabel jadi lebih mudah untuk pertimbangan nya. 
+- Buat alur lebih sederhana agar memudahkan pengembangan 
+
+Lainnya:
+- Menghapus file yang sudah tidak dibutuhkan dan tidak ada kaitannya dengan proses bisnis mungkin di folder public/
+- Menghidari OVer engineering
+
+Setelah matang baru ke tingkat selanjutnya yaitu payment gateway dengan midtrans
+Kemudian setelah matang baru ke wa gateway dengan bayleis

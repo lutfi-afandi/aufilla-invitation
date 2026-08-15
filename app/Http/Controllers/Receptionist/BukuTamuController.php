@@ -3,21 +3,18 @@
 namespace App\Http\Controllers\Receptionist;
 
 use App\Http\Controllers\Controller;
-use App\Models\Invitation;
+use App\Models\Undangan;
 use App\Models\Tamu;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class BukuTamuController extends Controller
 {
-    /**
-     * Tampilkan halaman Buku Tamu (Receptionist Control Panel)
-     */
     public function index($id)
     {
-        $invitation = Invitation::with(['acaras'])->findOrFail($id);
+        $invitation = Undangan::with(['acaras'])->findOrFail($id);
 
-        $recentLogs = Tamu::where('invitation_id', $id)
+        $recentLogs = Tamu::where('undangan_id', $id)
             ->whereNotNull('waktu_hadir')
             ->orderBy('waktu_hadir', 'desc')
             ->limit(5)
@@ -26,14 +23,11 @@ class BukuTamuController extends Controller
         return view('receptionist.buku-tamu', compact('invitation', 'recentLogs'));
     }
 
-    /**
-     * Pencarian manual tamu (AJAX)
-     */
     public function search(Request $request, $id)
     {
         $search = $request->input('q');
 
-        $query = Tamu::where('invitation_id', $id);
+        $query = Tamu::where('undangan_id', $id);
 
         if ($search) {
             $query->where('nama_tamu', 'like', "%{$search}%")
@@ -45,9 +39,6 @@ class BukuTamuController extends Controller
         return response()->json($tamus);
     }
 
-    /**
-     * Check-in tamu (via QR scan atau manual click)
-     */
     public function checkIn(Request $request, $id)
     {
         $request->validate([
@@ -55,7 +46,7 @@ class BukuTamuController extends Controller
             'kode_qr' => 'nullable|string'
         ]);
 
-        $query = Tamu::where('invitation_id', $id);
+        $query = Tamu::where('undangan_id', $id);
 
         if ($request->filled('kode_qr')) {
             $query->where('kode_qr', $request->kode_qr);
@@ -76,7 +67,7 @@ class BukuTamuController extends Controller
                 'success' => false, 
                 'message' => 'Tamu sudah melakukan check-in sebelumnya pada ' . $tamu->waktu_hadir->format('d/m/Y H:i'),
                 'tamu' => $tamu
-            ], 400); // Bad request but we still return tamu to show they are here. Actually let's just make it success = false so JS can warn. Wait, let's return 200 with a warning status so the frontend can handle it nicely.
+            ], 400);
         }
 
         $tamu->waktu_hadir = now();
@@ -89,9 +80,6 @@ class BukuTamuController extends Controller
         ]);
     }
 
-    /**
-     * Tambah tamu baru secara on-the-spot dan otomatis check-in
-     */
     public function addGuest(Request $request, $id)
     {
         $request->validate([
@@ -99,80 +87,33 @@ class BukuTamuController extends Controller
             'no_wa' => 'nullable|string|max:20'
         ]);
 
+        $undangan = Undangan::findOrFail($id);
+
         $tamu = Tamu::create([
-            'invitation_id' => $id,
+            'undangan_id' => $id,
             'nama_tamu' => $request->nama_tamu,
-            'no_wa' => $request->no_wa,
-            'waktu_hadir' => now() // Langsung check-in
+            'slug' => Str::slug($request->nama_tamu),
+            'no_whatsapp' => $request->no_wa,
+            'kode_qr' => 'QR-' . strtoupper(Str::random(10)),
+            'waktu_hadir' => now()
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Tamu baru berhasil ditambahkan dan di-check-in.',
+            'message' => 'Tamu berhasil ditambahkan & di-check-in.',
             'tamu' => $tamu
         ]);
     }
 
     public function welcomeScreen($id)
     {
-        $invitation = Invitation::with('galeris')->findOrFail($id);
+        $invitation = Undangan::with(['acaras'])->findOrFail($id);
+        $recentGuest = Tamu::where('undangan_id', $id)
+            ->whereNotNull('waktu_hadir')
+            ->orderBy('waktu_hadir', 'desc')
+            ->first();
 
-        return view('receptionist.welcome-screen', compact('invitation'));
-    }
-
-    public function uploadBg(Request $request, $id)
-    {
-        $invitation = Invitation::findOrFail($id);
-
-        $request->validate([
-            'background_image' => 'required|image|mimes:jpeg,png,jpg,webp|max:6144',
-        ]);
-
-        if ($request->hasFile('background_image')) {
-            $path = $request->file('background_image')->store('welcome_screens', 'public');
-            
-            // Save to invitation settings
-            $invitation->update([
-                'welcome_bg_path' => $path
-            ]);
-
-            return response()->json([
-                'success' => true, 
-                'message' => 'Background berhasil diunggah!',
-                'path' => asset('storage/' . $path)
-            ]);
-        }
-
-        return response()->json(['success' => false, 'message' => 'Gagal mengunggah file.']);
-    }
-
-    public function importExcel(Request $request, $id)
-    {
-        $invitation = Invitation::findOrFail($id);
-
-        $request->validate([
-            'excel_file' => 'required|file|mimes:xlsx,xls,csv|max:2048',
-        ]);
-
-        $collection = (new \Rap2hpoutre\FastExcel\FastExcel)->import($request->file('excel_file'));
-        
-        foreach ($collection as $row) {
-            if (!\App\Helpers\PackageHelper::canAddGuest($invitation)) {
-                break;
-            }
-
-            $nama_tamu = $row['Nama Tamu'] ?? $row['nama tamu'] ?? $row['nama_tamu'] ?? '';
-            $no_wa = $row['No WhatsApp'] ?? $row['no whatsapp'] ?? $row['no_wa'] ?? '';
-
-            if (!empty($nama_tamu)) {
-                $invitation->tamus()->create([
-                    'nama_tamu' => $nama_tamu,
-                    'no_wa' => $this->sanitizeWaNumber($no_wa)
-                ]);
-            }
-        }
-
-        return response()->json(['success' => true]);
+        return view('receptionist.welcome-screen', compact('invitation', 'recentGuest'));
     }
 
     public function downloadTemplate()
@@ -181,18 +122,34 @@ class BukuTamuController extends Controller
             ['Nama Tamu' => 'Budi Santoso', 'No WhatsApp' => '08123456789'],
             ['Nama Tamu' => 'Ayu Lestari', 'No WhatsApp' => '08987654321']
         ];
-        return (new \Rap2hpoutre\FastExcel\FastExcel(collect($templateData)))->download('template_tamu.xlsx');
+        return (new \Rap2hpoutre\FastExcel\FastExcel(collect($templateData)))->download('template_buku_tamu.xlsx');
     }
 
-    private function sanitizeWaNumber($no_wa)
+    public function importExcel(Request $request, $id)
     {
-        if (empty($no_wa)) return null;
-        $no_wa = preg_replace('/[^0-9+]/', '', $no_wa);
-        if (str_starts_with($no_wa, '+62')) {
-            return '0' . substr($no_wa, 3);
-        } elseif (str_starts_with($no_wa, '62')) {
-            return '0' . substr($no_wa, 2);
+        $request->validate([
+            'excel_file' => 'required|file|mimes:xlsx,xls,csv|max:2048',
+        ]);
+
+        $undangan = Undangan::findOrFail($id);
+
+        $collection = (new \Rap2hpoutre\FastExcel\FastExcel)->import($request->file('excel_file'));
+
+        foreach ($collection as $row) {
+            $nama_tamu = $row['Nama Tamu'] ?? $row['nama tamu'] ?? $row['nama_tamu'] ?? '';
+            $no_wa = $row['No WhatsApp'] ?? $row['no whatsapp'] ?? $row['no_wa'] ?? '';
+
+            if (!empty($nama_tamu)) {
+                Tamu::create([
+                    'undangan_id' => $id,
+                    'nama_tamu' => $nama_tamu,
+                    'slug' => Str::slug($nama_tamu),
+                    'no_whatsapp' => $no_wa,
+                    'kode_qr' => 'QR-' . strtoupper(Str::random(10)),
+                ]);
+            }
         }
-        return $no_wa;
+
+        return response()->json(['success' => true]);
     }
 }

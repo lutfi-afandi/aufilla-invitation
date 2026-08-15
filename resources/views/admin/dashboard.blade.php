@@ -183,13 +183,13 @@
                                     <span class="text-base font-bold text-slate-800 truncate">{{ $ucapan->nama }}</span>
                                     <span class="text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-lg flex-shrink-0">{{ $ucapan->created_at->diffForHumans() }}</span>
                                 </div>
-                                <p class="text-sm text-slate-600 line-clamp-2 leading-relaxed mb-2">"{{ $ucapan->pesan ?? '-' }}"</p>
+                                <p class="text-sm text-slate-600 line-clamp-2 leading-relaxed mb-2">"{{ $ucapan->ucapan ?? $ucapan->pesan ?? '-' }}"</p>
                                 <div class="flex items-center gap-2">
-                                    <span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-md {{ $ucapan->kehadiran === 'hadir' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : ($ucapan->kehadiran === 'tidak' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-amber-50 text-amber-600 border border-amber-100') }}">
-                                        <span class="w-1.5 h-1.5 rounded-full {{ $ucapan->kehadiran === 'hadir' ? 'bg-emerald-500' : ($ucapan->kehadiran === 'tidak' ? 'bg-red-500' : 'bg-amber-500') }}"></span>
+                                    <span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-md {{ $ucapan->kehadiran === 'hadir' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : ($ucapan->kehadiran === 'tidak_hadir' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-amber-50 text-amber-600 border border-amber-100') }}">
+                                        <span class="w-1.5 h-1.5 rounded-full {{ $ucapan->kehadiran === 'hadir' ? 'bg-emerald-500' : ($ucapan->kehadiran === 'tidak_hadir' ? 'bg-red-500' : 'bg-amber-500') }}"></span>
                                         {{ $ucapan->kehadiran }}
                                     </span>
-                                    <span class="text-xs text-slate-400 font-medium">via {{ $ucapan->invitation->slug ?? 'Unknown' }}</span>
+                                    <span class="text-xs text-slate-400 font-medium">via {{ $ucapan->undangan->slug ?? 'Unknown' }}</span>
                                 </div>
                             </div>
                         </div>
