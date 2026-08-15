@@ -16,25 +16,13 @@ class ClientController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::where('role', 'client')
-            ->with(['undangans.tema', 'undangans.paket']);
-
-        if ($search = $request->input('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('username', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
-
-        $clients  = $query->latest()->paginate(15)->withQueryString();
+        $clients  = User::where('role', 'client')
+            ->with(['undangans.tema', 'undangans.paket'])
+            ->latest()
+            ->get();
+            
         $themes   = Tema::where('is_active', true)->get();
         $packages = Paket::all();
-
-        if ($request->ajax()) {
-            return response()->json([
-                'html' => view('admin.clients.partials.table-content', compact('clients'))->render()
-            ]);
-        }
 
         return view('admin.clients.index', compact('clients', 'themes', 'packages'));
     }
@@ -86,12 +74,8 @@ class ClientController extends Controller
             return $user;
         });
 
-        $user->load('undangans.tema');
-        $html = view('admin.clients.partials.row', ['client' => $user])->render();
-
         return response()->json([
             'message' => 'Klien berhasil dibuat.',
-            'html' => $html
         ]);
     }
 
@@ -156,12 +140,8 @@ class ClientController extends Controller
             $undangan->save();
         }
 
-        $client->load('undangans.tema');
-        $html = view('admin.clients.partials.row', ['client' => $client])->render();
-
         return response()->json([
             'message' => 'Data klien berhasil diperbarui.',
-            'html' => $html
         ]);
     }
 

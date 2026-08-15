@@ -27,7 +27,7 @@
 </div>
 
 <!-- Create Receptionist Modal -->
-<div id="create-r-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm items-center justify-center p-4" style="display:none;">
+<div id="create-r-modal" class="fixed inset-0 z-[99999] bg-black/50 backdrop-blur-sm items-center justify-center p-4" style="display:none;">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
         <div class="bg-admin-dark p-5 text-white flex justify-between items-center">
             <h3 class="font-bold text-lg">Tambah Resepsionis</h3>
@@ -53,7 +53,7 @@
 </div>
 
 <!-- Edit Receptionist Modal -->
-<div id="edit-r-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm items-center justify-center p-4" style="display:none;">
+<div id="edit-r-modal" class="fixed inset-0 z-[99999] bg-black/50 backdrop-blur-sm items-center justify-center p-4" style="display:none;">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
         <div class="bg-admin-dark p-5 text-white flex justify-between items-center">
             <h3 class="font-bold text-lg">Edit Resepsionis</h3>
@@ -136,7 +136,6 @@ $('#edit-r-form').on('submit', function(e) {
         .always(() => btn.prop('disabled', false).text('Simpan'));
 });
 
-// Fetch receptionists via AJAX
 function fetchReceptionists(page_url) {
     const search = $('#search-receptionist').val();
     const url = page_url || "{{ route('admin.receptionists.index') }}";
@@ -157,7 +156,6 @@ function fetchReceptionists(page_url) {
     });
 }
 
-// Live Search
 let searchTimeout;
 $('#search-receptionist').on('input', function() {
     clearTimeout(searchTimeout);
@@ -166,7 +164,6 @@ $('#search-receptionist').on('input', function() {
     }, 600);
 });
 
-// Auto-focus search input
 $(document).ready(function() {
     const searchInput = $('#search-receptionist');
     if (searchInput.val()) {
@@ -176,7 +173,6 @@ $(document).ready(function() {
     }
 });
 
-// Pagination Clicks
 $(document).on('click', '.pagination-container a', function(e) {
     e.preventDefault();
     fetchReceptionists($(this).attr('href'));

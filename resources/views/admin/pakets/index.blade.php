@@ -103,7 +103,7 @@
 </div>
 
 <!-- Modal Form -->
-<div id="paketModal" class="fixed inset-0 z-50 hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+<div id="paketModal" class="fixed inset-0 z-[99999] hidden bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
         <h3 id="modalTitle" class="text-lg font-bold text-slate-800">Tambah Paket Baru</h3>
 

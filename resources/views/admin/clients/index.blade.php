@@ -7,11 +7,9 @@
 <div class="max-w-7xl mx-auto w-full space-y-6">
     <!-- Header Actions -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <!-- Search -->
-        <div class="relative max-w-sm w-full">
-            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input type="text" id="search-client" placeholder="Cari username / email..." value="{{ request('search') }}" 
-                   class="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-admin-accent/30 focus:border-admin-accent transition-all bg-white">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-800">Manajemen Klien</h1>
+            <p class="text-sm text-slate-500 mt-1">Daftar pengguna dan status undangan aktif / kedaluwarsa.</p>
         </div>
         <button onclick="openCreateModal()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-admin-accent-dark hover:bg-admin-accent text-white font-semibold text-sm rounded-xl shadow-sm hover:shadow-md transition-all">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
@@ -19,15 +17,31 @@
         </button>
     </div>
 
-    <!-- Table -->
-    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden" id="clients-table-container">
-        <div class="overflow-x-auto" id="table-content-wrapper">
-            @include('admin.clients.partials.table-content', ['clients' => $clients])
-        </div>
+    <!-- Table with DataTables -->
+    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 overflow-hidden" id="clients-table-container">
+        <table id="clients-table" class="w-full text-sm">
+            <thead>
+                <tr class="bg-slate-50 border-b border-slate-200">
+                    <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Username</th>
+                    <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Paket</th>
+                    <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Tema</th>
+                    <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Status</th>
+                    <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Terdaftar</th>
+                    <th class="text-left px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Expired</th>
+                    <th class="text-center px-6 py-4 font-bold text-xs uppercase tracking-wider text-slate-500">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                @foreach($clients as $client)
+                    @include('admin.clients.partials.row', ['client' => $client])
+                @endforeach
+            </tbody>
+        </table>
     </div>
+</div>
 
 <!-- Create Client Modal -->
-<div id="create-modal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md items-center justify-center p-4 transition-all" style="display:none;">
+<div id="create-modal" class="fixed inset-0 z-[99999] bg-slate-900/40 backdrop-blur-md items-center justify-center p-4 transition-all" style="display:none;">
     <div class="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg overflow-hidden transform transition-all">
         <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center">
             <h3 class="font-bold text-xl text-slate-800">Tambah Klien Baru</h3>
@@ -107,7 +121,7 @@
 </div>
 
 <!-- Edit Client Modal -->
-<div id="edit-modal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md items-center justify-center p-4 transition-all" style="display:none;">
+<div id="edit-modal" class="fixed inset-0 z-[99999] bg-slate-900/40 backdrop-blur-md items-center justify-center p-4 transition-all" style="display:none;">
     <div class="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg overflow-hidden transform transition-all">
         <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center">
             <h3 class="font-bold text-xl text-slate-800">Edit Klien</h3>
@@ -196,8 +210,9 @@
         </form>
     </div>
 </div>
+
 <!-- Detail Client Modal -->
-<div id="detail-modal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md items-center justify-center p-4 transition-all" style="display:none;">
+<div id="detail-modal" class="fixed inset-0 z-[99999] bg-slate-900/40 backdrop-blur-md items-center justify-center p-4 transition-all" style="display:none;">
     <div class="bg-white rounded-[2rem] shadow-2xl w-full max-w-xl overflow-hidden transform transition-all">
         <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white">
             <h3 class="font-bold text-xl text-slate-800">Detail Klien</h3>
@@ -216,7 +231,7 @@
 </div>
 
 <!-- Theme Picker Modal -->
-<div id="theme-picker-modal" class="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm items-center justify-center p-4" style="display:none;">
+<div id="theme-picker-modal" class="fixed inset-0 z-[100000] bg-black/50 backdrop-blur-sm items-center justify-center p-4" style="display:none;">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col max-h-[85vh]">
         <div class="bg-admin-dark p-5 text-white flex justify-between items-center shrink-0">
             <h3 class="font-bold text-lg">Pilih Tema Undangan</h3>
@@ -239,36 +254,34 @@
 <script>
 $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
 
-function fetchClients(page_url) {
-    const search = $('#search-client').val();
-    const url = page_url || "{{ route('admin.clients.index') }}";
-    
-    $('#table-content-wrapper').css('opacity', '0.5');
+let clientsTable;
 
-    $.ajax({
-        url: url,
-        data: { search: search },
-        success: function(res) {
-            $('#table-content-wrapper').html(res.html).css('opacity', '1');
-            if (history.pushState) {
-                const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?search=' + encodeURIComponent(search);
-                window.history.pushState({path:newurl}, '', newurl);
+$(document).ready(function() {
+    // Inisialisasi DataTables dengan styling Tailwind
+    clientsTable = $('#clients-table').DataTable({
+        language: {
+            search: "_INPUT_",
+            searchPlaceholder: "Cari username, email, paket...",
+            lengthMenu: "Tampilkan _MENU_ data",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ klien",
+            infoEmpty: "Menampilkan 0 data",
+            zeroRecords: "Tidak ada data klien yang cocok",
+            paginate: {
+                first: "Awal",
+                last: "Akhir",
+                next: "→",
+                previous: "←"
             }
-        }
+        },
+        pageLength: 10,
+        order: [[4, 'desc']],
+        columnDefs: [
+            { orderable: false, targets: 6 } // Nonaktifkan sorting di kolom Aksi
+        ]
     });
-}
 
-let searchTimeout;
-$('#search-client').on('input', function() {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-        fetchClients();
-    }, 400);
-});
-
-$(document).on('click', '.pagination-container a', function(e) {
-    e.preventDefault();
-    fetchClients($(this).attr('href'));
+    bindUsernameCheck('create-username', 'create-url-preview-container', 'create-username-value', 'create-username-feedback', 'create-form');
+    bindUsernameCheck('edit-username', 'edit-url-preview-container', 'edit-username-value', 'edit-username-feedback', 'edit-form', 'edit-id');
 });
 
 let currentPickerTarget = 'create';
@@ -508,11 +521,6 @@ function checkAdminUsername(username, feedbackEl, submitBtn, excludeId = '') {
         });
 }
 
-$(document).ready(function() {
-    bindUsernameCheck('create-username', 'create-url-preview-container', 'create-username-value', 'create-username-feedback', 'create-form');
-    bindUsernameCheck('edit-username', 'edit-url-preview-container', 'edit-username-value', 'edit-username-feedback', 'edit-form', 'edit-id');
-});
-
 $('#create-form').on('submit', function(e) {
     e.preventDefault();
     const btn = $(this).find('button[type=submit]');
@@ -521,15 +529,7 @@ $('#create-form').on('submit', function(e) {
         .done(function(res) {
             Swal.fire({ icon: 'success', title: 'Berhasil', text: res.message, timer: 1500, showConfirmButton: false });
             closeModal('create-modal');
-            
-            const tbody = $('#clients-table-container tbody');
-            if(tbody.find('tr').length === 1 && tbody.find('tr td').attr('colspan') === '7') {
-                tbody.empty();
-            }
-            
-            if(res.html) {
-                tbody.prepend(res.html);
-            }
+            window.location.reload();
         })
         .fail(function(xhr) {
             const errors = xhr.responseJSON?.errors;
@@ -545,7 +545,7 @@ $('#create-form').on('submit', function(e) {
                 Swal.fire({ icon: 'error', title: 'Gagal', text: msg });
             }
         })
-        .always(() => btn.prop('disabled', false).text('Buat Klien'));
+        .always(() => btn.prop('disabled', false).text('Buat Akun Klien'));
 });
 
 $('#edit-form').on('submit', function(e) {
@@ -561,10 +561,7 @@ $('#edit-form').on('submit', function(e) {
     .done(function(res) {
         Swal.fire({ icon: 'success', title: 'Berhasil', text: res.message, timer: 1500, showConfirmButton: false });
         closeModal('edit-modal');
-        
-        if(res.html && id) {
-            $('#client-row-' + id).replaceWith(res.html);
-        }
+        window.location.reload();
     })
     .fail(function(xhr) {
         const errors = xhr.responseJSON?.errors;
@@ -600,8 +597,8 @@ function deleteClient(id) {
                 data: { _token: $('meta[name="csrf-token"]').attr('content') }
             })
                 .done(function(res) {
-                    $('#client-row-' + id).fadeOut(400, function() { $(this).remove(); });
-                    Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: res.message, showConfirmButton: false, timer: 2000 });
+                    Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: res.message, showConfirmButton: false, timer: 1500 });
+                    setTimeout(() => window.location.reload(), 1000);
                 })
                 .fail(function() { Swal.fire({ icon: 'error', title: 'Gagal', text: 'Tidak dapat menghapus klien.' }); });
         }

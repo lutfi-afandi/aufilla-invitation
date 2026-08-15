@@ -10,6 +10,13 @@ Baca ini SETIAP KALI sebelum membuat/meng-clone tema baru. Dokumen ini mencegah 
 
 ---
 
+## ⚡ MANDATORY RULE: Mandatory Local Asset Storage (Zero CDN Policy)
+> **SETIAP KALI** menambahkan pustaka atau file aset (CSS, JavaScript, Plugin seperti DataTables, SweetAlert, jQuery, Font, dll), **WAJIB diunduh dan disimpan secara LOKAL** di dalam folder `public/assets/css/` atau `public/assets/js/`.
+> 
+> ❌ **JANGAN PERNAH** memakai link CDN eksternal (`https://cdn...`, `https://cdnjs...`). Semua aset harus dilayani langsung dari server lokal via `asset('assets/...')`.
+
+---
+
 ## 1. Flow Pembuatan Tema Baru
 
 1. **Clone** dari tema yang struktur cahaya/gelapnya paling cocok (`aufilla-maroon` = dark cover/light right, `aufilla-white` = all light).
