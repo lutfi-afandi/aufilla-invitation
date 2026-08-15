@@ -3,63 +3,44 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\PaketRequest;
 use App\Models\Paket;
 use Illuminate\Http\Request;
 
 class PaketController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $pakets = Paket::withCount('undangans')->orderBy('price', 'asc')->get();
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'html' => view('admin.pakets.partials.list', compact('pakets'))->render(),
+            ]);
+        }
+
         return view('admin.pakets.index', compact('pakets'));
     }
 
-    public function store(Request $request)
+    public function store(PaketRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:50',
-            'price' => 'required|numeric|min:0',
-            'active_days' => 'required|integer|min:1',
-            'max_wa_send' => 'required|integer|min:1',
-            'max_gallery_photos' => 'required|integer|min:0',
-            'has_love_story' => 'boolean',
-            'can_custom_music' => 'boolean',
-            'is_priority_support' => 'boolean',
-            'description' => 'nullable|string',
+        Paket::create($request->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Paket berhasil ditambahkan!',
         ]);
-
-        $validated['has_love_story'] = $request->has('has_love_story');
-        $validated['can_custom_music'] = $request->has('can_custom_music');
-        $validated['is_priority_support'] = $request->has('is_priority_support');
-
-        Paket::create($validated);
-
-        return redirect()->route('admin.pakets.index')->with('success', 'Paket berhasil ditambahkan!');
     }
 
-    public function update(Request $request, $id)
+    public function update(PaketRequest $request, $id)
     {
         $paket = Paket::findOrFail($id);
+        $paket->update($request->validated());
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:50',
-            'price' => 'required|numeric|min:0',
-            'active_days' => 'required|integer|min:1',
-            'max_wa_send' => 'required|integer|min:1',
-            'max_gallery_photos' => 'required|integer|min:0',
-            'has_love_story' => 'boolean',
-            'can_custom_music' => 'boolean',
-            'is_priority_support' => 'boolean',
-            'description' => 'nullable|string',
+        return response()->json([
+            'success' => true,
+            'message' => 'Paket berhasil diperbarui!',
         ]);
-
-        $validated['has_love_story'] = $request->has('has_love_story');
-        $validated['can_custom_music'] = $request->has('can_custom_music');
-        $validated['is_priority_support'] = $request->has('is_priority_support');
-
-        $paket->update($validated);
-
-        return redirect()->route('admin.pakets.index')->with('success', 'Paket berhasil diperbarui!');
     }
 
     public function destroy($id)
@@ -67,11 +48,17 @@ class PaketController extends Controller
         $paket = Paket::withCount('undangans')->findOrFail($id);
 
         if ($paket->undangans_count > 0) {
-            return redirect()->route('admin.pakets.index')->with('error', 'Paket tidak dapat dihapus karena digunakan oleh ' . $paket->undangans_count . ' undangan.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Paket tidak dapat dihapus karena digunakan oleh '.$paket->undangans_count.' undangan.',
+            ], 422);
         }
 
         $paket->delete();
 
-        return redirect()->route('admin.pakets.index')->with('success', 'Paket berhasil dihapus!');
+        return response()->json([
+            'success' => true,
+            'message' => 'Paket berhasil dihapus!',
+        ]);
     }
 }
