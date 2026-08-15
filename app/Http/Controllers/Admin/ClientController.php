@@ -30,16 +30,26 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $request->merge([
-            'username'   => Str::slug($request->username)
+            'username' => Str::slug($request->username),
+            'slug'     => Str::slug($request->slug ?: $request->username),
         ]);
 
         $validated = $request->validate([
             'username'   => [
-                'required', 'string', 'max:50', 'unique:users,username', 'unique:undangans,slug',
+                'required', 'string', 'max:50', 'unique:users,username',
                 function ($attribute, $value, $fail) {
                     $reserved = ['admin', 'login', 'register', 'preview', 'receptionist', 'dashboard', 'api', 'welcome-screen', 'kado', 'tamu'];
                     if (in_array(strtolower($value), $reserved)) {
                         $fail('Username ini tidak bisa digunakan.');
+                    }
+                }
+            ],
+            'slug'       => [
+                'required', 'string', 'max:100', 'unique:undangans,slug',
+                function ($attribute, $value, $fail) {
+                    $reserved = ['admin', 'login', 'register', 'preview', 'receptionist', 'dashboard', 'api', 'welcome-screen', 'kado', 'tamu'];
+                    if (in_array(strtolower($value), $reserved)) {
+                        $fail('URL slug ini tidak bisa digunakan.');
                     }
                 }
             ],
@@ -51,10 +61,11 @@ class ClientController extends Controller
 
         $user = \Illuminate\Support\Facades\DB::transaction(function () use ($validated) {
             $user = User::create([
-                'username' => $validated['username'],
-                'email'    => $validated['email'],
-                'password' => Hash::make($validated['password']),
-                'role'     => 'client',
+                'username'          => $validated['username'],
+                'email'             => $validated['email'],
+                'password'          => Hash::make($validated['password']),
+                'role'              => 'client',
+                'email_verified_at' => now(),
             ]);
 
             $paket = Paket::find($validated['package_id']);
@@ -62,7 +73,7 @@ class ClientController extends Controller
             $expireDate = now()->addDays($activeDays);
 
             $user->undangans()->create([
-                'slug'       => $validated['username'],
+                'slug'       => $validated['slug'],
                 'tema_id'    => $validated['theme_id'],
                 'paket_id'   => $validated['package_id'],
                 'status'     => 'aktif',
@@ -97,18 +108,28 @@ class ClientController extends Controller
         $undangan = $client->undangans()->first();
 
         $request->merge([
-            'username' => Str::slug($request->username)
+            'username' => Str::slug($request->username),
+            'slug'     => Str::slug($request->slug ?: $request->username),
         ]);
 
         $validated = $request->validate([
             'username'   => [
                 'required', 'string', 'max:50', 
                 Rule::unique('users', 'username')->ignore($client->id),
-                Rule::unique('undangans', 'slug')->ignore($undangan?->id),
                 function ($attribute, $value, $fail) {
                     $reserved = ['admin', 'login', 'register', 'preview', 'receptionist', 'dashboard', 'api', 'welcome-screen', 'kado', 'tamu'];
                     if (in_array(strtolower($value), $reserved)) {
                         $fail('Username ini tidak bisa digunakan.');
+                    }
+                }
+            ],
+            'slug'       => [
+                'required', 'string', 'max:100',
+                Rule::unique('undangans', 'slug')->ignore($undangan?->id),
+                function ($attribute, $value, $fail) {
+                    $reserved = ['admin', 'login', 'register', 'preview', 'receptionist', 'dashboard', 'api', 'welcome-screen', 'kado', 'tamu'];
+                    if (in_array(strtolower($value), $reserved)) {
+                        $fail('URL Slug ini tidak bisa digunakan.');
                     }
                 }
             ],
@@ -136,7 +157,7 @@ class ClientController extends Controller
                     $undangan->expired_at = now()->addDays($paket->active_days);
                 }
             }
-            $undangan->slug = $validated['username'];
+            $undangan->slug = $validated['slug'];
             $undangan->save();
         }
 

@@ -809,23 +809,30 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <label class="block text-[11px] font-bold tracking-widest uppercase text-brand-dark/80 mb-2">Username / Link Undangan</label>
-                    <input type="text" name="username" id="landing-username" required placeholder="bimaayu"
-                        class="w-full bg-brand-bg border border-brand-dark/5 rounded-xl px-5 py-3.5 text-[13px] text-brand-dark focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/30 transition-all placeholder:text-brand-dark/20">
-                    <div id="landing-url-preview-container" class="mt-3 hidden transition-all duration-300">
-                        <div class="flex flex-col gap-1.5 p-3.5 bg-brand-bg/50 border border-brand-dark/5 rounded-xl shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">
-                            <div class="flex flex-col gap-1 text-[11.5px] font-medium">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-5 h-5 rounded-full bg-brand-accent/10 flex items-center justify-center shrink-0">
-                                        <svg class="w-3 h-3 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
-                                    </div>
-                                    <span class="text-brand-dark/50">Akses URL:</span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold tracking-widest uppercase text-brand-dark/80 mb-2">Username Login</label>
+                        <input type="text" name="username" id="landing-username" required placeholder="bimaayu"
+                            class="w-full bg-brand-bg border border-brand-dark/5 rounded-xl px-4 py-3 text-[13px] text-brand-dark focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/30 transition-all placeholder:text-brand-dark/20">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold tracking-widest uppercase text-brand-dark/80 mb-2">URL Slug Undangan</label>
+                        <input type="text" name="slug" id="landing-slug" required placeholder="bimaayu"
+                            class="w-full bg-brand-bg border border-brand-dark/5 rounded-xl px-4 py-3 text-[13px] text-brand-dark focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent/30 transition-all placeholder:text-brand-dark/20">
+                    </div>
+                </div>
+                <div id="landing-url-preview-container" class="mt-2 hidden transition-all duration-300">
+                    <div class="flex flex-col gap-1.5 p-3.5 bg-brand-bg/50 border border-brand-dark/5 rounded-xl shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">
+                        <div class="flex flex-col gap-1 text-[11.5px] font-medium">
+                            <div class="flex items-center gap-2">
+                                <div class="w-5 h-5 rounded-full bg-brand-accent/10 flex items-center justify-center shrink-0">
+                                    <svg class="w-3 h-3 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
                                 </div>
-                                <span class="text-brand-dark font-bold break-all pl-7">{{ request()->getSchemeAndHttpHost() }}/<span id="landing-username-value" class="text-brand-accent underline decoration-brand-accent/30 underline-offset-2"></span></span>
+                                <span class="text-brand-dark/50">Akses URL:</span>
                             </div>
-                            <div id="landing-username-feedback" class="text-[11px] font-medium pl-7"></div>
+                            <span class="text-brand-dark font-bold break-all pl-7">{{ request()->getSchemeAndHttpHost() }}/<span id="landing-username-value" class="text-brand-accent underline decoration-brand-accent/30 underline-offset-2"></span></span>
                         </div>
+                        <div id="landing-username-feedback" class="text-[11px] font-medium pl-7"></div>
                     </div>
                 </div>
                 <div>
@@ -910,22 +917,10 @@
 
             if (themeId && themeName && themeThumb) {
                 selectRegisterTheme(themeId, themeName, themeThumb);
-            } else if (!themeId) {
-                // Reset form state for theme if opened generally
-                document.getElementById('register-theme-id').value = '';
-
-                const nameEl = document.getElementById('register-theme-name');
-                nameEl.textContent = 'Belum memilih tema';
-                nameEl.classList.add('text-brand-dark/40');
-                nameEl.classList.remove('text-brand-dark');
-
-                const thumbEl = document.getElementById('register-theme-thumbnail');
-                thumbEl.innerHTML = `<svg class="w-6 h-6 text-brand-dark/20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`;
-
-                document.querySelectorAll('.theme-indicator').forEach(el => {
-                    el.classList.add('hidden', 'opacity-0');
-                    el.classList.remove('flex');
-                });
+            } else if (!themeId && !document.getElementById('register-theme-id').value) {
+                @if(isset($themes[0]))
+                selectRegisterTheme({{ $themes[0]->id }}, `{{ addslashes($themes[0]->name) }}`, `{{ $themes[0]->thumbnail ? asset('storage/' . $themes[0]->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png') }}`);
+                @endif
             }
         }
 
@@ -1012,44 +1007,56 @@
 
         // Advanced Scroll Reveal (Vanilla JS)
 
-        // Register Live Username Check
+        // Register Live Username & Slug Check
         const landingUsername = document.getElementById('landing-username');
+        const landingSlug = document.getElementById('landing-slug');
         const landingFeedback = document.getElementById('landing-username-feedback');
         const landingSubmitBtn = document.getElementById('landing-register-submit');
         let landingTimeout = null;
 
-        if (landingUsername) {
+        if (landingUsername && landingSlug) {
             landingUsername.addEventListener('keyup', function() {
-                // Format to slug instantly
                 let val = this.value.toLowerCase().replace(/[^a-z0-9-]+/g, '-');
-                if (this.value !== val) {
-                    this.value = val;
-                }
-
-                const previewValue = document.getElementById('landing-username-value');
-                const previewContainer = document.getElementById('landing-url-preview-container');
+                if (this.value !== val) this.value = val;
                 
-                if (val.length > 0) {
-                    previewValue.textContent = val;
-                    previewContainer.classList.remove('hidden');
-                } else {
-                    previewContainer.classList.add('hidden');
+                if (!landingSlug.dataset.customized) {
+                    landingSlug.value = val;
+                    triggerSlugCheck(val);
                 }
+            });
 
-                clearTimeout(landingTimeout);
-                landingTimeout = setTimeout(() => {
-                    if (val.length > 0) {
-                        checkLandingUsername(val);
-                    } else {
-                        landingFeedback.innerHTML = '';
-                        if (landingSubmitBtn) landingSubmitBtn.disabled = true;
-                    }
-                }, 500);
+            landingSlug.addEventListener('keyup', function() {
+                let val = this.value.toLowerCase().replace(/[^a-z0-9-]+/g, '-');
+                if (this.value !== val) this.value = val;
+                this.dataset.customized = 'true';
+                triggerSlugCheck(val);
             });
         }
 
-        function checkLandingUsername(username) {
-            if (username.length < 3) {
+        function triggerSlugCheck(val) {
+            const previewValue = document.getElementById('landing-username-value');
+            const previewContainer = document.getElementById('landing-url-preview-container');
+            
+            if (val.length > 0) {
+                previewValue.textContent = val;
+                previewContainer.classList.remove('hidden');
+            } else {
+                previewContainer.classList.add('hidden');
+            }
+
+            clearTimeout(landingTimeout);
+            landingTimeout = setTimeout(() => {
+                if (val.length > 0) {
+                    checkLandingUsername(val);
+                } else {
+                    landingFeedback.innerHTML = '';
+                    if (landingSubmitBtn) landingSubmitBtn.disabled = true;
+                }
+            }, 500);
+        }
+
+        function checkLandingUsername(slug) {
+            if (slug.length < 3) {
                 landingFeedback.className = 'text-[11px] font-medium text-amber-600 pl-7';
                 landingFeedback.innerHTML = 'URL terlalu pendek (minimal 3 karakter)';
                 if (landingSubmitBtn) landingSubmitBtn.disabled = true;
@@ -1059,7 +1066,7 @@
             landingFeedback.className = 'text-[11px] font-medium text-brand-dark/60 pl-7';
             landingFeedback.innerHTML = 'Mengecek ketersediaan...';
 
-            fetch(`/api/check-username?username=${encodeURIComponent(username)}`)
+            fetch(`/api/check-username?username=${encodeURIComponent(slug)}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.available) {
