@@ -24,6 +24,15 @@ class Tamu extends Model
         'waktu_hadir' => 'datetime',
     ];
 
+    protected $appends = [
+        'no_wa',
+    ];
+
+    public function getNoWaAttribute()
+    {
+        return $this->no_whatsapp;
+    }
+
     public function undangan()
     {
         return $this->belongsTo(Undangan::class);

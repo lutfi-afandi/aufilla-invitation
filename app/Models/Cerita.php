@@ -16,6 +16,15 @@ class Cerita extends Model
         'isi',
     ];
 
+    protected $appends = [
+        'isi_cerita',
+    ];
+
+    public function getIsiCeritaAttribute()
+    {
+        return $this->isi;
+    }
+
     public function undangan()
     {
         return $this->belongsTo(Undangan::class);
