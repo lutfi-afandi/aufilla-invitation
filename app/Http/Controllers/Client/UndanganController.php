@@ -51,21 +51,21 @@ class UndanganController extends Controller
             if ($undangan->pria_foto && Storage::disk('public')->exists($undangan->pria_foto)) {
                 Storage::disk('public')->delete($undangan->pria_foto);
             }
-            $updateData['pria_foto'] = $request->file('pria_foto')->store('pengantin', 'public');
+            $updateData['pria_foto'] = \App\Helpers\ImageHelper::uploadAndCompress($request->file('pria_foto'), 'pengantin');
         }
 
         if ($request->hasFile('wanita_foto')) {
             if ($undangan->wanita_foto && Storage::disk('public')->exists($undangan->wanita_foto)) {
                 Storage::disk('public')->delete($undangan->wanita_foto);
             }
-            $updateData['wanita_foto'] = $request->file('wanita_foto')->store('pengantin', 'public');
+            $updateData['wanita_foto'] = \App\Helpers\ImageHelper::uploadAndCompress($request->file('wanita_foto'), 'pengantin');
         }
 
         if ($request->hasFile('cover_img')) {
             if ($undangan->cover_img && Storage::disk('public')->exists($undangan->cover_img)) {
                 Storage::disk('public')->delete($undangan->cover_img);
             }
-            $updateData['cover_img'] = $request->file('cover_img')->store('pengantin', 'public');
+            $updateData['cover_img'] = \App\Helpers\ImageHelper::uploadAndCompress($request->file('cover_img'), 'pengantin');
         }
 
         $undangan->update($updateData);

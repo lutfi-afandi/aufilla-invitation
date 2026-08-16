@@ -43,7 +43,7 @@ class TemaController extends Controller
         ];
 
         if ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = $request->file('thumbnail')->store('themes/thumbnails', 'public');
+            $data['thumbnail'] = \App\Helpers\ImageHelper::uploadAndCompress($request->file('thumbnail'), 'themes/thumbnails');
         }
 
         Tema::create($data);
@@ -68,7 +68,7 @@ class TemaController extends Controller
             if ($theme->thumbnail) {
                 Storage::disk('public')->delete($theme->thumbnail);
             }
-            $theme->thumbnail = $request->file('thumbnail')->store('themes/thumbnails', 'public');
+            $theme->thumbnail = \App\Helpers\ImageHelper::uploadAndCompress($request->file('thumbnail'), 'themes/thumbnails');
         }
 
         $theme->save();

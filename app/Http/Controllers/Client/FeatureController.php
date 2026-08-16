@@ -32,7 +32,7 @@ class FeatureController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('galeri', 'public');
+            $path = \App\Helpers\ImageHelper::uploadAndCompress($request->file('image'), 'galeri');
             
             $galeri = $undangan->galeris()->create([
                 'image_path' => $path
