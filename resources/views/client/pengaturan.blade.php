@@ -10,7 +10,9 @@
 
     <div class="max-w-7xl mx-auto w-full">
 
-        @include('client.partials.tab_navigation')
+        <div id="tab-navigation-wrapper">
+            @include('client.partials.tab_navigation')
+        </div>
         <div
             class="bg-white border border-brand-accent/15 rounded-[20px] shadow-[0_10px_30px_rgba(10,34,20,0.03)] overflow-hidden">
             <!-- Card Header -->
@@ -101,15 +103,17 @@
                                                 lagu. (Maks 10MB)</p>
                                         @else
                                             <div
-                                                class="w-full bg-gray-100 border-1.5 border-brand-accent/30 rounded-xl px-4 py-3 text-sm text-gray-500 flex items-center gap-2 cursor-not-allowed">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                class="w-full bg-amber-50/60 border border-amber-200/80 rounded-xl px-4 py-3 text-xs text-amber-800 flex items-center gap-2 cursor-not-allowed mb-2">
+                                                <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
                                                     </path>
                                                 </svg>
-                                                Tidak tersedia di paket Anda
+                                                Fitur Kustom Musik Latar tidak tersedia untuk Paket {{ $invitation->paket->name ?? 'Trial' }}.
                                             </div>
+                                            <input type="file" disabled
+                                                class="w-full bg-gray-100 border border-gray-200 rounded-xl px-4 py-2.5 text-xs text-gray-400 cursor-not-allowed opacity-60">
                                         @endif
                                     </div>
                                 </div>
@@ -294,6 +298,10 @@
                     contentType: false,
                     success: function(response) {
                         btn.html(originalText).prop('disabled', false);
+
+                        if (response.tabs_html) {
+                            $('#tab-navigation-wrapper').html(response.tabs_html);
+                        }
 
                         if (response.slug) {
                             $('#preview-link').html(

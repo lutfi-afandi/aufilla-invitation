@@ -49,7 +49,7 @@ class ClientController extends Controller
             ]);
 
             $paket = Paket::find($validated['package_id']);
-            $activeDays = $paket ? $paket->active_days : 90;
+            $activeDays = min($paket ? $paket->active_days : 90, 3650);
             $expireDate = now()->addDays($activeDays);
 
             $user->undangans()->create([
@@ -141,7 +141,8 @@ class ClientController extends Controller
                     $undangan->paket_id = $validated['package_id'];
                     $paket = Paket::find($validated['package_id']);
                     if ($paket && $validated['status'] === 'aktif') {
-                        $undangan->expired_at = now()->addDays($paket->active_days);
+                        $activeDays = min($paket->active_days, 3650);
+                        $undangan->expired_at = now()->addDays($activeDays);
                     }
                 }
                 $undangan->slug = $validated['slug'];
@@ -188,7 +189,7 @@ class ClientController extends Controller
 
         if ($validated['status'] === 'aktif') {
             $paket = $undangan->paket;
-            $activeDays = $paket ? $paket->active_days : 90;
+            $activeDays = min($paket ? $paket->active_days : 90, 3650);
             $undangan->expired_at = now()->addDays($activeDays);
         }
 

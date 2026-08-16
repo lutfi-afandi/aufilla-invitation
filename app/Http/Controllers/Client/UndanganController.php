@@ -186,6 +186,12 @@ class UndanganController extends Controller
 
         $undangan->update($updateData);
 
-        return response()->json(['success' => true, 'slug' => $undangan->slug]);
+        $tabsHtml = view('client.partials.tab_navigation')->render();
+
+        return response()->json([
+            'success' => true,
+            'slug' => $undangan->slug,
+            'tabs_html' => $tabsHtml
+        ]);
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Undangan;
 use App\Models\Tema;
 use App\Models\Paket;
 use App\Models\Ucapan;
+use App\Helpers\PackageHelper;
 
 class DashboardController extends Controller
 {
@@ -25,6 +26,9 @@ class DashboardController extends Controller
                 'tema_id' => Tema::first()?->id,
                 'paket_id' => $trialPaket?->id,
                 'status' => 'aktif',
+                'is_galeri_aktif' => false,
+                'is_cerita_aktif' => false,
+                'is_kado_aktif' => false,
                 'expired_at' => now()->addDays($activeDays),
             ]);
         }
@@ -69,6 +73,11 @@ class DashboardController extends Controller
     public function galeri()
     {
         $invitation = $this->getUndangan();
+
+        if (PackageHelper::getMaxGalleryPhotos($invitation) <= 0 || !$invitation->is_galeri_aktif) {
+            return redirect()->route('client.pengaturan')->with('warning', 'Modul Galeri Foto tidak aktif atau tidak didukung oleh paket Anda.');
+        }
+
         $galeris = $invitation->galeris()->orderBy('created_at', 'desc')->get();
         return view('client.galeri', compact('invitation', 'galeris'));
     }
@@ -76,6 +85,11 @@ class DashboardController extends Controller
     public function cerita()
     {
         $invitation = $this->getUndangan();
+
+        if (!PackageHelper::canAccessLoveStory($invitation) || !$invitation->is_cerita_aktif) {
+            return redirect()->route('client.pengaturan')->with('warning', 'Modul Cerita Cinta tidak aktif atau tidak didukung oleh paket Anda.');
+        }
+
         $ceritas = $invitation->ceritas()->orderBy('created_at', 'asc')->get();
         return view('client.cerita', compact('invitation', 'ceritas'));
     }
@@ -83,6 +97,11 @@ class DashboardController extends Controller
     public function kado()
     {
         $invitation = $this->getUndangan();
+
+        if (!$invitation->is_kado_aktif) {
+            return redirect()->route('client.pengaturan')->with('warning', 'Modul Kado Digital tidak aktif.');
+        }
+
         $kados = $invitation->kados()->orderBy('created_at', 'asc')->get();
         return view('client.kado', compact('invitation', 'kados'));
     }

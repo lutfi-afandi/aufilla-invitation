@@ -16,7 +16,7 @@ class PaketRequest extends FormRequest
         return [
             'name' => 'required|string|max:50',
             'price' => 'required|numeric|min:0',
-            'active_days' => 'required|integer|min:1',
+            'active_days' => 'required|integer|min:1|max:3650',
             'max_wa_send' => 'required|integer|min:1',
             'max_gallery_photos' => 'required|integer|min:0',
             'has_love_story' => 'nullable|boolean',
@@ -37,6 +37,7 @@ class PaketRequest extends FormRequest
             'active_days.required' => 'Masa aktif harus diisi.',
             'active_days.integer' => 'Masa aktif harus berupa angka bulat.',
             'active_days.min' => 'Masa aktif minimal 1 hari.',
+            'active_days.max' => 'Masa aktif paket maksimal 3650 hari (10 tahun).',
             'max_wa_send.required' => 'Maksimal kirim WA harus diisi.',
             'max_wa_send.integer' => 'Maksimal kirim WA harus berupa angka bulat.',
             'max_wa_send.min' => 'Maksimal kirim WA minimal 1.',

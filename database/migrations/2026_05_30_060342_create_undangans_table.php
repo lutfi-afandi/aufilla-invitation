@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('paket_id')->nullable()->constrained('pakets')->nullOnDelete();
             $table->string('slug')->unique();
             $table->enum('status', ['aktif', 'kedaluwarsa'])->default('aktif');
-            $table->timestamp('expired_at')->nullable();
+            $table->dateTime('expired_at')->nullable();
             
             // Mempelai Pria
             $table->string('pria_nama')->nullable();
@@ -38,9 +38,9 @@ return new class extends Migration
             // Settings
             $table->string('cover_img')->nullable();
             $table->string('music_file')->nullable();
-            $table->boolean('is_galeri_aktif')->default(true);
+            $table->boolean('is_galeri_aktif')->default(false);
             $table->boolean('is_cerita_aktif')->default(false);
-            $table->boolean('is_kado_aktif')->default(true);
+            $table->boolean('is_kado_aktif')->default(false);
             $table->text('alamat_kado')->nullable();
             
             $table->timestamps();

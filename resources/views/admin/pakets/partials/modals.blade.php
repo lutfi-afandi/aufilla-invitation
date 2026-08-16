@@ -24,7 +24,8 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Masa Aktif (Hari)</label>
-                    <input type="number" name="active_days" id="paket_active_days" required min="1" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-admin-accent focus:outline-none">
+                    <input type="number" name="active_days" id="paket_active_days" required min="1" max="3650" class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-admin-accent focus:outline-none">
+                    <p class="text-[10px] text-slate-400 mt-0.5">*Maksimal 3650 hari (10 tahun)</p>
                 </div>
             </div>
 

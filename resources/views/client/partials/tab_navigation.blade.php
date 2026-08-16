@@ -1,3 +1,10 @@
+@php
+    $tabInvitation = Auth::user() ? Auth::user()->undangans()->first() : null;
+    $canCeritaTab = $tabInvitation && \App\Helpers\PackageHelper::canAccessLoveStory($tabInvitation) && $tabInvitation->is_cerita_aktif;
+    $canGaleriTab = $tabInvitation && (\App\Helpers\PackageHelper::getMaxGalleryPhotos($tabInvitation) > 0) && $tabInvitation->is_galeri_aktif;
+    $canKadoTab = $tabInvitation && $tabInvitation->is_kado_aktif;
+@endphp
+
 <div class="bg-white border-b border-brand-accent/15 mb-6 rounded-[20px] shadow-[0_4px_20px_rgba(10,34,20,0.02)] overflow-hidden relative">
     <!-- Hint for Mobile -->
     <div class="md:hidden flex items-center justify-between px-4 py-1.5 bg-brand-light/10 text-[10px] text-brand-dark/60 font-medium border-b border-brand-accent/10">
@@ -43,7 +50,8 @@
             </div>
         </a>
 
-        <!-- Tab 4: Cerita Cinta -->
+        <!-- Tab 4: Cerita Cinta (Tampil hanya jika diaktifkan & didukung paket) -->
+        @if($canCeritaTab)
         <a href="{{ route('client.cerita') }}"
             class="whitespace-nowrap px-6 py-4 text-sm font-medium transition-all border-b-2 {{ request()->routeIs('client.cerita') ? 'border-brand-accent text-brand-accent bg-brand-light/10' : 'border-transparent text-gray-500 hover:text-brand-dark hover:bg-gray-50' }}">
             <div class="flex items-center gap-2">
@@ -53,8 +61,10 @@
                 Cerita Cinta
             </div>
         </a>
+        @endif
 
-        <!-- Tab 5: Galeri Foto -->
+        <!-- Tab 5: Galeri Foto (Tampil hanya jika diaktifkan & kuota > 0) -->
+        @if($canGaleriTab)
         <a href="{{ route('client.galeri') }}"
             class="whitespace-nowrap px-6 py-4 text-sm font-medium transition-all border-b-2 {{ request()->routeIs('client.galeri') ? 'border-brand-accent text-brand-accent bg-brand-light/10' : 'border-transparent text-gray-500 hover:text-brand-dark hover:bg-gray-50' }}">
             <div class="flex items-center gap-2">
@@ -64,8 +74,10 @@
                 Galeri Foto
             </div>
         </a>
+        @endif
 
-        <!-- Tab 6: Kado Digital -->
+        <!-- Tab 6: Kado Digital (Tampil hanya jika diaktifkan) -->
+        @if($canKadoTab)
         <a href="{{ route('client.kado') }}"
             class="whitespace-nowrap px-6 py-4 text-sm font-medium transition-all border-b-2 {{ request()->routeIs('client.kado') ? 'border-brand-accent text-brand-accent bg-brand-light/10' : 'border-transparent text-gray-500 hover:text-brand-dark hover:bg-gray-50' }}">
             <div class="flex items-center gap-2">
@@ -75,6 +87,7 @@
                 Kado Digital
             </div>
         </a>
+        @endif
     </div>
 </div>
 
@@ -84,7 +97,6 @@
         if (container) {
             var activeTab = container.querySelector('.border-brand-accent');
             if (activeTab) {
-                // Scroll specifically to center the active tab into view
                 var scrollLeft = activeTab.offsetLeft - (container.clientWidth / 2) + (activeTab.clientWidth / 2);
                 container.scrollTo({
                     left: scrollLeft,
@@ -96,11 +108,9 @@
 </script>
 
 <style>
-    /* Utility to hide scrollbar but keep functionality */
     .hide-scrollbar::-webkit-scrollbar {
         display: none;
     }
-
     .hide-scrollbar {
         -ms-overflow-style: none;
         scrollbar-width: none;
