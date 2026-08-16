@@ -47,7 +47,7 @@
                             
                             <span class="inline-block text-xs font-bold tracking-wider text-brand-accent uppercase mb-2 bg-brand-accent/10 px-3 py-1 rounded-full">{{ $cerita->tanggal }}</span>
                             <h4 class="text-lg font-bold text-brand-dark mb-2" style="font-family: 'Playfair Display', serif;">{{ $cerita->judul }}</h4>
-                            <p class="text-sm text-gray-600 leading-relaxed">{{ $cerita->isi_cerita }}</p>
+                            <p class="text-sm text-gray-600 leading-relaxed">{{ $cerita->isi ?? $cerita->isi_cerita }}</p>
                         </div>
                     </div>
                 @empty
@@ -203,7 +203,7 @@
         var id = data.id;
         var tanggal = data.tanggal || '';
         var judul = data.judul || '';
-        var isi = data.isi_cerita || '';
+        var isi = data.isi || data.isi_cerita || '';
         return `
             <div class="mb-8 relative pl-8 md:pl-10 group" id="cerita-${id}">
                 <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-brand-accent ring-4 ring-white shadow-sm"></div>
