@@ -11,7 +11,7 @@ class PackageHelper
      */
     public static function getMaxGalleryPhotos(?Undangan $undangan): int
     {
-        if (!$undangan || !$undangan->paket) {
+        if (! $undangan || ! $undangan->paket) {
             return 5;
         }
 
@@ -23,7 +23,7 @@ class PackageHelper
      */
     public static function canAddGalleryPhoto(?Undangan $undangan): bool
     {
-        if (!$undangan) {
+        if (! $undangan) {
             return false;
         }
 
@@ -38,11 +38,11 @@ class PackageHelper
      */
     public static function canAddGuest(?Undangan $undangan): bool
     {
-        if (!$undangan) {
+        if (! $undangan) {
             return false;
         }
 
-        return !$undangan->isExpired();
+        return ! $undangan->isExpired();
     }
 
     /**
@@ -50,7 +50,7 @@ class PackageHelper
      */
     public static function canAccessLoveStory(?Undangan $undangan): bool
     {
-        if (!$undangan || !$undangan->paket) {
+        if (! $undangan || ! $undangan->paket) {
             return false;
         }
 
@@ -62,7 +62,7 @@ class PackageHelper
      */
     public static function canAccessCustomMusic(?Undangan $undangan): bool
     {
-        if (!$undangan || !$undangan->paket) {
+        if (! $undangan || ! $undangan->paket) {
             return false;
         }
 
