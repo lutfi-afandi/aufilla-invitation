@@ -1419,7 +1419,7 @@
                                             </h5>
                                         </div>
                                         <span
-                                            style="font-size: 9px; color: #849687;">{{ $wish->created_at->diffForHumans() }}</span>
+                                            style="font-size: 9px; color: #849687;">{{ $wish->created_at ? $wish->created_at->diffForHumans() : 'baru saja' }}</span>
                                     </div>
                                     <p
                                         style="font-size: 0.8rem; color: #5a6b5d; font-style: italic; margin: 0; line-height: 1.4;">

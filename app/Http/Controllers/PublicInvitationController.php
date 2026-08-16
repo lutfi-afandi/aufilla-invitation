@@ -142,7 +142,8 @@ class PublicInvitationController extends Controller
             new \App\Models\Ucapan([
                 'nama' => 'Admin Aufilla',
                 'kehadiran' => 'hadir',
-                'ucapan' => 'Selamat menempuh hidup baru. Semoga menjadi keluarga yang sakinah, mawaddah, dan warahmah.'
+                'ucapan' => 'Selamat menempuh hidup baru. Semoga menjadi keluarga yang sakinah, mawaddah, dan warahmah.',
+                'created_at' => now(),
             ]),
         ]);
 
