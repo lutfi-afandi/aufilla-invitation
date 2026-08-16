@@ -15,7 +15,7 @@ kalau rose yang dimaksud sudah identik dengan soraya pilot, lebih baik batalkan 
     $ogImg  = $invitation->cover_img
         ? str_replace('http://', 'https://', assetv('storage/' . $invitation->cover_img))
         : str_replace('http://', 'https://', assetv('assets/default/default-pasangan.jpg'));
-    $ogDesc = 'Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami pada ' . (isset($resepsi) ? $resepsi->tgl_acara->translatedFormat('l, d F Y') : (isset($akad) ? $akad->tgl_acara->translatedFormat('l, d F Y') : 'hari yang telah ditentukan')) . '.';
+    $ogDesc = 'Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di acara pernikahan kami pada ' . (isset($resepsi) ? \Carbon\Carbon::parse($resepsi->tgl_acara)->translatedFormat('l, d F Y') : (isset($akad) ? \Carbon\Carbon::parse($akad->tgl_acara)->translatedFormat('l, d F Y') : 'hari yang telah ditentukan')) . '.';
   @endphp
   <!-- Meta Data & Open Graph untuk WhatsApp / Sosmed -->
   <meta name="description" content="{{ $ogDesc }}">
@@ -502,7 +502,7 @@ kalau rose yang dimaksud sudah identik dengan soraya pilot, lebih baik batalkan 
                           <div class="w-8 h-8 rounded-full bg-brand-50 text-brand-800 flex items-center justify-center text-xs font-bold font-serif shrink-0">{{ strtoupper(substr($wish->nama, 0, 1)) }}</div>
                           <h4 class="font-serif font-bold text-brand-900 text-sm">{{ $wish->nama }}</h4>
                         </div>
-                        <span class="text-[10px] text-stone-400">{{ $wish->created_at->diffForHumans() }}</span>
+                        <span class="text-[10px] text-stone-400">{{ $wish->created_at ? $wish->created_at->diffForHumans() : 'baru saja' }}</span>
                       </div>
                       <div class="mb-2">
                         @if($wish->kehadiran == 'hadir')

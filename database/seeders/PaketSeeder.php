@@ -17,7 +17,7 @@ class PaketSeeder extends Seeder
                 'max_wa_send' => 3,
                 'max_gallery_photos' => 5,
                 'has_love_story' => true,
-                'can_custom_music' => true,
+                'can_custom_music' => false,
                 'is_priority_support' => false,
                 'description' => 'Paket uji coba gratis 3 hari (maksimal kirim undangan 3x) untuk mencoba fitur pembuatan undangan.',
             ],
@@ -46,7 +46,7 @@ class PaketSeeder extends Seeder
             [
                 'name' => 'VIP',
                 'price' => 80000.00,
-                'active_days' => 36500,
+                'active_days' => 3650,
                 'max_wa_send' => 99999,
                 'max_gallery_photos' => 999,
                 'has_love_story' => true,

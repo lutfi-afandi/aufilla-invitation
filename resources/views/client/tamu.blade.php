@@ -30,7 +30,7 @@
                     Export
                 </a>
                 
-                @if(!Auth::user()->invitation || !Auth::user()->invitation->isExpired())
+                @if(!Auth::user()->invitation || !Auth::user()->invitation?->isExpired())
                     @if(\App\Helpers\PackageHelper::canAddGuest(Auth::user()->invitation))
                     <button onclick="$('#modal-import').removeClass('hidden').addClass('flex');" class="flex-1 md:flex-none justify-center bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-3 md:px-4 py-2 rounded-xl text-xs md:text-sm font-medium transition-colors shadow-sm flex items-center gap-1.5 md:gap-2">
                         <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
@@ -205,14 +205,14 @@
                 let html = '';
                 let data = response.data; // Because of paginate()
                 
-                let isExpired = {{ (!Auth::user()->invitation || Auth::user()->invitation->isExpired()) ? 'true' : 'false' }};
+                let isExpired = {{ (!Auth::user()->invitation || Auth::user()->invitation?->isExpired()) ? 'true' : 'false' }};
                 
                 if(data.length === 0) {
                     html = `<tr><td colspan="${isExpired ? '4' : '5'}" class="px-7 py-8 text-center text-gray-500 italic border-b border-brand-accent/10">Belum ada data tamu.</td></tr>`;
                 } else {
                     data.forEach(function(item) {
                         let isWaSent = item.is_wa_sent ? 'checked' : '';
-                        let slug = "{{ Auth::user()->invitation->slug }}";
+                        let slug = "{{ Auth::user()->invitation?->slug ?? '' }}";
                         let link = window.location.origin + "/" + slug + "?to=" + encodeURIComponent(item.nama_tamu);
                         html += `
                         <tr class="hover:bg-brand-accent/5 transition-colors border-b border-brand-accent/10 last:border-0" id="tamu-${item.id}">

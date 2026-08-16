@@ -16,6 +16,11 @@
     
     <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
+    <style>
+        .swal2-container {
+            z-index: 99999 !important;
+        }
+    </style>
 </head>
 <body class="font-sans antialiased text-gray-900 bg-brand-bg flex h-screen overflow-hidden">
     

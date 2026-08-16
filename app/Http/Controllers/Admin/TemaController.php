@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\TemaRequest;
 use App\Models\Tema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,32 +15,31 @@ class TemaController extends Controller
         $query = Tema::withCount('undangans');
 
         if ($search = $request->input('search')) {
-            $query->where('name', 'like', "%{$search}%")
-                ->orWhere('code', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('code', 'like', "%{$search}%");
+            });
         }
 
-        $themes = $query->latest()->paginate(12)->withQueryString();
+        $themes = $query->orderBy('id', 'desc')->paginate(12)->withQueryString();
 
         if ($request->ajax()) {
-            return view('admin.themes.partials.grid', compact('themes'))->render();
+            return response()->json([
+                'html' => view('admin.themes.partials.table', compact('themes'))->render(),
+            ]);
         }
 
         return view('admin.themes.index', compact('themes'));
     }
 
-    public function store(Request $request)
+    public function store(TemaRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'code' => 'required|string|max:50|unique:temas,code',
-            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'is_active' => 'boolean',
-        ]);
+        $validated = $request->validated();
 
         $data = [
             'name' => $validated['name'],
             'code' => $validated['code'],
-            'is_active' => $validated['is_active'] ?? true,
+            'is_active' => isset($validated['is_active']) ? $validated['is_active'] : 1,
         ];
 
         if ($request->hasFile('thumbnail')) {
@@ -48,21 +48,21 @@ class TemaController extends Controller
 
         Tema::create($data);
 
-        return response()->json(['message' => 'Tema berhasil ditambahkan.']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Tema berhasil ditambahkan.',
+        ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(TemaRequest $request, $id)
     {
         $theme = Tema::findOrFail($id);
-
-        $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'is_active' => 'required|boolean',
-            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
+        $validated = $request->validated();
 
         $theme->name = $validated['name'];
-        $theme->is_active = $validated['is_active'];
+        if (array_key_exists('is_active', $validated)) {
+            $theme->is_active = $validated['is_active'];
+        }
 
         if ($request->hasFile('thumbnail')) {
             if ($theme->thumbnail) {
@@ -73,7 +73,10 @@ class TemaController extends Controller
 
         $theme->save();
 
-        return response()->json(['message' => 'Tema berhasil diperbarui.']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Tema berhasil diperbarui.',
+        ]);
     }
 
     public function toggleActive($id)
@@ -83,7 +86,8 @@ class TemaController extends Controller
         $theme->save();
 
         return response()->json([
-            'message' => 'Status tema berhasil diubah.',
+            'success' => true,
+            'message' => 'Status tema '.$theme->name.' berhasil diubah.',
             'is_active' => $theme->is_active,
         ]);
     }
@@ -94,6 +98,7 @@ class TemaController extends Controller
 
         if ($theme->undangans_count > 0) {
             return response()->json([
+                'success' => false,
                 'message' => 'Gagal menghapus! Tema ini sedang digunakan oleh '.$theme->undangans_count.' klien.',
             ], 422);
         }
@@ -104,6 +109,9 @@ class TemaController extends Controller
 
         $theme->delete();
 
-        return response()->json(['message' => 'Tema berhasil dihapus.']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Tema berhasil dihapus.',
+        ]);
     }
 }

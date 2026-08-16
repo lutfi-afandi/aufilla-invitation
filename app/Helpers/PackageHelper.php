@@ -9,9 +9,9 @@ class PackageHelper
     /**
      * Mendapatkan kuota maksimal foto galeri sesuai paket.
      */
-    public static function getMaxGalleryPhotos(Undangan $undangan): int
+    public static function getMaxGalleryPhotos(?Undangan $undangan): int
     {
-        if (!$undangan->paket) {
+        if (! $undangan || ! $undangan->paket) {
             return 5;
         }
 
@@ -21,8 +21,12 @@ class PackageHelper
     /**
      * Mengecek apakah klien masih bisa menambah foto galeri (kuota belum penuh).
      */
-    public static function canAddGalleryPhoto(Undangan $undangan): bool
+    public static function canAddGalleryPhoto(?Undangan $undangan): bool
     {
+        if (! $undangan) {
+            return false;
+        }
+
         $currentCount = $undangan->galeris()->count();
         $maxPhotos = self::getMaxGalleryPhotos($undangan);
 
@@ -30,11 +34,23 @@ class PackageHelper
     }
 
     /**
+     * Mengecek apakah klien masih bisa menambah data tamu.
+     */
+    public static function canAddGuest(?Undangan $undangan): bool
+    {
+        if (! $undangan) {
+            return false;
+        }
+
+        return ! $undangan->isExpired();
+    }
+
+    /**
      * Mengecek apakah fitur Cerita Cinta dapat diakses (didukung oleh paket).
      */
-    public static function canAccessLoveStory(Undangan $undangan): bool
+    public static function canAccessLoveStory(?Undangan $undangan): bool
     {
-        if (!$undangan->paket) {
+        if (! $undangan || ! $undangan->paket) {
             return false;
         }
 
@@ -44,9 +60,9 @@ class PackageHelper
     /**
      * Mengecek apakah fitur Musik Kustom dapat digunakan.
      */
-    public static function canAccessCustomMusic(Undangan $undangan): bool
+    public static function canAccessCustomMusic(?Undangan $undangan): bool
     {
-        if (!$undangan->paket) {
+        if (! $undangan || ! $undangan->paket) {
             return false;
         }
 

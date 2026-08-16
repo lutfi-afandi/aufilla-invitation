@@ -21,6 +21,10 @@ class Acara extends Model
         'gmaps_link',
     ];
 
+    protected $casts = [
+        'tgl_acara' => 'date',
+    ];
+
     public function undangan()
     {
         return $this->belongsTo(Undangan::class);

@@ -15,6 +15,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'email_verified_at',
     ];
 
     protected $hidden = [
@@ -33,6 +34,11 @@ class User extends Authenticatable
     public function undangans()
     {
         return $this->hasMany(Undangan::class);
+    }
+
+    public function invitation()
+    {
+        return $this->hasOne(Undangan::class)->latestOfMany();
     }
 
     public function transaksis()

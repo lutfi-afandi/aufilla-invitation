@@ -23,7 +23,8 @@ class LandingController extends Controller
     public function register(Request $request)
     {
         $request->merge([
-            'username' => Str::slug($request->username)
+            'username' => Str::slug($request->username),
+            'slug'     => Str::slug($request->slug ?: $request->username),
         ]);
 
         $validated = $request->validate([
@@ -32,11 +33,22 @@ class LandingController extends Controller
                 'string',
                 'max:50',
                 'unique:users,username',
-                'unique:undangans,slug',
                 function ($attribute, $value, $fail) {
                     $reserved = ['admin', 'login', 'register', 'preview', 'receptionist', 'dashboard', 'api', 'welcome-screen', 'kado', 'tamu'];
                     if (in_array(strtolower($value), $reserved)) {
                         $fail('Username ini tidak bisa digunakan.');
+                    }
+                },
+            ],
+            'slug' => [
+                'required',
+                'string',
+                'max:100',
+                'unique:undangans,slug',
+                function ($attribute, $value, $fail) {
+                    $reserved = ['admin', 'login', 'register', 'preview', 'receptionist', 'dashboard', 'api', 'welcome-screen', 'kado', 'tamu'];
+                    if (in_array(strtolower($value), $reserved)) {
+                        $fail('URL Slug ini tidak bisa digunakan.');
                     }
                 },
             ],
@@ -46,22 +58,23 @@ class LandingController extends Controller
         ]);
 
         $user = User::create([
-            'username' => $validated['username'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role' => 'client',
+            'username'          => $validated['username'],
+            'email'             => $validated['email'],
+            'password'          => Hash::make($validated['password']),
+            'role'              => 'client',
+            'email_verified_at' => now(),
         ]);
 
         $trialPaket = Paket::where('name', 'Trial')->first() ?? Paket::first();
         $activeDays = $trialPaket ? $trialPaket->active_days : 3;
 
         $user->undangans()->create([
-            'slug' => $validated['username'],
-            'tema_id' => $validated['theme_id'],
-            'paket_id' => $trialPaket ? $trialPaket->id : null,
-            'status' => 'aktif',
+            'slug'       => $validated['slug'],
+            'tema_id'    => $validated['theme_id'],
+            'paket_id'   => $trialPaket ? $trialPaket->id : null,
+            'status'     => 'aktif',
             'expired_at' => now()->addDays($activeDays),
-            'pria_nama' => 'Pria',
+            'pria_nama'  => 'Pria',
             'wanita_nama' => 'Wanita',
         ]);
 

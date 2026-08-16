@@ -3,219 +3,244 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Undangan;
-use App\Models\Tema;
+use App\Http\Requests\Admin\StoreClientRequest;
+use App\Http\Requests\Admin\UpdateClientRequest;
 use App\Models\Paket;
+use App\Models\Tema;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class ClientController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Display a listing of clients.
+     */
+    public function index(Request $request): View
     {
-        $query = User::where('role', 'client')
-            ->with(['undangans.tema', 'undangans.paket']);
+        $clients = User::where('role', 'client')
+            ->with(['undangans.tema', 'undangans.paket'])
+            ->latest()
+            ->get();
 
-        if ($search = $request->input('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('username', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
-
-        $clients  = $query->latest()->paginate(15)->withQueryString();
-        $themes   = Tema::where('is_active', true)->get();
+        $themes = Tema::where('is_active', true)->get();
         $packages = Paket::all();
-
-        if ($request->ajax()) {
-            return response()->json([
-                'html' => view('admin.clients.partials.table-content', compact('clients'))->render()
-            ]);
-        }
 
         return view('admin.clients.index', compact('clients', 'themes', 'packages'));
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created client.
+     */
+    public function store(StoreClientRequest $request): JsonResponse
     {
-        $request->merge([
-            'username'   => Str::slug($request->username)
-        ]);
+        $validated = $request->validated();
 
-        $validated = $request->validate([
-            'username'   => [
-                'required', 'string', 'max:50', 'unique:users,username', 'unique:undangans,slug',
-                function ($attribute, $value, $fail) {
-                    $reserved = ['admin', 'login', 'register', 'preview', 'receptionist', 'dashboard', 'api', 'welcome-screen', 'kado', 'tamu'];
-                    if (in_array(strtolower($value), $reserved)) {
-                        $fail('Username ini tidak bisa digunakan.');
-                    }
-                }
-            ],
-            'email'      => 'nullable|email|max:100|unique:users,email',
-            'password'   => 'required|string|min:6|max:50',
-            'theme_id'   => 'required|exists:temas,id',
-            'package_id' => 'required|exists:pakets,id',
-        ]);
-
-        $user = \Illuminate\Support\Facades\DB::transaction(function () use ($validated) {
+        $user = DB::transaction(function () use ($validated) {
             $user = User::create([
                 'username' => $validated['username'],
-                'email'    => $validated['email'],
+                'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'role'     => 'client',
+                'role' => 'client',
+                'email_verified_at' => now(),
             ]);
 
             $paket = Paket::find($validated['package_id']);
-            $activeDays = $paket ? $paket->active_days : 90;
+            $activeDays = min($paket ? $paket->active_days : 90, 3650);
             $expireDate = now()->addDays($activeDays);
 
             $user->undangans()->create([
-                'slug'       => $validated['username'],
-                'tema_id'    => $validated['theme_id'],
-                'paket_id'   => $validated['package_id'],
-                'status'     => 'aktif',
+                'slug' => $validated['slug'],
+                'tema_id' => $validated['theme_id'],
+                'paket_id' => $validated['package_id'],
+                'status' => 'aktif',
                 'expired_at' => $expireDate,
-                'pria_nama'  => 'Pria',
+                'pria_nama' => 'Pria',
                 'wanita_nama' => 'Wanita',
             ]);
 
             return $user;
         });
 
-        $user->load('undangans.tema');
-        $html = view('admin.clients.partials.row', ['client' => $user])->render();
+        // Load relations for partial row rendering
+        $user->load(['undangans.tema', 'undangans.paket']);
 
         return response()->json([
-            'message' => 'Klien berhasil dibuat.',
-            'html' => $html
+            'success' => true,
+            'message' => "Klien {$user->username} berhasil ditambahkan.",
+            'client' => $user,
+            'row_html' => view('admin.clients.partials.row', ['client' => $user])->render(),
         ]);
     }
 
-    public function show($id)
+    /**
+     * Display the specified client details.
+     */
+    public function show(int $id): JsonResponse
     {
         $client = User::where('role', 'client')
-            ->with(['undangans.tema', 'undangans.paket', 'undangans.tamus', 'undangans.ucapans', 'undangans.galeris', 'undangans.ceritas', 'undangans.kados', 'undangans.acaras'])
+            ->with([
+                'undangans.tema',
+                'undangans.paket',
+                'undangans.tamus',
+                'undangans.ucapans',
+                'undangans.galeris',
+                'undangans.ceritas',
+                'undangans.kados',
+                'undangans.acaras'
+            ])
             ->findOrFail($id);
 
+        $undangan = $client->undangans->first();
+
+        // Calculate synchronized stats
+        $stats = [
+            'total_tamu' => $undangan ? $undangan->tamus->count() : 0,
+            'total_ucapan' => $undangan ? $undangan->ucapans->count() : 0,
+            'total_galeri' => $undangan ? $undangan->galeris->count() : 0,
+            'total_cerita' => $undangan ? $undangan->ceritas->count() : 0,
+            'total_kado' => $undangan ? $undangan->kados->count() : 0,
+            'total_acara' => $undangan ? $undangan->acaras->count() : 0,
+        ];
+
+        $html = view('admin.clients.partials.detail', compact('client', 'undangan', 'stats'))->render();
+
         return response()->json([
+            'success' => true,
             'client' => $client,
-            'undangan' => $client->undangans()->first()
+            'undangan' => $undangan,
+            'stats' => $stats,
+            'html' => $html,
         ]);
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified client.
+     */
+    public function update(UpdateClientRequest $request, int $id): JsonResponse
     {
         $client = User::where('role', 'client')->findOrFail($id);
-        $undangan = $client->undangans()->first();
+        $undangan = $client->undangans->first();
+        $validated = $request->validated();
 
-        $request->merge([
-            'username' => Str::slug($request->username)
-        ]);
+        DB::transaction(function () use ($client, $undangan, $validated) {
+            $client->username = $validated['username'];
+            $client->email = $validated['email'];
+            if (! empty($validated['password'])) {
+                $client->password = Hash::make($validated['password']);
+            }
+            $client->save();
 
-        $validated = $request->validate([
-            'username'   => [
-                'required', 'string', 'max:50', 
-                Rule::unique('users', 'username')->ignore($client->id),
-                Rule::unique('undangans', 'slug')->ignore($undangan?->id),
-                function ($attribute, $value, $fail) {
-                    $reserved = ['admin', 'login', 'register', 'preview', 'receptionist', 'dashboard', 'api', 'welcome-screen', 'kado', 'tamu'];
-                    if (in_array(strtolower($value), $reserved)) {
-                        $fail('Username ini tidak bisa digunakan.');
+            if ($undangan) {
+                $undangan->status = $validated['status'];
+                $undangan->tema_id = $validated['theme_id'];
+                if (array_key_exists('package_id', $validated) && ! empty($validated['package_id'])) {
+                    $undangan->paket_id = $validated['package_id'];
+                    $paket = Paket::find($validated['package_id']);
+                    if ($paket && $validated['status'] === 'aktif') {
+                        $activeDays = min($paket->active_days, 3650);
+                        $undangan->expired_at = now()->addDays($activeDays);
                     }
                 }
-            ],
-            'email'      => ['nullable', 'email', 'max:100', Rule::unique('users', 'email')->ignore($client->id)],
-            'password'   => 'nullable|string|min:6|max:50',
-            'status'     => 'required|in:aktif,kedaluwarsa',
-            'theme_id'   => 'required|exists:temas,id',
-            'package_id' => 'nullable|exists:pakets,id',
-        ]);
-
-        $client->username = $validated['username'];
-        $client->email    = $validated['email'];
-        if (!empty($validated['password'])) {
-            $client->password = Hash::make($validated['password']);
-        }
-        $client->save();
-
-        if ($undangan) {
-            $undangan->status = $validated['status'];
-            $undangan->tema_id = $validated['theme_id'];
-            if (array_key_exists('package_id', $validated)) {
-                $undangan->paket_id = $validated['package_id'];
-                $paket = Paket::find($validated['package_id']);
-                if ($paket && $validated['status'] === 'aktif') {
-                    $undangan->expired_at = now()->addDays($paket->active_days);
-                }
+                $undangan->slug = $validated['slug'];
+                $undangan->save();
             }
-            $undangan->slug = $validated['username'];
-            $undangan->save();
-        }
+        });
 
-        $client->load('undangans.tema');
-        $html = view('admin.clients.partials.row', ['client' => $client])->render();
+        // Fresh load relations
+        $client->load(['undangans.tema', 'undangans.paket']);
 
         return response()->json([
-            'message' => 'Data klien berhasil diperbarui.',
-            'html' => $html
+            'success' => true,
+            'message' => "Data klien {$client->username} berhasil diperbarui.",
+            'client' => $client,
+            'row_html' => view('admin.clients.partials.row', ['client' => $client])->render(),
         ]);
     }
 
-    public function updateStatus(Request $request, $id)
+    /**
+     * Update client invitation status.
+     */
+    public function updateStatus(Request $request, int $id): JsonResponse
     {
         $client = User::where('role', 'client')->findOrFail($id);
-        $undangan = $client->undangans()->first();
+        $undangan = $client->undangans->first();
 
-        if (!$undangan) {
-            return response()->json(['message' => 'Klien belum memiliki undangan.'], 404);
+        if (! $undangan) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Klien belum memiliki data undangan.',
+            ], 404);
         }
 
         $validated = $request->validate([
-            'status'   => 'required|in:aktif,kedaluwarsa',
+            'status' => 'required|in:aktif,kedaluwarsa',
             'theme_id' => 'nullable|exists:temas,id',
+        ], [
+            'status.required' => 'Status undangan wajib dipilih.',
+            'status.in' => 'Status harus berupa "aktif" atau "kedaluwarsa".',
+            'theme_id.exists' => 'Tema yang dipilih tidak valid.',
         ]);
 
         $undangan->status = $validated['status'];
 
         if ($validated['status'] === 'aktif') {
             $paket = $undangan->paket;
-            $activeDays = $paket ? $paket->active_days : 3;
+            $activeDays = min($paket ? $paket->active_days : 90, 3650);
             $undangan->expired_at = now()->addDays($activeDays);
         }
 
-        if (!empty($validated['theme_id'])) {
+        if (! empty($validated['theme_id'])) {
             $undangan->tema_id = $validated['theme_id'];
         }
 
         $undangan->save();
 
-        return response()->json(['message' => 'Status undangan berhasil diperbarui.']);
+        $client->load(['undangans.tema', 'undangans.paket']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status undangan berhasil diperbarui.',
+            'client' => $client,
+            'row_html' => view('admin.clients.partials.row', ['client' => $client])->render(),
+        ]);
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified client and related records.
+     */
+    public function destroy(int $id): JsonResponse
     {
         $client = User::where('role', 'client')->findOrFail($id);
+        $username = $client->username;
 
-        foreach ($client->undangans as $undangan) {
-            $undangan->tamus()->delete();
-            $undangan->ucapans()->delete();
-            $undangan->galeris()->delete();
-            $undangan->ceritas()->delete();
-            $undangan->kados()->delete();
-            $undangan->acaras()->delete();
-            $undangan->delete();
-        }
+        DB::transaction(function () use ($client) {
+            foreach ($client->undangans as $undangan) {
+                $undangan->tamus()->delete();
+                $undangan->ucapans()->delete();
+                $undangan->galeris()->delete();
+                $undangan->ceritas()->delete();
+                $undangan->kados()->delete();
+                $undangan->acaras()->delete();
+                $undangan->delete();
+            }
 
-        $client->delete();
+            $client->delete();
+        });
 
-        return response()->json(['message' => 'Klien berhasil dihapus.']);
+        return response()->json([
+            'success' => true,
+            'message' => "Klien {$username} berhasil dihapus permanen.",
+        ]);
     }
 
-    public function impersonate($id)
+    /**
+     * Impersonate as the client.
+     */
+    public function impersonate(int $id)
     {
         $client = User::where('role', 'client')->findOrFail($id);
 
