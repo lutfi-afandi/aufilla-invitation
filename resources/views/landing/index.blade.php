@@ -3,6 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="color-scheme" content="light only">
+    <meta name="supported-color-schemes" content="light">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Aufilla Invitation') }} — Undangan Pernikahan Digital</title>
@@ -153,6 +155,60 @@
 <body class="font-sans antialiased text-brand-dark bg-brand-bg overflow-x-hidden">
 
     {{-- ═══════════════════════════════════════════════
+         PRELOADER / SPLASH SCREEN (Elegance Dark & Gold)
+    ═══════════════════════════════════════════════ --}}
+    <div id="landing-preloader" class="fixed inset-0 z-[99999] bg-[#0a2214] flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
+        <div class="relative flex flex-col items-center text-center px-4">
+            {{-- Ring Spinner --}}
+            <div class="relative w-20 h-20 mb-6 flex items-center justify-center">
+                <div class="absolute inset-0 rounded-full border-2 border-[#c5a880]/20 animate-ping"></div>
+                <div class="w-16 h-16 rounded-full border-2 border-t-[#c5a880] border-r-[#c5a880]/40 border-b-transparent border-l-transparent animate-spin"></div>
+                <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Logo" class="w-8 h-8 object-contain absolute inset-0 m-auto">
+            </div>
+            
+            {{-- Brand Name & Tagline --}}
+            <h2 class="font-serif text-2xl md:text-3xl text-white tracking-wide mb-1">
+                Aufilla <span class="text-[#c5a880] italic font-normal">Invitation</span>
+            </h2>
+            <p class="text-[10px] md:text-[11px] text-[#c5a880]/80 tracking-[0.25em] uppercase font-light">
+                Mewujudkan Momen Spesial Anda
+            </p>
+
+            {{-- Progress Bar --}}
+            <div class="w-36 h-[2px] bg-white/10 rounded-full mt-6 overflow-hidden relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#c5a880] to-transparent w-full animate-[preloader-bar_1.2s_ease-in-out_infinite]"></div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes preloader-bar {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
+
+    <script>
+        (function() {
+            function hidePreloader() {
+                const loader = document.getElementById('landing-preloader');
+                if (loader && !loader.classList.contains('opacity-0')) {
+                    loader.classList.add('opacity-0', 'pointer-events-none');
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 700);
+                }
+            }
+            if (document.readyState === 'complete') {
+                hidePreloader();
+            } else {
+                window.addEventListener('load', hidePreloader);
+                setTimeout(hidePreloader, 1000);
+            }
+        })();
+    </script>
+
+    {{-- ═══════════════════════════════════════════════
          NAVBAR
     ═══════════════════════════════════════════════ --}}
     <nav x-data="{ mobileMenuOpen: false }" @click.outside="mobileMenuOpen = false"
@@ -282,7 +338,7 @@
         <div class="absolute inset-0 z-0 pointer-events-none">
             {{-- Base Image --}}
             <img src="{{ asset('assets/img/wedding-aesthetic-bg.jpg') }}" alt="Wedding Aesthetic Background"
-                class="w-full h-full object-cover grayscale opacity-40 mix-blend-multiply">
+                class="w-full h-full object-cover grayscale opacity-40 mix-blend-multiply" fetchpriority="high" decoding="async">
 
             {{-- Dual Tone Gradient Overlay (Warm Gold to Soft Sage Green) --}}
             <div
@@ -590,7 +646,7 @@
                             <img src="{{ $theme->thumbnail ? asset('storage/' . $theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png') }}"
                                 onerror="this.src=`{{ asset('assets/img/thumbnail-tema/demo1.png') }}`"
                                 alt="{{ $theme->name }}"
-                                class="w-full h-full object-cover scale-[1.15] group-hover:scale-[1.20] transition-transform duration-500 origin-center relative z-0">
+                                class="w-full h-full object-cover scale-[1.15] group-hover:scale-[1.20] transition-transform duration-500 origin-center relative z-0" loading="lazy" decoding="async">
 
                             {{-- Tag Label --}}
                             <div
