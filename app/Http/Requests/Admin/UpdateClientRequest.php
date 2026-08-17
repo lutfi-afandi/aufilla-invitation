@@ -81,6 +81,7 @@ class UpdateClientRequest extends FormRequest
             'status' => 'required|in:aktif,kedaluwarsa',
             'theme_id' => 'required|exists:temas,id',
             'package_id' => 'nullable|exists:pakets,id',
+            'custom_css' => 'nullable|string',
         ];
     }
 

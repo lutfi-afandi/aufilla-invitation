@@ -141,6 +141,11 @@
       box-shadow: 0 8px 25px rgba(0,0,0,0.06);
     }
   </style>
+    @if(!empty($invitation->custom_css))
+        <style>
+            {!! strip_tags($invitation->custom_css) !!}
+        </style>
+    @endif
 </head>
 
 <body class="font-sans text-stone-800 bg-[#F9F9F9] relative selection:bg-brand-800 selection:text-white locked">

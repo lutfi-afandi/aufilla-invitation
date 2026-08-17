@@ -665,6 +665,11 @@
             }
         }
     </style>
+    @if(!empty($invitation->custom_css))
+        <style>
+            {!! strip_tags($invitation->custom_css) !!}
+        </style>
+    @endif
 </head>
 
 <body class="antialiased leading-relaxed">

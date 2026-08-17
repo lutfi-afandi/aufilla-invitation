@@ -140,7 +140,9 @@
                                 $('#edit-theme-icon').html(
                                     `<img src="/storage/${und.tema.thumbnail}" class="w-full h-full object-cover">`);
                             }
-                        }
+                        $('#edit-custom-css').val(und.custom_css || '');
+                    } else {
+                        $('#edit-custom-css').val('');
                     }
                     $('#edit-modal').css('display', 'flex');
                 })

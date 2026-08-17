@@ -146,6 +146,9 @@ class ClientController extends Controller
                     }
                 }
                 $undangan->slug = $validated['slug'];
+                if (array_key_exists('custom_css', $validated)) {
+                    $undangan->custom_css = $validated['custom_css'];
+                }
                 $undangan->save();
             }
         });

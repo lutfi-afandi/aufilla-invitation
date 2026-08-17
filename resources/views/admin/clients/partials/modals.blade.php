@@ -146,6 +146,11 @@
                     <input type="password" name="password" id="edit-password" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-2 focus:ring-admin-accent/30 focus:border-admin-accent transition-all placeholder-slate-400" placeholder="Kosongkan jika tak diubah">
                 </div>
             </div>
+
+            <div>
+                <label class="block font-bold text-xs tracking-wider text-slate-600 uppercase mb-1">Custom CSS Override <span class="text-slate-400 font-normal normal-case">(Khusus VIP / Fitur Admin)</span></label>
+                <textarea name="custom_css" id="edit-custom-css" rows="3" class="block w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono focus:bg-white focus:ring-2 focus:ring-admin-accent/30 focus:border-admin-accent transition-all text-slate-800 placeholder-slate-400" placeholder="Contoh: #event-section { background-color: #faf0e6 !important; }"></textarea>
+            </div>
             
             <div class="pt-2">
                 <button type="submit" id="edit-submit-btn" class="w-full inline-flex justify-center items-center px-4 py-3 bg-admin-accent-dark border border-transparent rounded-xl font-bold text-sm text-white tracking-wider uppercase hover:bg-admin-accent transition duration-150 shadow-sm">

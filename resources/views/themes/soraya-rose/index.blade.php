@@ -143,6 +143,11 @@ kalau rose yang dimaksud sudah identik dengan soraya pilot, lebih baik batalkan 
       box-shadow: 0 8px 25px rgba(0,0,0,0.06);
     }
   </style>
+    @if(!empty($invitation->custom_css))
+        <style>
+            {!! strip_tags($invitation->custom_css) !!}
+        </style>
+    @endif
 </head>
 
 <body class="font-sans text-stone-800 bg-[#FFF5F5] relative selection:bg-brand-800 selection:text-white locked">

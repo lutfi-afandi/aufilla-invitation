@@ -192,6 +192,11 @@
             overflow: hidden;
         }
     </style>
+    @if(!empty($invitation->custom_css))
+        <style>
+            {!! strip_tags($invitation->custom_css) !!}
+        </style>
+    @endif
 </head>
 
 <body class="font-sans text-stone-800 bg-pearl-100 relative selection:bg-gold-500 selection:text-white locked">

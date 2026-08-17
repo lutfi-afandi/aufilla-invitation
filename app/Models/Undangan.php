@@ -35,6 +35,7 @@ class Undangan extends Model
         'is_cerita_aktif',
         'is_kado_aktif',
         'alamat_kado',
+        'custom_css',
     ];
 
     protected $casts = [
