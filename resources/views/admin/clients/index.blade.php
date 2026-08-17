@@ -132,6 +132,7 @@
                         $('#edit-slug').val(und.slug);
                         $('#edit-status').val(und.status);
                         $('#edit-package').val(und.paket_id || '');
+                        $('#edit-custom-css').val(und.custom_css || '');
                         if (und.tema) {
                             $('#edit-theme-id').val(und.tema_id);
                             $('#edit-theme-name').text(und.tema.name).removeClass('text-slate-600').addClass(
@@ -140,7 +141,7 @@
                                 $('#edit-theme-icon').html(
                                     `<img src="/storage/${und.tema.thumbnail}" class="w-full h-full object-cover">`);
                             }
-                        $('#edit-custom-css').val(und.custom_css || '');
+                        }
                     } else {
                         $('#edit-custom-css').val('');
                     }
