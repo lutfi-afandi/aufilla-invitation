@@ -221,23 +221,46 @@
     <div id="modal-theme-picker" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm items-center justify-center p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-3xl overflow-hidden max-h-[85vh] flex flex-col">
             <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-brand-bg">
-                <h3 class="text-lg font-bold text-brand-dark font-serif-custom">Pilih Tema Undangan Digital</h3>
+                <div>
+                    <h3 class="text-lg font-bold text-brand-dark font-serif-custom">Pilih Tema Undangan Digital</h3>
+                    <p class="text-xs text-gray-500">Filter berdasarkan kategori atau gaya desain pilihan Anda</p>
+                </div>
                 <button type="button" onclick="$('#modal-theme-picker').removeClass('flex').addClass('hidden')" class="text-gray-400 hover:text-gray-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
+            </div>
+
+            <!-- Modal Category Filter -->
+            <div class="px-6 py-3 border-b border-gray-100 bg-gray-50/70 flex items-center gap-2 overflow-x-auto no-scrollbar">
+                <button type="button" onclick="filterModalCategory('all')" class="modal-cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-brand-dark text-white shrink-0 transition-colors" data-cat="all">Semua</button>
+                <button type="button" onclick="filterModalCategory('minimalis')" class="modal-cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 shrink-0 transition-colors" data-cat="minimalis">Minimalis</button>
+                <button type="button" onclick="filterModalCategory('tradisional_jawa')" class="modal-cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 shrink-0 transition-colors" data-cat="tradisional_jawa">Tradisional Jawa</button>
+                <button type="button" onclick="filterModalCategory('tradisional_minang')" class="modal-cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 shrink-0 transition-colors" data-cat="tradisional_minang">Tradisional Minang</button>
+                <button type="button" onclick="filterModalCategory('islami')" class="modal-cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 shrink-0 transition-colors" data-cat="islami">Islami</button>
+                <button type="button" onclick="filterModalCategory('modern_floral')" class="modal-cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 shrink-0 transition-colors" data-cat="modern_floral">Modern & Floral</button>
             </div>
             
             <div class="p-6 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 @foreach($themes as $theme)
                 @php
                     $thumbUrl = $theme->thumbnail ? asset('storage/' . $theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png');
+                    $themeCat = $theme->category ?? 'minimalis';
                 @endphp
-                <div onclick="pickTheme({{ $theme->id }}, '{{ addslashes($theme->name) }}', '{{ $thumbUrl }}')" class="theme-card-option cursor-pointer group border-2 {{ ($selectedTheme && $selectedTheme->id === $theme->id) ? 'border-brand-accent ring-2 ring-brand-accent/20' : 'border-gray-200' }} rounded-2xl overflow-hidden bg-white hover:border-brand-accent transition-all shadow-sm" data-id="{{ $theme->id }}">
+                <div onclick="pickTheme({{ $theme->id }}, '{{ addslashes($theme->name) }}', '{{ $thumbUrl }}')" 
+                     class="theme-card-option cursor-pointer group border-2 {{ ($selectedTheme && $selectedTheme->id === $theme->id) ? 'border-brand-accent ring-2 ring-brand-accent/20' : 'border-gray-200' }} rounded-2xl overflow-hidden bg-white hover:border-brand-accent transition-all shadow-sm flex flex-col" 
+                     data-id="{{ $theme->id }}" 
+                     data-category="{{ $themeCat }}">
                     <div class="aspect-[3/4] bg-gray-100 relative overflow-hidden">
                         <img src="{{ $thumbUrl }}" onerror="this.src='{{ asset('assets/img/thumbnail-tema/demo1.png') }}'" alt="{{ $theme->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        @if(($theme->harga_tambahan ?? 0) > 0)
+                            <span class="absolute top-2 right-2 bg-purple-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-md shadow-xs">
+                                +Rp {{ number_format($theme->harga_tambahan, 0, ',', '.') }}
+                            </span>
+                        @endif
                     </div>
-                    <div class="p-2.5 text-center">
+                    <div class="p-2.5 text-center mt-auto">
                         <span class="block text-xs font-bold text-brand-dark group-hover:text-brand-accent transition-colors truncate">{{ $theme->name }}</span>
+                        <span class="text-[10px] text-gray-400 capitalize block">{{ str_replace('_', ' ', $themeCat) }}</span>
                     </div>
                 </div>
                 @endforeach
@@ -264,6 +287,24 @@
                 .replace(/\-\-+/g, '-')         // Replace multiple - with single -
                 .replace(/^-+/, '')             // Trim - from start of text
                 .replace(/-+$/, '');            // Trim - from end of text
+        }
+
+        function filterModalCategory(category) {
+            $('.modal-cat-btn').removeClass('bg-brand-dark text-white').addClass('bg-white text-gray-700 hover:bg-gray-100 border border-gray-200');
+            $('.modal-cat-btn[data-cat="' + category + '"]').removeClass('bg-white text-gray-700 hover:bg-gray-100 border border-gray-200').addClass('bg-brand-dark text-white');
+
+            if (category === 'all') {
+                $('.theme-card-option').removeClass('hidden');
+            } else {
+                $('.theme-card-option').each(function() {
+                    var cardCat = $(this).data('category');
+                    if (cardCat === category) {
+                        $(this).removeClass('hidden');
+                    } else {
+                        $(this).addClass('hidden');
+                    }
+                });
+            }
         }
 
         function pickTheme(id, name, img) {

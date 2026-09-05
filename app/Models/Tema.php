@@ -14,7 +14,16 @@ class Tema extends Model
         'code',
         'thumbnail',
         'category',
+        'tingkatan',
+        'harga_tambahan',
+        'is_privat',
         'is_active',
+    ];
+
+    protected $casts = [
+        'harga_tambahan' => 'decimal:2',
+        'is_privat' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     public function undangans()

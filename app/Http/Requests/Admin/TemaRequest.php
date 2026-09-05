@@ -18,6 +18,10 @@ class TemaRequest extends FormRequest
 
         $rules = [
             'name' => 'required|string|max:100',
+            'category' => 'required|string|in:minimalis,tradisional_jawa,tradisional_minang,islami,modern_floral',
+            'tingkatan' => 'required|in:standar,premium,eksklusif',
+            'harga_tambahan' => 'nullable|numeric|min:0',
+            'is_privat' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
             'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ];
@@ -41,6 +45,12 @@ class TemaRequest extends FormRequest
         return [
             'name.required' => 'Nama tema wajib diisi.',
             'name.max' => 'Nama tema maksimal 100 karakter.',
+            'category.required' => 'Kategori tema wajib dipilih.',
+            'category.in' => 'Kategori tema tidak valid.',
+            'tingkatan.required' => 'Tingkatan tema wajib dipilih.',
+            'tingkatan.in' => 'Tingkatan tema tidak valid.',
+            'harga_tambahan.numeric' => 'Harga tambahan harus berupa angka.',
+            'harga_tambahan.min' => 'Harga tambahan tidak boleh negatif.',
             'code.required' => 'Kode tema wajib diisi.',
             'code.max' => 'Kode tema maksimal 50 karakter.',
             'code.unique' => 'Kode tema sudah digunakan oleh tema lain.',
@@ -52,10 +62,18 @@ class TemaRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        $merge = [];
         if ($this->has('is_active')) {
-            $this->merge([
-                'is_active' => filter_var($this->input('is_active'), FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
-            ]);
+            $merge['is_active'] = filter_var($this->input('is_active'), FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+        }
+        if ($this->has('is_privat')) {
+            $merge['is_privat'] = filter_var($this->input('is_privat'), FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+        }
+        if ($this->has('harga_tambahan')) {
+            $merge['harga_tambahan'] = (float) $this->input('harga_tambahan', 0);
+        }
+        if (!empty($merge)) {
+            $this->merge($merge);
         }
     }
 }

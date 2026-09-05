@@ -14,7 +14,10 @@ class LandingController extends Controller
 {
     public function index()
     {
-        $themes = Tema::withCount('undangans')->where('is_active', true)->get();
+        $themes = Tema::withCount('undangans')
+            ->where('is_active', true)
+            ->where('is_privat', false)
+            ->get();
         
         // Paid packages only for main pricing grid
         $packages = Paket::where('name', '!=', 'Trial')->orderBy('price', 'asc')->get();
@@ -27,12 +30,17 @@ class LandingController extends Controller
 
     public function showRegisterForm(Request $request)
     {
-        $themes = Tema::where('is_active', true)->get();
+        $themes = Tema::where('is_active', true)
+            ->where('is_privat', false)
+            ->get();
         $selectedThemeCode = $request->query('theme');
         $selectedTheme = null;
 
         if ($selectedThemeCode) {
-            $selectedTheme = Tema::where('code', $selectedThemeCode)->where('is_active', true)->first();
+            $selectedTheme = Tema::where('code', $selectedThemeCode)
+                ->where('is_active', true)
+                ->where('is_privat', false)
+                ->first();
         }
 
         if (!$selectedTheme) {

@@ -39,6 +39,10 @@ class TemaController extends Controller
         $data = [
             'name' => $validated['name'],
             'code' => $validated['code'],
+            'category' => $validated['category'],
+            'tingkatan' => $validated['tingkatan'],
+            'harga_tambahan' => $validated['harga_tambahan'] ?? 0,
+            'is_privat' => $validated['is_privat'] ?? 0,
             'is_active' => isset($validated['is_active']) ? $validated['is_active'] : 1,
         ];
 
@@ -60,6 +64,18 @@ class TemaController extends Controller
         $validated = $request->validated();
 
         $theme->name = $validated['name'];
+        if (isset($validated['category'])) {
+            $theme->category = $validated['category'];
+        }
+        if (isset($validated['tingkatan'])) {
+            $theme->tingkatan = $validated['tingkatan'];
+        }
+        if (array_key_exists('harga_tambahan', $validated)) {
+            $theme->harga_tambahan = $validated['harga_tambahan'];
+        }
+        if (array_key_exists('is_privat', $validated)) {
+            $theme->is_privat = $validated['is_privat'];
+        }
         if (array_key_exists('is_active', $validated)) {
             $theme->is_active = $validated['is_active'];
         }

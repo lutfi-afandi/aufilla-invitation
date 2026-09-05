@@ -613,7 +613,7 @@
     {{-- ═══════════════════════════════════════════════
          THEMES (Katalog Tema)
     ═══════════════════════════════════════════════ --}}
-    <section id="tema" class="py-24 px-6 lg:px-10 bg-brand-bg relative overflow-hidden">
+    <section id="tema" x-data="{ activeCategory: 'all' }" class="py-24 px-6 lg:px-10 bg-brand-bg relative overflow-hidden">
         {{-- Ornamen --}}
         <div class="absolute bottom-0 -right-20 w-96 h-96 bg-brand-dark/[.03] rounded-full blur-[100px] pointer-events-none anim-pulse-soft z-0"
             style="animation-delay: -3s"></div>
@@ -625,7 +625,7 @@
 
         <div class="max-w-7xl mx-auto relative z-10">
 
-            <div class="text-center max-w-2xl mx-auto mb-14 lp-reveal lp-delay-0">
+            <div class="text-center max-w-2xl mx-auto mb-10 lp-reveal lp-delay-0">
                 <span
                     class="font-serif font-bold text-[36px] md:text-[42px] text-brand-dark block leading-none mb-2">Katalog</span>
                 <h2
@@ -636,9 +636,47 @@
                 </p>
             </div>
 
+            {{-- Category Filter Tabs --}}
+            <div class="flex items-center justify-center flex-wrap gap-2 sm:gap-3 mb-12 lp-reveal lp-delay-1">
+                <button type="button" @click="activeCategory = 'all'"
+                    :class="activeCategory === 'all' ? 'bg-brand-dark text-white shadow-md' : 'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
+                    class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
+                    Semua Gaya
+                </button>
+                <button type="button" @click="activeCategory = 'minimalis'"
+                    :class="activeCategory === 'minimalis' ? 'bg-brand-dark text-white shadow-md' : 'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
+                    class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
+                    Minimalis
+                </button>
+                <button type="button" @click="activeCategory = 'tradisional_jawa'"
+                    :class="activeCategory === 'tradisional_jawa' ? 'bg-brand-dark text-white shadow-md' : 'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
+                    class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
+                    Tradisional Jawa
+                </button>
+                <button type="button" @click="activeCategory = 'tradisional_minang'"
+                    :class="activeCategory === 'tradisional_minang' ? 'bg-brand-dark text-white shadow-md' : 'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
+                    class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
+                    Tradisional Minang
+                </button>
+                <button type="button" @click="activeCategory = 'islami'"
+                    :class="activeCategory === 'islami' ? 'bg-brand-dark text-white shadow-md' : 'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
+                    class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
+                    Islami
+                </button>
+                <button type="button" @click="activeCategory = 'modern_floral'"
+                    :class="activeCategory === 'modern_floral' ? 'bg-brand-dark text-white shadow-md' : 'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
+                    class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
+                    Modern & Floral
+                </button>
+            </div>
+
             <div class="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-6">
                 @foreach ($themes as $index => $theme)
                     <div
+                        x-show="activeCategory === 'all' || activeCategory === '{{ $theme->category ?? 'minimalis' }}'"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 scale-95"
+                        x-transition:enter-end="opacity-100 scale-100"
                         class="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-brand-dark/5 overflow-hidden group hover:shadow-xl transition-all duration-300 flex flex-col lp-reveal lp-delay-{{ $index % 4 }}">
                         <div
                             class="relative bg-brand-bg/30 aspect-[3/4] flex items-center justify-center overflow-hidden">
@@ -652,6 +690,15 @@
                             <div
                                 class="absolute top-0 left-0 bg-brand-dark text-white text-[11px] font-bold px-4 py-2 rounded-br-2xl shadow-sm z-10 hidden sm:block">
                                 {{ $theme->name }}
+                            </div>
+
+                            {{-- Badges: Tier & Extra Price --}}
+                            <div class="absolute top-2 left-2 flex flex-col gap-1 z-10 sm:hidden">
+                                @if(($theme->tingkatan ?? 'standar') === 'premium')
+                                    <span class="bg-purple-600 text-white text-[7px] font-bold px-2 py-0.5 rounded-full shadow-xs">PREMIUM</span>
+                                @elseif(($theme->tingkatan ?? 'standar') === 'eksklusif')
+                                    <span class="bg-amber-600 text-white text-[7px] font-bold px-2 py-0.5 rounded-full shadow-xs">VIP</span>
+                                @endif
                             </div>
 
                             {{-- Ribbon (Terpopuler / NEW) --}}
@@ -672,8 +719,22 @@
                         <div
                             class="p-2 sm:p-5 text-center flex flex-col items-center border-t border-brand-dark/5 mt-auto bg-white relative z-10">
                             <h3
-                                class="font-bold text-brand-dark text-[10px] sm:text-[15px] mb-2 sm:mb-4 truncate w-full">
+                                class="font-bold text-brand-dark text-[10px] sm:text-[15px] mb-1 sm:mb-2 truncate w-full">
                                 {{ $theme->name }}</h3>
+                            
+                            {{-- Price Indicator --}}
+                            <div class="mb-2 sm:mb-3">
+                                @if(($theme->harga_tambahan ?? 0) > 0)
+                                    <span class="text-[9px] sm:text-xs font-semibold text-purple-700 bg-purple-50 border border-purple-100 px-2 py-0.5 rounded-md">
+                                        +Rp {{ number_format($theme->harga_tambahan, 0, ',', '.') }}
+                                    </span>
+                                @else
+                                    <span class="text-[9px] sm:text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-md">
+                                        Termasuk di Paket
+                                    </span>
+                                @endif
+                            </div>
+
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-2 w-full">
                                 <a href="{{ route('theme.preview', $theme->code) }}" target="_blank"
                                     class="w-full py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl border border-brand-dark/20 text-brand-dark text-[8px] sm:text-[12px] font-bold uppercase tracking-widest hover:border-brand-dark hover:bg-brand-dark hover:text-white transition-all duration-300 flex items-center justify-center">

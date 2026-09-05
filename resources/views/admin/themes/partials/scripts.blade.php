@@ -20,6 +20,10 @@
         $('#edit-modal-title').text('Edit Tema: ' + theme.name);
         $('#edit-theme-id').val(theme.id);
         $('#edit-theme-name').val(theme.name);
+        $('#edit-theme-category').val(theme.category || 'minimalis');
+        $('#edit-theme-tingkatan').val(theme.tingkatan || 'standar');
+        $('#edit-theme-harga-tambahan').val(theme.harga_tambahan || 0);
+        $('#edit-theme-is-privat').val(theme.is_privat ? '1' : '0');
         $('#edit-theme-status').val(theme.is_active ? '1' : '0');
         
         if (theme.thumbnail) {

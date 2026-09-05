@@ -4,9 +4,10 @@
             <thead>
                 <tr class="border-b border-slate-100 bg-slate-50/50 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                     <th class="py-3.5 px-4 text-center w-12">No</th>
-                    <th class="py-3.5 px-4 w-36">Thumbnail</th>
+                    <th class="py-3.5 px-4 w-28">Thumbnail</th>
                     <th class="py-3.5 px-4">Nama Tema</th>
-                    <th class="py-3.5 px-4">Kode Tema</th>
+                    <th class="py-3.5 px-4">Kategori & Tier</th>
+                    <th class="py-3.5 px-4">Harga Tambahan</th>
                     <th class="py-3.5 px-4 text-center">Status</th>
                     <th class="py-3.5 px-4 text-center">Preview</th>
                     <th class="py-3.5 px-4 text-right">Aksi</th>
@@ -22,7 +23,7 @@
 
                     <!-- Thumbnail -->
                     <td class="py-3 px-4">
-                        <div class="w-14 aspect-[3/4] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shadow-2xs relative group-hover:shadow-xs transition-shadow">
+                        <div class="w-12 aspect-[3/4] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shadow-2xs relative group-hover:shadow-xs transition-shadow">
                             @if($theme->thumbnail)
                                 <img src="{{ asset('storage/' . $theme->thumbnail) }}" alt="{{ $theme->name }}" class="w-full h-full object-cover">
                             @else
@@ -31,21 +32,59 @@
                         </div>
                     </td>
 
-                    <!-- Nama Tema & Badge -->
+                    <!-- Nama Tema & Slug -->
                     <td class="py-3 px-4">
-                        <div class="flex items-center gap-2">
-                            <span class="font-bold text-slate-800">{{ $theme->name }}</span>
-                            <span class="text-[10px] font-semibold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-full">
-                                {{ $theme->undangans_count }} klien
+                        <div class="flex flex-col gap-1">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-slate-800">{{ $theme->name }}</span>
+                                <span class="text-[10px] font-semibold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-full">
+                                    {{ $theme->undangans_count }} klien
+                                </span>
+                                @if($theme->is_privat)
+                                    <span class="text-[10px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+                                        Privat
+                                    </span>
+                                @endif
+                            </div>
+                            <span class="font-mono text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/60 w-fit">
+                                {{ $theme->code }}
                             </span>
                         </div>
                     </td>
 
-                    <!-- Kode Tema -->
+                    <!-- Kategori & Tingkatan -->
                     <td class="py-3 px-4">
-                        <span class="font-mono text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-md border border-slate-200/60">
-                            {{ $theme->code }}
-                        </span>
+                        <div class="flex flex-col gap-1">
+                            <span class="text-xs font-semibold text-slate-700 capitalize">
+                                {{ str_replace('_', ' ', $theme->category ?? 'minimalis') }}
+                            </span>
+                            @if(($theme->tingkatan ?? 'standar') === 'premium')
+                                <span class="text-[10px] font-bold text-purple-700 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-full w-fit uppercase">
+                                    Premium
+                                </span>
+                            @elseif(($theme->tingkatan ?? 'standar') === 'eksklusif')
+                                <span class="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full w-fit uppercase">
+                                    Eksklusif VIP
+                                </span>
+                            @else
+                                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full w-fit uppercase">
+                                    Standar
+                                </span>
+                            @endif
+                        </div>
+                    </td>
+
+                    <!-- Harga Tambahan -->
+                    <td class="py-3 px-4">
+                        @if(($theme->harga_tambahan ?? 0) > 0)
+                            <span class="font-semibold text-slate-800 text-xs">
+                                +Rp {{ number_format($theme->harga_tambahan, 0, ',', '.') }}
+                            </span>
+                        @else
+                            <span class="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                                Gratis (Paket)
+                            </span>
+                        @endif
                     </td>
 
                     <!-- Status Toggle Badge -->
@@ -91,7 +130,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="py-12 text-center text-slate-400">
+                    <td colspan="8" class="py-12 text-center text-slate-400">
                         <div class="flex flex-col items-center justify-center">
                             <svg class="w-12 h-12 text-slate-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -105,16 +144,10 @@
         </table>
     </div>
 
-    <!-- Table Footer / Pagination -->
-    <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/40 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p class="text-xs text-slate-500">
-            Menampilkan <span class="font-semibold text-slate-700">{{ $themes->firstItem() ?? 0 }}</span> sampai <span class="font-semibold text-slate-700">{{ $themes->lastItem() ?? 0 }}</span> dari <span class="font-semibold text-slate-700">{{ $themes->total() }}</span> tema
-        </p>
-
-        @if($themes->hasPages())
-        <div class="ajax-pagination">
-            {{ $themes->links('admin.themes.partials.pagination') }}
-        </div>
-        @endif
+    <!-- Pagination -->
+    @if($themes->hasPages())
+    <div class="p-4 border-t border-slate-100 flex items-center justify-between">
+        {{ $themes->links() }}
     </div>
+    @endif
 </div>
