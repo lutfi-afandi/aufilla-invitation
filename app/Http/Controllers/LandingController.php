@@ -18,6 +18,10 @@ class LandingController extends Controller
             ->where('is_active', true)
             ->where('is_privat', false)
             ->get();
+        
+        $categories = \App\Models\KategoriTema::where('is_active', true)
+            ->orderBy('urutan', 'asc')
+            ->get();
 
         // Paid packages only for main pricing grid
         $packages = Paket::where('name', '!=', 'Trial')->orderBy('price', 'asc')->get();
@@ -25,7 +29,7 @@ class LandingController extends Controller
         // Trial package info for promo banner
         $trialPaket = Paket::where('name', 'Trial')->first();
 
-        return view('landing.index', compact('themes', 'packages', 'trialPaket'));
+        return view('landing.index', compact('themes', 'categories', 'packages', 'trialPaket'));
     }
 
     public function showRegisterForm(Request $request)
@@ -33,6 +37,11 @@ class LandingController extends Controller
         $themes = Tema::where('is_active', true)
             ->where('is_privat', false)
             ->get();
+            
+        $categories = \App\Models\KategoriTema::where('is_active', true)
+            ->orderBy('urutan', 'asc')
+            ->get();
+
         $selectedThemeCode = $request->query('theme');
         $selectedTheme = null;
 
@@ -43,11 +52,11 @@ class LandingController extends Controller
                 ->first();
         }
 
-        if (! $selectedTheme) {
+        if (!$selectedTheme) {
             $selectedTheme = $themes->first();
         }
 
-        return view('landing.register', compact('themes', 'selectedTheme'));
+        return view('landing.register', compact('themes', 'categories', 'selectedTheme'));
     }
 
     public function register(Request $request)

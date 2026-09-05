@@ -14,6 +14,7 @@ class Tema extends Model
         'code',
         'thumbnail',
         'category',
+        'kategori_tema_id',
         'tingkatan',
         'harga_tambahan',
         'is_privat',
@@ -25,6 +26,11 @@ class Tema extends Model
         'is_privat' => 'boolean',
         'is_active' => 'boolean',
     ];
+
+    public function kategoriTema()
+    {
+        return $this->belongsTo(KategoriTema::class, 'kategori_tema_id');
+    }
 
     public function undangans()
     {

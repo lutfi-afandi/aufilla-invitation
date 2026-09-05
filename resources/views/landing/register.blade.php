@@ -233,11 +233,11 @@
             <!-- Modal Category Filter -->
             <div class="px-6 py-3 border-b border-gray-100 bg-gray-50/70 flex items-center gap-2 overflow-x-auto no-scrollbar">
                 <button type="button" onclick="filterModalCategory('all')" class="modal-cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-brand-dark text-white shrink-0 transition-colors" data-cat="all">Semua</button>
-                <button type="button" onclick="filterModalCategory('minimalis')" class="modal-cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 shrink-0 transition-colors" data-cat="minimalis">Minimalis</button>
-                <button type="button" onclick="filterModalCategory('tradisional_jawa')" class="modal-cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 shrink-0 transition-colors" data-cat="tradisional_jawa">Tradisional Jawa</button>
-                <button type="button" onclick="filterModalCategory('tradisional_minang')" class="modal-cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 shrink-0 transition-colors" data-cat="tradisional_minang">Tradisional Minang</button>
-                <button type="button" onclick="filterModalCategory('islami')" class="modal-cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 shrink-0 transition-colors" data-cat="islami">Islami</button>
-                <button type="button" onclick="filterModalCategory('modern_floral')" class="modal-cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 shrink-0 transition-colors" data-cat="modern_floral">Modern & Floral</button>
+                @if(isset($categories) && $categories->count() > 0)
+                    @foreach($categories as $cat)
+                        <button type="button" onclick="filterModalCategory('{{ $cat->slug }}')" class="modal-cat-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 shrink-0 transition-colors" data-cat="{{ $cat->slug }}">{{ $cat->nama }}</button>
+                    @endforeach
+                @endif
             </div>
             
             <div class="p-6 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">

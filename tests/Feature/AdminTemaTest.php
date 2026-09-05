@@ -24,6 +24,12 @@ class AdminTemaTest extends TestCase
     public function test_admin_can_create_theme_with_category_and_tier(): void
     {
         $admin = User::factory()->create(['role' => 'admin']);
+        \App\Models\KategoriTema::create([
+            'nama' => 'Tradisional Jawa',
+            'slug' => 'tradisional_jawa',
+            'urutan' => 1,
+            'is_active' => true,
+        ]);
 
         $response = $this->actingAs($admin)->post('/admin/themes', [
             'name' => 'Jawa Kasunanan',

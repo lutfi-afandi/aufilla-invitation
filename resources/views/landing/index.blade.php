@@ -652,41 +652,19 @@
             {{-- Category Filter Tabs --}}
             <div class="flex items-center justify-center flex-wrap gap-2 sm:gap-3 mb-12 lp-reveal lp-delay-1">
                 <button type="button" @click="activeCategory = 'all'"
-                    :class="activeCategory === 'all' ? 'bg-brand-dark text-white shadow-md' :
-                        'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
+                    :class="activeCategory === 'all' ? 'bg-brand-dark text-white shadow-md' : 'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
                     class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
                     Semua Gaya
                 </button>
-                <button type="button" @click="activeCategory = 'minimalis'"
-                    :class="activeCategory === 'minimalis' ? 'bg-brand-dark text-white shadow-md' :
-                        'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
-                    class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
-                    Minimalis
-                </button>
-                <button type="button" @click="activeCategory = 'tradisional_jawa'"
-                    :class="activeCategory === 'tradisional_jawa' ? 'bg-brand-dark text-white shadow-md' :
-                        'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
-                    class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
-                    Tradisional Jawa
-                </button>
-                <button type="button" @click="activeCategory = 'tradisional_minang'"
-                    :class="activeCategory === 'tradisional_minang' ? 'bg-brand-dark text-white shadow-md' :
-                        'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
-                    class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
-                    Tradisional Minang
-                </button>
-                <button type="button" @click="activeCategory = 'islami'"
-                    :class="activeCategory === 'islami' ? 'bg-brand-dark text-white shadow-md' :
-                        'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
-                    class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
-                    Islami
-                </button>
-                <button type="button" @click="activeCategory = 'modern_floral'"
-                    :class="activeCategory === 'modern_floral' ? 'bg-brand-dark text-white shadow-md' :
-                        'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
-                    class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
-                    Modern & Floral
-                </button>
+                @if(isset($categories) && $categories->count() > 0)
+                    @foreach($categories as $cat)
+                        <button type="button" @click="activeCategory = '{{ $cat->slug }}'"
+                            :class="activeCategory === '{{ $cat->slug }}' ? 'bg-brand-dark text-white shadow-md' : 'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
+                            class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
+                            {{ $cat->nama }}
+                        </button>
+                    @endforeach
+                @endif
             </div>
 
             <div class="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-6">

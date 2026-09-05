@@ -31,11 +31,13 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Kategori</label>
                     <select name="category" required class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 focus:outline-none bg-white">
-                        <option value="minimalis">Minimalis</option>
-                        <option value="tradisional_jawa">Tradisional Jawa</option>
-                        <option value="tradisional_minang">Tradisional Minang</option>
-                        <option value="islami">Islami</option>
-                        <option value="modern_floral">Modern / Floral</option>
+                        @if(isset($categories) && $categories->count() > 0)
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat->slug }}">{{ $cat->nama }}</option>
+                            @endforeach
+                        @else
+                            <option value="minimalis">Minimalis</option>
+                        @endif
                     </select>
                 </div>
                 <div>
@@ -110,11 +112,13 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Kategori</label>
                     <select name="category" id="edit-theme-category" required class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 focus:outline-none bg-white">
-                        <option value="minimalis">Minimalis</option>
-                        <option value="tradisional_jawa">Tradisional Jawa</option>
-                        <option value="tradisional_minang">Tradisional Minang</option>
-                        <option value="islami">Islami</option>
-                        <option value="modern_floral">Modern / Floral</option>
+                        @if(isset($categories) && $categories->count() > 0)
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat->slug }}">{{ $cat->nama }}</option>
+                            @endforeach
+                        @else
+                            <option value="minimalis">Minimalis</option>
+                        @endif
                     </select>
                 </div>
                 <div>

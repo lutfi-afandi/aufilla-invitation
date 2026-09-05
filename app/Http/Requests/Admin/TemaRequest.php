@@ -18,7 +18,7 @@ class TemaRequest extends FormRequest
 
         $rules = [
             'name' => 'required|string|max:100',
-            'category' => 'required|string|in:minimalis,tradisional_jawa,tradisional_minang,islami,modern_floral',
+            'category' => 'required|string|exists:kategori_temas,slug',
             'tingkatan' => 'required|in:standar,premium,eksklusif',
             'harga_tambahan' => 'nullable|numeric|min:0',
             'is_privat' => 'nullable|boolean',

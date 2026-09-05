@@ -38,6 +38,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('/themes/{id}/toggle', [\App\Http\Controllers\Admin\TemaController::class, 'toggleActive'])->name('themes.toggle');
         Route::delete('/themes/{id}', [\App\Http\Controllers\Admin\TemaController::class, 'destroy'])->name('themes.destroy');
 
+        // Theme Categories (Kategori Tema)
+        Route::get('/theme-categories', [\App\Http\Controllers\Admin\KategoriTemaController::class, 'index'])->name('theme-categories.index');
+        Route::post('/theme-categories', [\App\Http\Controllers\Admin\KategoriTemaController::class, 'store'])->name('theme-categories.store');
+        Route::put('/theme-categories/{id}', [\App\Http\Controllers\Admin\KategoriTemaController::class, 'update'])->name('theme-categories.update');
+        Route::patch('/theme-categories/{id}/toggle', [\App\Http\Controllers\Admin\KategoriTemaController::class, 'toggleActive'])->name('theme-categories.toggle');
+        Route::delete('/theme-categories/{id}', [\App\Http\Controllers\Admin\KategoriTemaController::class, 'destroy'])->name('theme-categories.destroy');
+
         // Pakets
         Route::get('/pakets', [\App\Http\Controllers\Admin\PaketController::class, 'index'])->name('pakets.index');
         Route::post('/pakets', [\App\Http\Controllers\Admin\PaketController::class, 'store'])->name('pakets.store');

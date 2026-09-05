@@ -22,24 +22,27 @@ class TemaController extends Controller
         }
 
         $themes = $query->orderBy('id', 'desc')->paginate(12)->withQueryString();
+        $categories = \App\Models\KategoriTema::where('is_active', true)->orderBy('urutan', 'asc')->get();
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('admin.themes.partials.table', compact('themes'))->render(),
+                'html' => view('admin.themes.partials.table', compact('themes', 'categories'))->render(),
             ]);
         }
 
-        return view('admin.themes.index', compact('themes'));
+        return view('admin.themes.index', compact('themes', 'categories'));
     }
 
     public function store(TemaRequest $request)
     {
         $validated = $request->validated();
+        $kategoriId = \App\Models\KategoriTema::where('slug', $validated['category'])->value('id');
 
         $data = [
             'name' => $validated['name'],
             'code' => $validated['code'],
             'category' => $validated['category'],
+            'kategori_tema_id' => $kategoriId,
             'tingkatan' => $validated['tingkatan'],
             'harga_tambahan' => $validated['harga_tambahan'] ?? 0,
             'is_privat' => $validated['is_privat'] ?? 0,
@@ -66,6 +69,7 @@ class TemaController extends Controller
         $theme->name = $validated['name'];
         if (isset($validated['category'])) {
             $theme->category = $validated['category'];
+            $theme->kategori_tema_id = \App\Models\KategoriTema::where('slug', $validated['category'])->value('id');
         }
         if (isset($validated['tingkatan'])) {
             $theme->tingkatan = $validated['tingkatan'];
