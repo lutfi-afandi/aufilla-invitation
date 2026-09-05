@@ -157,15 +157,19 @@
     {{-- ═══════════════════════════════════════════════
          PRELOADER / SPLASH SCREEN (Elegance Dark & Gold)
     ═══════════════════════════════════════════════ --}}
-    <div id="landing-preloader" class="fixed inset-0 z-[99999] bg-[#0a2214] flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
+    <div id="landing-preloader"
+        class="fixed inset-0 z-[99999] bg-[#0a2214] flex flex-col items-center justify-center transition-all duration-700 ease-in-out">
         <div class="relative flex flex-col items-center text-center px-4">
             {{-- Ring Spinner --}}
             <div class="relative w-20 h-20 mb-6 flex items-center justify-center">
                 <div class="absolute inset-0 rounded-full border-2 border-[#c5a880]/20 animate-ping"></div>
-                <div class="w-16 h-16 rounded-full border-2 border-t-[#c5a880] border-r-[#c5a880]/40 border-b-transparent border-l-transparent animate-spin"></div>
-                <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Logo" class="w-8 h-8 object-contain absolute inset-0 m-auto">
+                <div
+                    class="w-16 h-16 rounded-full border-2 border-t-[#c5a880] border-r-[#c5a880]/40 border-b-transparent border-l-transparent animate-spin">
+                </div>
+                <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Logo"
+                    class="w-8 h-8 object-contain absolute inset-0 m-auto">
             </div>
-            
+
             {{-- Brand Name & Tagline --}}
             <h2 class="font-serif text-2xl md:text-3xl text-white tracking-wide mb-1">
                 Aufilla <span class="text-[#c5a880] italic font-normal">Invitation</span>
@@ -176,15 +180,22 @@
 
             {{-- Progress Bar --}}
             <div class="w-36 h-[2px] bg-white/10 rounded-full mt-6 overflow-hidden relative">
-                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#c5a880] to-transparent w-full animate-[preloader-bar_1.2s_ease-in-out_infinite]"></div>
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-transparent via-[#c5a880] to-transparent w-full animate-[preloader-bar_1.2s_ease-in-out_infinite]">
+                </div>
             </div>
         </div>
     </div>
 
     <style>
         @keyframes preloader-bar {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
     </style>
 
@@ -280,7 +291,8 @@
                     <svg class="w-5 h-5 absolute transition-all duration-500 ease-in-out"
                         :class="mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'"
                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12">
                         </path>
                     </svg>
                 </button>
@@ -338,7 +350,8 @@
         <div class="absolute inset-0 z-0 pointer-events-none">
             {{-- Base Image --}}
             <img src="{{ asset('assets/img/wedding-aesthetic-bg.jpg') }}" alt="Wedding Aesthetic Background"
-                class="w-full h-full object-cover grayscale opacity-40 mix-blend-multiply" fetchpriority="high" decoding="async">
+                class="w-full h-full object-cover grayscale opacity-40 mix-blend-multiply" fetchpriority="high"
+                decoding="async">
 
             {{-- Dual Tone Gradient Overlay (Warm Gold to Soft Sage Green) --}}
             <div
@@ -639,32 +652,38 @@
             {{-- Category Filter Tabs --}}
             <div class="flex items-center justify-center flex-wrap gap-2 sm:gap-3 mb-12 lp-reveal lp-delay-1">
                 <button type="button" @click="activeCategory = 'all'"
-                    :class="activeCategory === 'all' ? 'bg-brand-dark text-white shadow-md' : 'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
+                    :class="activeCategory === 'all' ? 'bg-brand-dark text-white shadow-md' :
+                        'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
                     class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
                     Semua Gaya
                 </button>
                 <button type="button" @click="activeCategory = 'minimalis'"
-                    :class="activeCategory === 'minimalis' ? 'bg-brand-dark text-white shadow-md' : 'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
+                    :class="activeCategory === 'minimalis' ? 'bg-brand-dark text-white shadow-md' :
+                        'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
                     class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
                     Minimalis
                 </button>
                 <button type="button" @click="activeCategory = 'tradisional_jawa'"
-                    :class="activeCategory === 'tradisional_jawa' ? 'bg-brand-dark text-white shadow-md' : 'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
+                    :class="activeCategory === 'tradisional_jawa' ? 'bg-brand-dark text-white shadow-md' :
+                        'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
                     class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
                     Tradisional Jawa
                 </button>
                 <button type="button" @click="activeCategory = 'tradisional_minang'"
-                    :class="activeCategory === 'tradisional_minang' ? 'bg-brand-dark text-white shadow-md' : 'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
+                    :class="activeCategory === 'tradisional_minang' ? 'bg-brand-dark text-white shadow-md' :
+                        'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
                     class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
                     Tradisional Minang
                 </button>
                 <button type="button" @click="activeCategory = 'islami'"
-                    :class="activeCategory === 'islami' ? 'bg-brand-dark text-white shadow-md' : 'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
+                    :class="activeCategory === 'islami' ? 'bg-brand-dark text-white shadow-md' :
+                        'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
                     class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
                     Islami
                 </button>
                 <button type="button" @click="activeCategory = 'modern_floral'"
-                    :class="activeCategory === 'modern_floral' ? 'bg-brand-dark text-white shadow-md' : 'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
+                    :class="activeCategory === 'modern_floral' ? 'bg-brand-dark text-white shadow-md' :
+                        'bg-white text-brand-dark/80 hover:bg-brand-dark/5 border border-brand-dark/10'"
                     class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200">
                     Modern & Floral
                 </button>
@@ -672,11 +691,9 @@
 
             <div class="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-6">
                 @foreach ($themes as $index => $theme)
-                    <div
-                        x-show="activeCategory === 'all' || activeCategory === '{{ $theme->category ?? 'minimalis' }}'"
+                    <div x-show="activeCategory === 'all' || activeCategory === '{{ $theme->category ?? 'minimalis' }}'"
                         x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 scale-95"
-                        x-transition:enter-end="opacity-100 scale-100"
+                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                         class="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-brand-dark/5 overflow-hidden group hover:shadow-xl transition-all duration-300 flex flex-col lp-reveal lp-delay-{{ $index % 4 }}">
                         <div
                             class="relative bg-brand-bg/30 aspect-[3/4] flex items-center justify-center overflow-hidden">
@@ -684,7 +701,8 @@
                             <img src="{{ $theme->thumbnail ? asset('storage/' . $theme->thumbnail) : asset('assets/img/thumbnail-tema/demo1.png') }}"
                                 onerror="this.src=`{{ asset('assets/img/thumbnail-tema/demo1.png') }}`"
                                 alt="{{ $theme->name }}"
-                                class="w-full h-full object-cover scale-[1.15] group-hover:scale-[1.20] transition-transform duration-500 origin-center relative z-0" loading="lazy" decoding="async">
+                                class="w-full h-full object-cover scale-[1.15] group-hover:scale-[1.20] transition-transform duration-500 origin-center relative z-0"
+                                loading="lazy" decoding="async">
 
                             {{-- Tag Label --}}
                             <div
@@ -694,10 +712,12 @@
 
                             {{-- Badges: Tier & Extra Price --}}
                             <div class="absolute top-2 left-2 flex flex-col gap-1 z-10 sm:hidden">
-                                @if(($theme->tingkatan ?? 'standar') === 'premium')
-                                    <span class="bg-purple-600 text-white text-[7px] font-bold px-2 py-0.5 rounded-full shadow-xs">PREMIUM</span>
+                                @if (($theme->tingkatan ?? 'standar') === 'premium')
+                                    <span
+                                        class="bg-purple-600 text-white text-[7px] font-bold px-2 py-0.5 rounded-full shadow-xs">PREMIUM</span>
                                 @elseif(($theme->tingkatan ?? 'standar') === 'eksklusif')
-                                    <span class="bg-amber-600 text-white text-[7px] font-bold px-2 py-0.5 rounded-full shadow-xs">VIP</span>
+                                    <span
+                                        class="bg-amber-600 text-white text-[7px] font-bold px-2 py-0.5 rounded-full shadow-xs">VIP</span>
                                 @endif
                             </div>
 
@@ -721,15 +741,17 @@
                             <h3
                                 class="font-bold text-brand-dark text-[10px] sm:text-[15px] mb-1 sm:mb-2 truncate w-full">
                                 {{ $theme->name }}</h3>
-                            
+
                             {{-- Price Indicator --}}
                             <div class="mb-2 sm:mb-3">
-                                @if(($theme->harga_tambahan ?? 0) > 0)
-                                    <span class="text-[9px] sm:text-xs font-semibold text-purple-700 bg-purple-50 border border-purple-100 px-2 py-0.5 rounded-md">
+                                @if (($theme->harga_tambahan ?? 0) > 0)
+                                    <span
+                                        class="text-[9px] sm:text-xs font-semibold text-purple-700 bg-purple-50 border border-purple-100 px-2 py-0.5 rounded-md">
                                         +Rp {{ number_format($theme->harga_tambahan, 0, ',', '.') }}
                                     </span>
                                 @else
-                                    <span class="text-[9px] sm:text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-md">
+                                    <span
+                                        class="text-[9px] sm:text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-md">
                                         Termasuk di Paket
                                     </span>
                                 @endif
@@ -819,7 +841,11 @@
                 <div class="space-y-2 text-center md:text-left z-10">
                     <span
                         class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-accent/20 text-brand-accent text-xs font-bold uppercase tracking-widest">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
+                            </path>
+                        </svg>
                         <span>Masa Uji Coba Gratis</span>
                     </span>
                     <h3 class="text-xl sm:text-2xl font-bold font-serif text-white">Ingin Mencoba Dulu Tanpa Bayar?
@@ -964,30 +990,52 @@
                 <div class="space-y-5 max-w-2xl text-center lg:text-left z-10">
                     <span
                         class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-brand-accent/15 text-brand-accent-dark text-xs font-bold uppercase tracking-widest">
-                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                            </path>
+                        </svg>
                         <span>Layanan Cetak Fisik Minimalis</span>
                     </span>
                     <h2 class="text-3xl sm:text-4xl font-bold font-serif text-brand-dark leading-tight">
                         Cetak Undangan Fisik Murah & Minimalis (Bisa Pakai Foto)
                     </h2>
                     <p class="text-sm sm:text-base text-gray-600 leading-relaxed">
-                        Selain undangan digital interaktif, Aufilla juga melayani pencetakan <strong>Undangan Fisik Murah, Minimalis & Hemat</strong> menggunakan pilihan kertas <strong>Jasmine, Brief Card (BC), Linen, dan Art Paper</strong> berkualitas. Beragam variasi model tersedia mulai dari tipe ekonomis hingga cetak full foto yang diselaraskan dengan tema digital Anda!
+                        Selain undangan digital interaktif, Aufilla juga melayani pencetakan <strong>Undangan Fisik
+                            Murah, Minimalis & Hemat</strong> menggunakan pilihan kertas <strong>Jasmine, Brief Card
+                            (BC), Linen, dan Art Paper</strong> berkualitas. Beragam variasi model tersedia mulai dari
+                        tipe ekonomis hingga cetak full foto yang diselaraskan dengan tema digital Anda!
                     </p>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-left">
                         <div
                             class="bg-brand-bg p-3.5 rounded-xl border border-brand-accent/15 flex items-center gap-2 text-xs font-semibold text-brand-dark">
-                            <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                </path>
+                            </svg>
                             <span>Kertas Jasmine, BC & Linen</span>
                         </div>
                         <div
                             class="bg-brand-bg p-3.5 rounded-xl border border-brand-accent/15 flex items-center gap-2 text-xs font-semibold text-brand-dark">
-                            <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
+                            <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
+                                </path>
+                            </svg>
                             <span>Desain Minimalis & Full Foto</span>
                         </div>
                         <div
                             class="bg-brand-bg p-3.5 rounded-xl border border-brand-accent/15 flex items-center gap-2 text-xs font-semibold text-brand-dark">
-                            <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                            <svg class="w-4 h-4 text-brand-accent shrink-0" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z">
+                                </path>
+                            </svg>
                             <span>Paket Murah & Hemat</span>
                         </div>
                     </div>

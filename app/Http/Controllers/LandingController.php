@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Tema;
 use App\Models\Paket;
+use App\Models\Tema;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class LandingController extends Controller
@@ -18,10 +18,10 @@ class LandingController extends Controller
             ->where('is_active', true)
             ->where('is_privat', false)
             ->get();
-        
+
         // Paid packages only for main pricing grid
         $packages = Paket::where('name', '!=', 'Trial')->orderBy('price', 'asc')->get();
-        
+
         // Trial package info for promo banner
         $trialPaket = Paket::where('name', 'Trial')->first();
 
@@ -43,7 +43,7 @@ class LandingController extends Controller
                 ->first();
         }
 
-        if (!$selectedTheme) {
+        if (! $selectedTheme) {
             $selectedTheme = $themes->first();
         }
 
@@ -54,7 +54,7 @@ class LandingController extends Controller
     {
         $request->merge([
             'username' => Str::slug($request->username),
-            'slug'     => Str::slug($request->slug ?: ($request->pria_nama . '-' . $request->wanita_nama)),
+            'slug' => Str::slug($request->slug ?: ($request->pria_nama.'-'.$request->wanita_nama)),
         ]);
 
         $validated = $request->validate([
@@ -105,10 +105,10 @@ class LandingController extends Controller
         ]);
 
         $user = User::create([
-            'username'          => $validated['username'],
-            'email'             => $validated['email'],
-            'password'          => Hash::make($validated['password']),
-            'role'              => 'client',
+            'username' => $validated['username'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role' => 'client',
             'email_verified_at' => now(),
         ]);
 
@@ -116,22 +116,22 @@ class LandingController extends Controller
         $activeDays = $trialPaket ? $trialPaket->active_days : 3;
 
         $user->undangans()->create([
-            'slug'                => $validated['slug'],
-            'tema_id'             => $validated['theme_id'],
-            'paket_id'            => $trialPaket ? $trialPaket->id : null,
-            'status'              => 'aktif',
-            'is_galeri_aktif'     => false,
-            'is_cerita_aktif'     => false,
-            'is_kado_aktif'       => false,
-            'expired_at'          => now()->addDays($activeDays),
-            'pria_nama'           => $validated['pria_nama'],
-            'pria_nama_lengkap'   => $validated['pria_nama_lengkap'] ?? $validated['pria_nama'],
-            'wanita_nama'         => $validated['wanita_nama'],
+            'slug' => $validated['slug'],
+            'tema_id' => $validated['theme_id'],
+            'paket_id' => $trialPaket ? $trialPaket->id : null,
+            'status' => 'aktif',
+            'is_galeri_aktif' => false,
+            'is_cerita_aktif' => false,
+            'is_kado_aktif' => false,
+            'expired_at' => now()->addDays($activeDays),
+            'pria_nama' => $validated['pria_nama'],
+            'pria_nama_lengkap' => $validated['pria_nama_lengkap'] ?? $validated['pria_nama'],
+            'wanita_nama' => $validated['wanita_nama'],
             'wanita_nama_lengkap' => $validated['wanita_nama_lengkap'] ?? $validated['wanita_nama'],
         ]);
 
         Auth::login($user);
 
-        return redirect()->route('client.dashboard')->with('success', 'Selamat datang! Undangan Anda berhasil dibuat. Masa Trial ' . $activeDays . ' hari telah dimulai.');
+        return redirect()->route('client.dashboard')->with('success', 'Selamat datang! Undangan Anda berhasil dibuat. Masa Trial '.$activeDays.' hari telah dimulai.');
     }
 }
