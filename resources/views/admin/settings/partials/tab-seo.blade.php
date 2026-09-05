@@ -48,19 +48,24 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Gambar Pratinjau Sosial (Open Graph Banner / 1200x630)</label>
                     <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 flex flex-col sm:flex-row items-center gap-4">
-                        <div id="preview-container-og" class="w-full sm:w-48 h-28 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center shrink-0">
-                            @if(!empty($settings['app_og_image']))
-                                <img src="{{ asset('storage/' . $settings['app_og_image']) }}" id="preview-og" class="w-full h-full object-cover" alt="OG Preview">
-                            @else
-                                <img src="{{ asset('assets/img/brand-white-og.png') }}" id="preview-og" class="w-full h-full object-cover opacity-80" alt="Default OG Preview">
-                            @endif
+                        <div id="preview-container-og" class="w-full sm:w-48 h-28 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center shrink-0 relative">
+                            @php
+                                $ogSrc = !empty($settings['app_og_image']) ? asset('storage/' . $settings['app_og_image']) : asset('assets/img/brand-white-og.png');
+                            @endphp
+                            <img src="{{ $ogSrc }}" data-initial-src="{{ $ogSrc }}" id="preview-og" class="w-full h-full object-cover {{ empty($settings['app_og_image']) ? 'opacity-80' : '' }}" alt="OG Preview">
                         </div>
                         <div class="space-y-2 text-center sm:text-left">
+                            <div id="status-og" class="hidden"></div>
                             <input type="file" name="app_og_image" id="input-og" accept="image/*" class="hidden">
-                            <button type="button" onclick="$('#input-og').click()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-2xs">
-                                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                                Upload Banner OG
-                            </button>
+                            <div class="flex items-center gap-2 justify-center sm:justify-start">
+                                <button type="button" onclick="$('#input-og').click()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-2xs">
+                                    <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                                    Upload Banner OG
+                                </button>
+                                <button type="button" id="btn-cancel-og" onclick="cancelImagePreview('input-og', 'preview-og', 'btn-cancel-og', 'status-og')" class="hidden text-xs font-semibold text-rose-500 hover:text-rose-700">
+                                    (Batal)
+                                </button>
+                            </div>
                             <p class="text-[11px] text-slate-400">Format gambar JPG, PNG, atau WebP (Rasio 1.91:1, disarankan 1200 x 630 px).</p>
                         </div>
                     </div>

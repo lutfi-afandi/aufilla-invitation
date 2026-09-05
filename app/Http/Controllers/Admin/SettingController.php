@@ -63,9 +63,10 @@ class SettingController extends Controller
                     Storage::disk('public')->delete($oldFile);
                 }
 
-                if (in_array($field, ['app_logo', 'app_logo_dark', 'app_og_image'])) {
-                    $path = ImageHelper::uploadAndCompress($request->file($field), 'settings');
+                if ($field === 'app_og_image') {
+                    $path = ImageHelper::uploadAndCompress($request->file($field), 'settings', 1200, 85);
                 } else {
+                    // Logos and Favicons are saved in original format (PNG, SVG, ICO, JPG) to preserve sharp transparency
                     $path = $request->file($field)->store('settings', 'public');
                 }
 

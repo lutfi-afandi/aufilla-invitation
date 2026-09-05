@@ -54,6 +54,30 @@ class AdminSettingTest extends TestCase
         $this->assertEquals('Platform Undangan Digital Terbaik & Termewah', setting('app_tagline'));
     }
 
+    public function test_admin_can_upload_brand_logo_and_favicon(): void
+    {
+        Storage::fake('public');
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $logoFile = UploadedFile::fake()->image('logo.png', 400, 200);
+        $faviconFile = UploadedFile::fake()->image('favicon.png', 64, 64);
+
+        $response = $this->actingAs($admin)->postJson('/admin/settings', [
+            'group' => 'general',
+            'app_name' => 'Aufilla Official',
+            'app_logo' => $logoFile,
+            'app_favicon' => $faviconFile,
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true]);
+
+        $this->assertNotNull(setting('app_logo'));
+        $this->assertNotNull(setting('app_favicon'));
+        Storage::disk('public')->assertExists(setting('app_logo'));
+        Storage::disk('public')->assertExists(setting('app_favicon'));
+    }
+
     public function test_admin_can_update_contact_settings(): void
     {
         $admin = User::factory()->create(['role' => 'admin']);

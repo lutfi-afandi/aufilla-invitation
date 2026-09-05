@@ -12,24 +12,46 @@
         }
     }
 
-    // Image Upload Previews
-    function setupImagePreview(inputId, imgId) {
+    // Image Upload Previews with Draft Status & Auto-Revert on Error
+    const previewConfigs = [
+        { inputId: 'input-logo', imgId: 'preview-logo', cancelBtnId: 'btn-cancel-logo', statusId: 'status-logo' },
+        { inputId: 'input-logo-dark', imgId: 'preview-logo-dark', cancelBtnId: 'btn-cancel-logo-dark', statusId: 'status-logo-dark' },
+        { inputId: 'input-favicon', imgId: 'preview-favicon', cancelBtnId: 'btn-cancel-favicon', statusId: 'status-favicon' },
+        { inputId: 'input-og', imgId: 'preview-og', cancelBtnId: 'btn-cancel-og', statusId: 'status-og' }
+    ];
+
+    function setupImagePreview(inputId, imgId, cancelBtnId, statusId) {
         $('#' + inputId).on('change', function() {
             const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     $('#' + imgId).attr('src', e.target.result).removeClass('opacity-60');
-                }
+                    $('#' + statusId).removeClass('hidden').html(
+                        '<span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs">' +
+                        '<svg class="w-3 h-3 text-amber-600 animate-pulse" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg> ' +
+                        'Draft (Belum Disimpan)</span>'
+                    );
+                    $('#' + cancelBtnId).removeClass('hidden');
+                };
                 reader.readAsDataURL(file);
             }
         });
     }
 
-    setupImagePreview('input-logo', 'preview-logo');
-    setupImagePreview('input-logo-dark', 'preview-logo-dark');
-    setupImagePreview('input-favicon', 'preview-favicon');
-    setupImagePreview('input-og', 'preview-og');
+    function cancelImagePreview(inputId, imgId, cancelBtnId, statusId) {
+        $('#' + inputId).val('');
+        const initialSrc = $('#' + imgId).attr('data-initial-src');
+        if (initialSrc) {
+            $('#' + imgId).attr('src', initialSrc);
+        }
+        $('#' + statusId).addClass('hidden').empty();
+        $('#' + cancelBtnId).addClass('hidden');
+    }
+
+    previewConfigs.forEach(cfg => {
+        setupImagePreview(cfg.inputId, cfg.imgId, cfg.cancelBtnId, cfg.statusId);
+    });
 
     // FAQ Repeater Logic
     let faqSortableInstance = null;
@@ -148,6 +170,18 @@
             processData: false,
             dataType: 'json',
             success: function(response) {
+                // Update initial src on successful save & clear draft state
+                previewConfigs.forEach(cfg => {
+                    let $inp = form.find('#' + cfg.inputId);
+                    if ($inp.length && $inp[0].files && $inp[0].files.length > 0) {
+                        let currentSrc = $('#' + cfg.imgId).attr('src');
+                        $('#' + cfg.imgId).attr('data-initial-src', currentSrc);
+                        $inp.val('');
+                        $('#' + cfg.statusId).addClass('hidden').empty();
+                        $('#' + cfg.cancelBtnId).addClass('hidden');
+                    }
+                });
+
                 if (typeof Swal !== 'undefined') {
                     const Toast = Swal.mixin({
                         toast: true,
@@ -163,16 +197,47 @@
                 }
             },
             error: function(xhr) {
+                // Revert all draft image previews in this form back to initial src
+                let hadDraftImages = false;
+                previewConfigs.forEach(cfg => {
+                    let $inp = form.find('#' + cfg.inputId);
+                    if ($inp.length && $inp[0].files && $inp[0].files.length > 0) {
+                        cancelImagePreview(cfg.inputId, cfg.imgId, cfg.cancelBtnId, cfg.statusId);
+                        hadDraftImages = true;
+                    }
+                });
+
                 let msg = 'Terjadi kesalahan saat menyimpan pengaturan.';
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                    msg = xhr.responseJSON.message;
+                let details = '';
+
+                if (xhr.responseJSON) {
+                    if (xhr.responseJSON.message) {
+                        msg = xhr.responseJSON.message;
+                    }
+                    if (xhr.responseJSON.errors) {
+                        let errList = Object.values(xhr.responseJSON.errors).flat();
+                        if (errList.length > 0) {
+                            details = '<ul class="text-left text-xs text-rose-600 list-disc list-inside mt-2 space-y-1 bg-rose-50 p-3 rounded-xl border border-rose-100">' +
+                                errList.map(e => '<li>' + e + '</li>').join('') +
+                                '</ul>';
+                        }
+                    }
                 }
+
+                let extraNotice = '';
+                if (hadDraftImages) {
+                    extraNotice = '<div class="mt-3 p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 text-left flex items-start gap-2">' +
+                        '<span class="font-bold">⚠️ Catatan:</span> File gambar yang Anda pilih batal diunggah karena terjadi kesalahan, dan pratinjau telah dikembalikan ke gambar sebelumnya.' +
+                        '</div>';
+                }
+
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Gagal',
-                        text: msg,
-                        confirmButtonColor: '#4f46e5'
+                        title: 'Gagal Menyimpan',
+                        html: '<p class="text-sm text-slate-700">' + msg + '</p>' + details + extraNotice,
+                        confirmButtonColor: '#4f46e5',
+                        confirmButtonText: 'Mengerti'
                     });
                 }
             },
