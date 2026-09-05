@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\KategoriTemaRequest;
+use App\Http\Requests\Admin\ReorderKategoriTemaRequest;
 use App\Models\KategoriTema;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class KategoriTemaController extends Controller
@@ -124,6 +126,25 @@ class KategoriTemaController extends Controller
             'success' => true,
             'message' => 'Kategori tema berhasil dihapus.',
             'html' => view('admin.kategori-themes.partials.table', compact('categories'))->render(),
+        ]);
+    }
+
+    /**
+     * Reorder theme categories via drag-and-drop.
+     */
+    public function reorder(ReorderKategoriTemaRequest $request): JsonResponse
+    {
+        $orders = $request->validated()['orders'];
+
+        DB::transaction(function () use ($orders) {
+            foreach ($orders as $item) {
+                KategoriTema::where('id', $item['id'])->update(['urutan' => $item['urutan']]);
+            }
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Urutan kategori tema berhasil diperbarui.',
         ]);
     }
 }

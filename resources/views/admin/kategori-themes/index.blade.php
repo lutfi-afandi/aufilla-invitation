@@ -64,5 +64,6 @@
 @endsection
 
 @push('scripts')
+<script src="{{ asset('assets/js/Sortable.min.js') }}"></script>
 @include('admin.kategori-themes.partials.scripts')
 @endpush

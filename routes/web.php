@@ -41,6 +41,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Theme Categories (Kategori Tema)
         Route::get('/theme-categories', [\App\Http\Controllers\Admin\KategoriTemaController::class, 'index'])->name('theme-categories.index');
         Route::post('/theme-categories', [\App\Http\Controllers\Admin\KategoriTemaController::class, 'store'])->name('theme-categories.store');
+        Route::post('/theme-categories/reorder', [\App\Http\Controllers\Admin\KategoriTemaController::class, 'reorder'])->name('theme-categories.reorder');
         Route::put('/theme-categories/{id}', [\App\Http\Controllers\Admin\KategoriTemaController::class, 'update'])->name('theme-categories.update');
         Route::patch('/theme-categories/{id}/toggle', [\App\Http\Controllers\Admin\KategoriTemaController::class, 'toggleActive'])->name('theme-categories.toggle');
         Route::delete('/theme-categories/{id}', [\App\Http\Controllers\Admin\KategoriTemaController::class, 'destroy'])->name('theme-categories.destroy');

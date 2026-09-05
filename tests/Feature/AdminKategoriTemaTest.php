@@ -120,4 +120,34 @@ class AdminKategoriTemaTest extends TestCase
             'id' => $cat->id,
         ]);
     }
+
+    public function test_admin_can_reorder_kategori_tema(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $cat1 = KategoriTema::create([
+            'nama' => 'Cat 1',
+            'slug' => 'cat_1',
+            'urutan' => 1,
+            'is_active' => 1,
+        ]);
+        $cat2 = KategoriTema::create([
+            'nama' => 'Cat 2',
+            'slug' => 'cat_2',
+            'urutan' => 2,
+            'is_active' => 1,
+        ]);
+
+        $response = $this->actingAs($admin)->post('/admin/theme-categories/reorder', [
+            'orders' => [
+                ['id' => $cat1->id, 'urutan' => 2],
+                ['id' => $cat2->id, 'urutan' => 1],
+            ],
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true]);
+
+        $this->assertEquals(2, $cat1->fresh()->urutan);
+        $this->assertEquals(1, $cat2->fresh()->urutan);
+    }
 }

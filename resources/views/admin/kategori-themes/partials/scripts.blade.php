@@ -79,6 +79,75 @@
         });
     }
 
+    // Sortable Drag-and-Drop Instance
+    let categorySortableInstance = null;
+
+    function initCategorySortable() {
+        let el = document.getElementById('category-sortable-tbody');
+        if (!el || typeof Sortable === 'undefined') return;
+
+        if (categorySortableInstance) {
+            categorySortableInstance.destroy();
+        }
+
+        categorySortableInstance = new Sortable(el, {
+            handle: '.drag-handle',
+            animation: 200,
+            ghostClass: 'bg-indigo-50/80',
+            chosenClass: 'bg-slate-100/90',
+            dragClass: 'shadow-lg',
+            onEnd: function(evt) {
+                let orders = [];
+                $('#category-sortable-tbody tr.category-row').each(function(index) {
+                    let id = $(this).data('id');
+                    let newUrutan = index + 1;
+                    $(this).find('.order-badge').text(newUrutan);
+                    orders.push({
+                        id: id,
+                        urutan: newUrutan
+                    });
+                });
+
+                if (orders.length === 0) return;
+
+                $.ajax({
+                    url: "{{ route('admin.theme-categories.reorder') }}",
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        orders: orders
+                    },
+                    success: function(response) {
+                        if (typeof Swal !== 'undefined') {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                timerProgressBar: true
+                            });
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Urutan kategori berhasil disimpan!'
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        refreshCategoryTable();
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: xhr.responseJSON?.message || 'Gagal memperbarui urutan kategori.',
+                                confirmButtonColor: '#4f46e5'
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
+
     // Refresh Table via AJAX
     function refreshCategoryTable(url = null) {
         let fetchUrl = url || "{{ route('admin.theme-categories.index') }}";
@@ -95,6 +164,7 @@
             success: function(response) {
                 if (response.html) {
                     $('#category-table-container').html(response.html);
+                    initCategorySortable();
                 }
             },
             error: function() {
@@ -149,6 +219,7 @@
                     closeCreateModal();
                     if (response.html) {
                         $('#category-table-container').html(response.html);
+                        initCategorySortable();
                     } else {
                         refreshCategoryTable();
                     }
@@ -203,6 +274,7 @@
                     closeEditModal();
                     if (response.html) {
                         $('#category-table-container').html(response.html);
+                        initCategorySortable();
                     } else {
                         refreshCategoryTable();
                     }
@@ -249,6 +321,7 @@
                 if (response.success) {
                     if (response.html) {
                         $('#category-table-container').html(response.html);
+                        initCategorySortable();
                     } else {
                         refreshCategoryTable();
                     }
@@ -295,6 +368,7 @@
                     if (response.success) {
                         if (response.html) {
                             $('#category-table-container').html(response.html);
+                            initCategorySortable();
                         } else {
                             refreshCategoryTable();
                         }
@@ -344,4 +418,9 @@
             }
         }
     }
+
+    // Document Ready Initialization
+    $(document).ready(function() {
+        initCategorySortable();
+    });
 </script>
