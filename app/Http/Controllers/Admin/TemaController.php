@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TemaRequest;
+use App\Models\KategoriTema;
 use App\Models\Tema;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -12,7 +14,7 @@ class TemaController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Tema::withCount('undangans');
+        $query = Tema::withCount('undangans')->with('kategoriTema');
 
         if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
@@ -21,10 +23,22 @@ class TemaController extends Controller
             });
         }
 
-        $themes = $query->orderBy('id', 'desc')->paginate(12)->withQueryString();
-        $categories = \App\Models\KategoriTema::where('is_active', true)->orderBy('urutan', 'asc')->get();
+        if ($category = $request->input('category')) {
+            $query->where('category', $category);
+        }
 
-        if ($request->ajax()) {
+        if ($tingkatan = $request->input('tingkatan')) {
+            $query->where('tingkatan', $tingkatan);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('is_active', $request->input('status') === '1');
+        }
+
+        $themes = $query->orderBy('id', 'desc')->paginate(12)->withQueryString();
+        $categories = KategoriTema::where('is_active', true)->orderBy('urutan', 'asc')->get();
+
+        if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'html' => view('admin.themes.partials.table', compact('themes', 'categories'))->render(),
             ]);
@@ -36,7 +50,7 @@ class TemaController extends Controller
     public function store(TemaRequest $request)
     {
         $validated = $request->validated();
-        $kategoriId = \App\Models\KategoriTema::where('slug', $validated['category'])->value('id');
+        $kategoriId = KategoriTema::where('slug', $validated['category'])->value('id');
 
         $data = [
             'name' => $validated['name'],
@@ -50,7 +64,7 @@ class TemaController extends Controller
         ];
 
         if ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = \App\Helpers\ImageHelper::uploadAndCompress($request->file('thumbnail'), 'themes/thumbnails');
+            $data['thumbnail'] = ImageHelper::uploadAndCompress($request->file('thumbnail'), 'themes/thumbnails');
         }
 
         Tema::create($data);
@@ -69,7 +83,7 @@ class TemaController extends Controller
         $theme->name = $validated['name'];
         if (isset($validated['category'])) {
             $theme->category = $validated['category'];
-            $theme->kategori_tema_id = \App\Models\KategoriTema::where('slug', $validated['category'])->value('id');
+            $theme->kategori_tema_id = KategoriTema::where('slug', $validated['category'])->value('id');
         }
         if (isset($validated['tingkatan'])) {
             $theme->tingkatan = $validated['tingkatan'];
@@ -88,7 +102,7 @@ class TemaController extends Controller
             if ($theme->thumbnail) {
                 Storage::disk('public')->delete($theme->thumbnail);
             }
-            $theme->thumbnail = \App\Helpers\ImageHelper::uploadAndCompress($request->file('thumbnail'), 'themes/thumbnails');
+            $theme->thumbnail = ImageHelper::uploadAndCompress($request->file('thumbnail'), 'themes/thumbnails');
         }
 
         $theme->save();

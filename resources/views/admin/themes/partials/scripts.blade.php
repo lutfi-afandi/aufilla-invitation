@@ -25,7 +25,7 @@
         $('#edit-theme-harga-tambahan').val(theme.harga_tambahan || 0);
         $('#edit-theme-is-privat').val(theme.is_privat ? '1' : '0');
         $('#edit-theme-status').val(theme.is_active ? '1' : '0');
-        
+
         if (theme.thumbnail) {
             $('#edit-thumbnail-preview').attr('src', '/storage/' + theme.thumbnail);
             $('#edit-preview-container').removeClass('hidden');
@@ -50,8 +50,8 @@
 
     function showCreateErrors(errors) {
         let ul = $('#create-form-errors').removeClass('hidden').find('ul').empty();
-        $.each(errors, function (key, messages) {
-            $.each(messages, function (index, message) {
+        $.each(errors, function(key, messages) {
+            $.each(messages, function(index, message) {
                 ul.append('<li>' + message + '</li>');
             });
         });
@@ -63,8 +63,8 @@
 
     function showEditErrors(errors) {
         let ul = $('#edit-form-errors').removeClass('hidden').find('ul').empty();
-        $.each(errors, function (key, messages) {
-            $.each(messages, function (index, message) {
+        $.each(errors, function(key, messages) {
+            $.each(messages, function(index, message) {
                 ul.append('<li>' + message + '</li>');
             });
         });
@@ -101,13 +101,21 @@
     function refreshTable(url = null) {
         let fetchUrl = url || "{{ route('admin.themes.index') }}";
         let search = $('#search-theme').val();
+        let category = $('#filter-category').val();
+        let tingkatan = $('#filter-tingkatan').val();
+        let status = $('#filter-status').val();
 
         $('#grid-loader').removeClass('hidden').addClass('flex');
 
         $.ajax({
             url: fetchUrl,
             type: "GET",
-            data: { search: search },
+            data: {
+                search: search,
+                category: category,
+                tingkatan: tingkatan,
+                status: status
+            },
             dataType: "json",
             success: function(res) {
                 $('#grid-loader').removeClass('flex').addClass('hidden');
@@ -121,7 +129,7 @@
         });
     }
 
-    // Live Search Event
+    // Live Search & Filter Events
     $('#search-theme').on('input', function() {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(function() {
@@ -129,8 +137,20 @@
         }, 300);
     });
 
-    // Pagination Click Handler
-    $(document).on('click', '#themes-table-container .ajax-pagination a', function(e) {
+    $('#filter-category, #filter-tingkatan, #filter-status').on('change', function() {
+        refreshTable();
+    });
+
+    $('#btn-reset-filters').on('click', function() {
+        $('#search-theme').val('');
+        $('#filter-category').val('');
+        $('#filter-tingkatan').val('');
+        $('#filter-status').val('');
+        refreshTable();
+    });
+
+    // Pagination Click Handler (Fix: intercept native nav a / pagination a)
+    $(document).on('click', '#themes-table-container nav a, #themes-table-container .pagination a', function(e) {
         e.preventDefault();
         let url = $(this).attr('href');
         if (url) {
@@ -176,7 +196,9 @@
                     if (res.errors) {
                         showCreateErrors(res.errors);
                     } else if (res.message) {
-                        showCreateErrors({ general: [res.message] });
+                        showCreateErrors({
+                            general: [res.message]
+                        });
                     }
                 } else {
                     Swal.fire({
@@ -229,7 +251,9 @@
                     if (res.errors) {
                         showEditErrors(res.errors);
                     } else if (res.message) {
-                        showEditErrors({ general: [res.message] });
+                        showEditErrors({
+                            general: [res.message]
+                        });
                     }
                 } else {
                     Swal.fire({
@@ -255,12 +279,13 @@
                 const badge = $('#theme-badge-' + id);
                 if (response.is_active) {
                     badge.removeClass('bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200')
-                         .addClass('bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-200')
-                         .text('AKTIF');
+                        .addClass('bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-200')
+                        .text('AKTIF');
                 } else {
-                    badge.removeClass('bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-200')
-                         .addClass('bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200')
-                         .text('NONAKTIF');
+                    badge.removeClass(
+                            'bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-200')
+                        .addClass('bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200')
+                        .text('NONAKTIF');
                 }
 
                 Swal.fire({
