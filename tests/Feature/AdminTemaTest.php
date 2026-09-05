@@ -124,4 +124,34 @@ class AdminTemaTest extends TestCase
         $this->assertStringContainsString('Jawa Kasunanan', $response->json('html'));
         $this->assertStringNotContainsString('Aufilla Modern', $response->json('html'));
     }
+
+    public function test_admin_can_validate_theme_code_live(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        Tema::create([
+            'name' => 'Aufilla Maroon',
+            'code' => 'aufilla-maroon',
+            'category' => 'minimalis',
+            'tingkatan' => 'standar',
+            'harga_tambahan' => 0,
+            'is_privat' => 0,
+            'is_active' => 1,
+        ]);
+
+        // 1. Valid and existing blade view (aufilla-maroon is in resources/views/themes/aufilla-maroon)
+        $response1 = $this->actingAs($admin)->getJson('/admin/themes/check-code?code=aufilla-maroon');
+        $response1->assertStatus(200);
+        $response1->assertJson(['valid' => false, 'unique' => false]);
+
+        // 2. Invalid format (spaces and uppercase)
+        $response2 = $this->actingAs($admin)->getJson('/admin/themes/check-code?code=Aufilla%20Invalid');
+        $response2->assertStatus(200);
+        $response2->assertJson(['valid' => false, 'format_valid' => false]);
+
+        // 3. Valid new code and view exists
+        $response3 = $this->actingAs($admin)->getJson('/admin/themes/check-code?code=soraya-pilot');
+        $response3->assertStatus(200);
+        $response3->assertJson(['valid' => true, 'view_exists' => true]);
+    }
 }

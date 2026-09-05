@@ -148,4 +148,60 @@ class TemaController extends Controller
             'message' => 'Tema berhasil dihapus.',
         ]);
     }
+
+    /**
+     * Check code/slug availability, format, and view file existence.
+     */
+    public function checkCode(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $code = trim((string) $request->input('code', ''));
+        $ignoreId = $request->input('ignore_id');
+
+        if (empty($code)) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Kode tema tidak boleh kosong.',
+            ]);
+        }
+
+        // Validate format: kebab-case
+        if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $code)) {
+            return response()->json([
+                'valid' => false,
+                'format_valid' => false,
+                'message' => 'Format kode tema harus berupa huruf kecil, angka, dan tanda strip (-) tanpa spasi atau simbol.',
+            ]);
+        }
+
+        // Check database uniqueness
+        $query = Tema::where('code', $code);
+        if ($ignoreId) {
+            $query->where('id', '!=', $ignoreId);
+        }
+
+        if ($query->exists()) {
+            return response()->json([
+                'valid' => false,
+                'unique' => false,
+                'message' => "Kode tema '{$code}' sudah digunakan di database.",
+            ]);
+        }
+
+        // Check if Blade view file exists in resources/views/themes/{code}/index.blade.php
+        $viewExists = view()->exists("themes.{$code}.index");
+        $previewUrl = route('theme.preview', $code);
+
+        return response()->json([
+            'valid' => true,
+            'format_valid' => true,
+            'unique' => true,
+            'code' => $code,
+            'preview_url' => $previewUrl,
+            'view_exists' => $viewExists,
+            'view_path' => "resources/views/themes/{$code}/index.blade.php",
+            'message' => $viewExists
+                ? 'Kode tema valid & file template view ditemukan!'
+                : 'Kode tema valid & unik (file view template belum dibuat).',
+        ]);
+    }
 }

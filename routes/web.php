@@ -32,6 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/clients/{id}/impersonate', [\App\Http\Controllers\Admin\ClientController::class, 'impersonate'])->name('clients.impersonate');
 
         // Themes (Temas)
+        Route::get('/themes/check-code', [\App\Http\Controllers\Admin\TemaController::class, 'checkCode'])->name('themes.check-code');
         Route::get('/themes', [\App\Http\Controllers\Admin\TemaController::class, 'index'])->name('themes.index');
         Route::post('/themes', [\App\Http\Controllers\Admin\TemaController::class, 'store'])->name('themes.store');
         Route::put('/themes/{id}', [\App\Http\Controllers\Admin\TemaController::class, 'update'])->name('themes.update');
