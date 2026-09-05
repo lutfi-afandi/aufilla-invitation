@@ -29,7 +29,9 @@ class LandingController extends Controller
         // Trial package info for promo banner
         $trialPaket = Paket::where('name', 'Trial')->first();
 
-        return view('landing.index', compact('themes', 'categories', 'packages', 'trialPaket'));
+        $faqs = \App\Models\Setting::getJson('faqs', []);
+
+        return view('landing.index', compact('themes', 'categories', 'packages', 'trialPaket', 'faqs'));
     }
 
     public function showRegisterForm(Request $request)

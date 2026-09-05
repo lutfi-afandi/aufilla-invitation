@@ -7,33 +7,45 @@
     <meta name="supported-color-schemes" content="light">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Aufilla Invitation') }} — Undangan Pernikahan Digital</title>
+    <title>{{ setting('meta_title') ?: (setting('app_name', config('app.name', 'Aufilla Invitation')) . ' — ' . setting('app_tagline', 'Undangan Pernikahan Digital')) }}</title>
 
     <!-- SEO & Meta Tags -->
     <meta name="description"
-        content="Buat undangan pernikahan digital premium, elegan, dan mudah digunakan. Bagikan momen kebahagiaan Anda tanpa batas dengan Aufilla Invitation.">
+        content="{{ setting('meta_description', 'Buat undangan pernikahan digital premium, elegan, dan mudah digunakan. Bagikan momen kebahagiaan Anda tanpa batas.') }}">
     <meta name="keywords"
-        content="undangan pernikahan digital, undangan online, undangan website, buat undangan digital, aufilla invitation, undangan premium">
-    <meta name="author" content="Aufilla Invitation">
+        content="{{ setting('meta_keywords', 'undangan pernikahan digital, undangan online, undangan website, buat undangan digital, undangan premium') }}">
+    <meta name="author" content="{{ setting('meta_author', setting('app_name', 'Aufilla Invitation')) }}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url('/') }}">
-    <meta property="og:title" content="{{ config('app.name', 'Aufilla Invitation') }} — Undangan Pernikahan Digital">
+    <meta property="og:title" content="{{ setting('meta_title') ?: (setting('app_name', config('app.name', 'Aufilla Invitation')) . ' — ' . setting('app_tagline', 'Undangan Pernikahan Digital')) }}">
     <meta property="og:description"
-        content="Buat undangan pernikahan digital premium, elegan, dan mudah digunakan. Bagikan momen kebahagiaan Anda tanpa batas dengan Aufilla Invitation.">
-    <meta property="og:image" content="{{ asset('assets/img/brand-white-og.png') }}">
+        content="{{ setting('meta_description', 'Buat undangan pernikahan digital premium, elegan, dan mudah digunakan. Bagikan momen kebahagiaan Anda tanpa batas.') }}">
+    @if(setting('app_og_image'))
+        <meta property="og:image" content="{{ asset('storage/' . setting('app_og_image')) }}">
+    @else
+        <meta property="og:image" content="{{ asset('assets/img/brand-white-og.png') }}">
+    @endif
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="{{ url('/') }}">
-    <meta name="twitter:title" content="{{ config('app.name', 'Aufilla Invitation') }} — Undangan Pernikahan Digital">
+    <meta name="twitter:title" content="{{ setting('app_name', config('app.name', 'Aufilla Invitation')) }} — {{ setting('app_tagline', 'Undangan Pernikahan Digital') }}">
     <meta name="twitter:description"
-        content="Buat undangan pernikahan digital premium, elegan, dan mudah digunakan. Bagikan momen kebahagiaan Anda tanpa batas dengan Aufilla Invitation.">
-    <meta name="twitter:image" content="{{ asset('assets/img/brand-white-og.png') }}">
+        content="{{ setting('meta_description', 'Buat undangan pernikahan digital premium, elegan, dan mudah digunakan. Bagikan momen kebahagiaan Anda tanpa batas.') }}">
+    @if(setting('app_og_image'))
+        <meta name="twitter:image" content="{{ asset('storage/' . setting('app_og_image')) }}">
+    @else
+        <meta name="twitter:image" content="{{ asset('assets/img/brand-white-og.png') }}">
+    @endif
 
     <!-- Favicon -->
-    <link rel="icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
+    @if(setting('app_favicon'))
+        <link rel="icon" href="{{ asset('storage/' . setting('app_favicon')) }}">
+    @else
+        <link rel="icon" href="{{ asset('assets/img/logo-icon.png') }}" type="image/png">
+    @endif
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -166,16 +178,24 @@
                 <div
                     class="w-16 h-16 rounded-full border-2 border-t-[#c5a880] border-r-[#c5a880]/40 border-b-transparent border-l-transparent animate-spin">
                 </div>
-                <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Logo"
-                    class="w-8 h-8 object-contain absolute inset-0 m-auto">
+                @if(setting('app_favicon'))
+                    <img src="{{ asset('storage/' . setting('app_favicon')) }}" alt="Logo"
+                        class="w-8 h-8 object-contain absolute inset-0 m-auto">
+                @elseif(setting('app_logo_dark'))
+                    <img src="{{ asset('storage/' . setting('app_logo_dark')) }}" alt="Logo"
+                        class="w-8 h-8 object-contain absolute inset-0 m-auto">
+                @else
+                    <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Logo"
+                        class="w-8 h-8 object-contain absolute inset-0 m-auto">
+                @endif
             </div>
 
             {{-- Brand Name & Tagline --}}
             <h2 class="font-serif text-2xl md:text-3xl text-white tracking-wide mb-1">
-                Aufilla <span class="text-[#c5a880] italic font-normal">Invitation</span>
+                {{ setting('app_name', 'Aufilla Invitation') }}
             </h2>
             <p class="text-[10px] md:text-[11px] text-[#c5a880]/80 tracking-[0.25em] uppercase font-light">
-                Mewujudkan Momen Spesial Anda
+                {{ setting('app_tagline', 'Mewujudkan Momen Spesial Anda') }}
             </p>
 
             {{-- Progress Bar --}}
@@ -227,15 +247,23 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-10 h-[75px] flex items-center justify-between relative z-50">
             {{-- Logo --}}
             <a href="/" class="flex items-center gap-3 hover:-translate-y-0.5 transition-transform duration-300">
-                <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Aufilla Logo"
-                    class="h-10 md:h-12 w-auto object-contain">
+                @if(setting('app_logo'))
+                    <img src="{{ asset('storage/' . setting('app_logo')) }}" alt="{{ setting('app_name', 'Logo') }}"
+                        class="h-10 md:h-12 w-auto object-contain">
+                @elseif(setting('app_favicon'))
+                    <img src="{{ asset('storage/' . setting('app_favicon')) }}" alt="{{ setting('app_name', 'Logo') }}"
+                        class="h-10 md:h-12 w-auto object-contain">
+                @else
+                    <img src="{{ asset('assets/img/logo-icon.png') }}" alt="{{ setting('app_name', 'Aufilla Logo') }}"
+                        class="h-10 md:h-12 w-auto object-contain">
+                @endif
                 <div class="flex flex-col justify-center">
-                    <span class="text-[20px] md:text-[24px] font-serif text-brand-dark tracking-tight leading-none">
-                        Aufilla<span class="italic text-brand-accent">Invitation</span>
+                    <span class="text-[18px] md:text-[22px] font-serif font-bold text-brand-dark tracking-tight leading-none">
+                        {{ setting('app_name', 'Aufilla Invitation') }}
                     </span>
                     <span
                         class="text-[8px] md:text-[9px] font-sans font-bold tracking-[0.3em] uppercase text-brand-dark/60 mt-1 pl-0.5">
-                        Undangan Digital
+                        {{ setting('app_tagline', 'Undangan Digital') }}
                     </span>
                 </div>
             </a>
@@ -979,7 +1007,7 @@
                         Cetak Undangan Fisik Murah & Minimalis (Bisa Pakai Foto)
                     </h2>
                     <p class="text-sm sm:text-base text-gray-600 leading-relaxed">
-                        Selain undangan digital interaktif, Aufilla juga melayani pencetakan <strong>Undangan Fisik
+                        Selain undangan digital interaktif, {{ setting('app_name', 'Aufilla') }} juga melayani pencetakan <strong>Undangan Fisik
                             Murah, Minimalis & Hemat</strong> menggunakan pilihan kertas <strong>Jasmine, Brief Card
                             (BC), Linen, dan Art Paper</strong> berkualitas. Beragam variasi model tersedia mulai dari
                         tipe ekonomis hingga cetak full foto yang diselaraskan dengan tema digital Anda!
@@ -1019,7 +1047,7 @@
                     </div>
 
                     <div class="pt-4">
-                        <a href="https://wa.me/6285171097138?text=Halo%20Admin%20Aufilla%2C%20saya%20tertarik%20untuk%20konsultasi%20cetak%20undangan%20fisik%20pendamping%20digital..."
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', setting('contact_whatsapp', '6285171097138')) }}?text={{ urlencode('Halo Admin ' . setting('app_name', 'Aufilla') . ', saya tertarik untuk konsultasi cetak undangan fisik pendamping digital...') }}"
                             target="_blank"
                             class="inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold px-8 py-4 rounded-2xl text-sm shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5">
                             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -1051,48 +1079,22 @@
         <div class="max-w-3xl mx-auto lp-reveal lp-delay-0 relative z-10">
             <div class="text-center mb-10">
                 <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-brand-accent mb-2 block">FAQ</span>
-                <h2 class="font-serif text-3xl md:text-4xl text-brand-dark mb-3">Pertanyaan Seputar Aufilla</h2>
+                <h2 class="font-serif text-3xl md:text-4xl text-brand-dark mb-3">Pertanyaan Seputar {{ setting('app_name', 'Aufilla Invitation') }}</h2>
                 <p class="text-brand-dark/80 text-[13px] md:text-[14px] leading-relaxed">Hal-hal yang sering ditanyakan
                     oleh calon pengantin mengenai platform undangan kami.</p>
             </div>
 
             <div class="space-y-3">
                 @php
-                    $faqs = [
-                        [
-                            'q' => 'Bagaimana alur pembuatan undangan digital di Aufilla Invitation?',
-                            'a' =>
-                                'Pembuatan undangan di Aufilla dirancang secara mandiri dan sepenuhnya otomatis (instant). Anda dapat memulainya dengan mengeksplorasi katalog tema eksklusif yang kami sediakan, lalu mengklik tombol "Pilih Tema". Anda akan diarahkan untuk mendaftarkan akun sekaligus mendapatkan <strong>Masa Uji Coba (Trial)</strong> gratis selama 1 hari. Setelah akun berhasil dibuat, Anda akan langsung diarahkan ke Dasbor Klien yang intuitif. Di sana, Anda bisa melengkapi profil mempelai, mengatur detail waktu dan lokasi acara (Akad & Resepsi), hingga mengunggah foto pre-wedding Anda ke galeri. Segera setelah data inti terisi, URL atau <em>link</em> undangan Anda sudah aktif dan siap disebarkan ke kerabat Anda tanpa perlu menunggu proses manual dari tim kami!',
-                        ],
-                        [
-                            'q' => 'Berapa lama masa aktif undangan yang sudah dibuat?',
-                            'a' =>
-                                'Masa aktif undangan akan sangat bergantung pada jenis paket yang Anda pilih setelah masa uji coba 1 hari Anda berakhir. Untuk paket <strong>Basic</strong>, undangan Anda akan tetap aktif dan bisa diakses publik selama <strong>90 Hari (3 Bulan)</strong>. Jika Anda memilih paket <strong>Premium</strong>, masa aktifnya diperpanjang menjadi <strong>180 Hari (6 Bulan)</strong>. Namun, jika Anda menginginkan kenangan pernikahan Anda abadi dan bisa diakses kapan saja untuk dikenang di masa depan, kami sangat menyarankan paket <strong>VIP</strong>. Paket VIP memberikan jaminan masa aktif <strong>Permanen (Lifetime)</strong> tanpa perlu memikirkan biaya perpanjangan server atau langganan bulanan selamanya. Jika masa aktif paket (Basic/Premium) habis, tautan publik akan ditutup otomatis namun data Anda tidak dihapus.',
-                        ],
-                        [
-                            'q' => 'Apakah ada batasan jumlah foto galeri dan nama tamu yang bisa dimasukkan?',
-                            'a' =>
-                                'Kami memberikan kebebasan penuh pada fitur input <strong>Custom Nama Tamu</strong>. Tidak peduli paket berbayar apa yang Anda gunakan, Anda berhak menyebarkan tautan spesifik untuk tamu <strong>tanpa batasan jumlah (Unlimited)</strong>. Namun, untuk <strong>Foto Galeri</strong>, kami menerapkan kuota: paket <strong>Basic</strong> membatasi maksimal <strong>5 Foto</strong>, paket <strong>Premium</strong> hingga <strong>10 Foto</strong>, dan khusus paket <strong>VIP</strong>, Anda bebas mengunggah foto <strong>Unlimited</strong>. Harap diperhatikan, selama Anda masih berstatus <strong>Trial</strong>, sistem membatasi ketat maksimal 3 foto galeri dan 5 nama tamu untuk mencegah penyalahgunaan sebelum akun diaktivasi ke versi berbayar.',
-                        ],
-                        [
-                            'q' => 'Apakah saya bisa mengganti tema undangan atau mengubah musiknya?',
-                            'a' =>
-                                'Tentu saja! Aufilla Invitation mendukung perubahan desain secara dinamis. Anda bisa masuk ke menu "Ganti Tema" di Dasbor Klien dan secara instan desain undangan publik Anda akan berganti dengan mulus tanpa merusak data mempelai maupun foto Anda. Untuk kustomisasi lanjutan seperti mengaktifkan halaman <strong>Cerita Cinta (Love Story)</strong> dan mengunggah <strong>Musik (Lagu Custom) MP3</strong> sendiri, fitur tersebut secara eksklusif hanya terbuka <em>(unlocked)</em> bagi pengguna paket <strong>Premium</strong> atau <strong>VIP</strong>. Pada paket Basic atau Trial, Anda akan menggunakan instrumen musik elegan yang sudah tertanam secara *default* dari tema kami.',
-                        ],
-                        [
-                            'q' => 'Jika saya mengalami kesulitan teknis, apakah ada bantuan?',
-                            'a' =>
-                                'Kepuasan dan kelancaran momen pernikahan Anda adalah prioritas mutlak kami. Kami telah merancang sistem yang semudah mungkin (layaknya mengisi profil di media sosial), namun kami juga memahami bahwa Anda mungkin membutuhkan arahan teknis. Oleh karena itu, tim <em>Customer Support</em> profesional kami selalu bersiaga dan dapat dengan mudah dihubungi melalui tombol <strong>Bantuan WhatsApp</strong> di dalam Dasbor Anda. Khusus bagi para pengguna paket <strong>VIP</strong>, Anda akan otomatis mendapatkan fasilitas <strong>Dukungan Prioritas (Priority Support)</strong>, di mana setiap keluhan atau permintaan teknis Anda akan diloncatkan ke antrean terdepan untuk ditangani sesegera mungkin.',
-                        ],
-                    ];
+                    $displayFaqs = $faqs ?? setting_json('faqs', []);
                 @endphp
 
-                @foreach ($faqs as $faq)
+                @forelse ($displayFaqs as $faq)
                     <div x-data="{ open: false }"
                         class="group bg-white rounded-xl border border-brand-dark/5 shadow-sm overflow-hidden transition-all duration-300">
                         <button @click="open = !open" type="button"
                             class="w-full flex justify-between items-center font-bold text-[13px] cursor-pointer text-brand-dark px-5 py-4 hover:text-brand-accent transition-colors select-none text-left focus:outline-none">
-                            <span>{{ $faq['q'] }}</span>
+                            <span>{{ $faq['pertanyaan'] ?? ($faq['question'] ?? ($faq['q'] ?? '')) }}</span>
                             <span
                                 class="transition-transform duration-500 text-brand-dark/40 group-hover:text-brand-accent ml-4 shrink-0"
                                 :class="open ? 'rotate-180' : ''">
@@ -1109,12 +1111,16 @@
                             <div class="overflow-hidden">
                                 <div class="px-5 pb-5 text-[12px] md:text-[13px] leading-relaxed text-brand-dark/80 border-t border-brand-dark/5 pt-3 mt-1 transform transition-transform duration-500"
                                     :class="open ? 'translate-y-0' : '-translate-y-2'">
-                                    {!! $faq['a'] !!}
+                                    {!! $faq['jawaban'] ?? ($faq['answer'] ?? ($faq['a'] ?? '')) !!}
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <div class="text-center py-8 text-sm text-brand-dark/50">
+                        Belum ada daftar pertanyaan yang dipublikasikan.
+                    </div>
+                @endforelse
             </div>
         </div>
     </section>
@@ -1129,10 +1135,15 @@
                 {{-- Left: Logo & Text (Col-span 5) --}}
                 <div
                     class="col-span-2 md:col-span-5 text-center flex flex-col items-center md:items-start justify-center md:justify-start">
-                    <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Aufilla"
-                        class="w-16 h-16 object-contain mb-3">
+                    @if(setting('app_logo'))
+                        <img src="{{ asset('storage/' . setting('app_logo')) }}" alt="{{ setting('app_name', 'Aufilla') }}"
+                            class="max-h-16 w-auto object-contain mb-3">
+                    @else
+                        <img src="{{ asset('assets/img/logo-icon.png') }}" alt="{{ setting('app_name', 'Aufilla') }}"
+                            class="w-16 h-16 object-contain mb-3">
+                    @endif
                     <p class="text-[13px] leading-relaxed text-brand-dark/80 max-w-sm md:text-left">
-                        <strong class="font-bold text-brand-dark">Aufilla Invitation</strong> adalah platform undangan
+                        <strong class="font-bold text-brand-dark">{{ setting('app_name', 'Aufilla Invitation') }}</strong> adalah platform undangan
                         digital berdesain premium yang sangat praktis digunakan. Cukup isi data diri & unggah foto,
                         undangan Anda langsung siap disebarkan tanpa ribet mengatur komponen desain!
                     </p>
@@ -1152,17 +1163,9 @@
                                         d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                 </svg>
                             </div>
-                            <span class="break-all md:break-normal">638517097138</span>
-                        </li>
-                        <li class="flex items-center gap-2 md:gap-4">
-                            <div
-                                class="w-6 h-6 md:w-8 md:h-8 rounded-full bg-brand-bg flex items-center justify-center shrink-0 text-brand-accent">
-                                <svg class="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                                </svg>
-                            </div>
-                            <span class="break-words">Aufilla Studio</span>
+                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', setting('contact_whatsapp', '6281234567890')) }}" target="_blank" class="hover:text-brand-accent transition-colors break-all md:break-normal">
+                                {{ setting('contact_whatsapp', '6281234567890') }}
+                            </a>
                         </li>
                         <li class="flex items-center gap-2 md:gap-4">
                             <div
@@ -1172,7 +1175,9 @@
                                         d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
                                 </svg>
                             </div>
-                            <span class="break-words">aufilla.studio</span>
+                            <a href="https://instagram.com/{{ ltrim(setting('contact_instagram', 'aufilla.invitation'), '@') }}" target="_blank" class="hover:text-brand-accent transition-colors break-words">
+                                {{ setting('contact_instagram', 'aufilla.invitation') }}
+                            </a>
                         </li>
                         <li class="flex items-center gap-2 md:gap-4">
                             <div
@@ -1183,7 +1188,9 @@
                                         d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
                             </div>
-                            <span class="break-all md:break-normal">aufilla.web@gmail.com</span>
+                            <a href="mailto:{{ setting('contact_email', 'support@aufilla.com') }}" class="hover:text-brand-accent transition-colors break-all md:break-normal">
+                                {{ setting('contact_email', 'support@aufilla.com') }}
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -1208,8 +1215,7 @@
 
             <div
                 class="border-t border-brand-dark/5 pt-8 text-center text-[11px] md:text-[12px] text-brand-dark/60 lp-reveal lp-delay-2">
-                Copyright &copy; {{ date('Y') }} <strong class="text-brand-dark font-medium">Aufilla
-                    Invitation</strong>
+                Copyright &copy; {{ date('Y') }} <strong class="text-brand-dark font-medium">{{ setting('app_name', 'Aufilla Invitation') }}</strong>
             </div>
         </div>
     </footer>

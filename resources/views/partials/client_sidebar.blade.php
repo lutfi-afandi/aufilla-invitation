@@ -4,10 +4,18 @@
     <div class="p-6 border-b border-brand-accent/10 bg-brand-dark/50">
         <a href="{{ route('client.dashboard') }}" class="flex items-center gap-3 decoration-transparent hover:-translate-y-0.5 transition-transform duration-300">
             <!-- Icon Logo -->
-            <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Aufilla Logo" class="h-10 w-auto object-contain drop-shadow-md">
+            @if(setting('app_logo_dark'))
+                <img src="{{ asset('storage/' . setting('app_logo_dark')) }}" alt="Logo" class="h-10 w-auto object-contain drop-shadow-md">
+            @elseif(setting('app_logo'))
+                <img src="{{ asset('storage/' . setting('app_logo')) }}" alt="Logo" class="h-10 w-auto object-contain drop-shadow-md">
+            @elseif(setting('app_favicon'))
+                <img src="{{ asset('storage/' . setting('app_favicon')) }}" alt="Logo" class="h-10 w-auto object-contain drop-shadow-md">
+            @else
+                <img src="{{ asset('assets/img/logo-icon.png') }}" alt="Logo" class="h-10 w-auto object-contain drop-shadow-md">
+            @endif
             <div class="flex flex-col justify-center">
-                <span class="text-[20px] font-serif text-white tracking-tight leading-none drop-shadow-sm">
-                    Aufilla<span class="italic text-brand-accent">Invitation</span>
+                <span class="text-[18px] font-serif font-bold text-white tracking-tight leading-none drop-shadow-sm">
+                    {{ setting('app_name', 'Aufilla Invitation') }}
                 </span>
                 <span class="text-[8px] font-sans font-bold tracking-[0.3em] uppercase text-white/60 mt-1 pl-0.5">
                     Panel Klien

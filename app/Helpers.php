@@ -20,3 +20,31 @@ if (!function_exists('assetv')) {
         return asset($path . $separator . 'v=' . $version, $secure);
     }
 }
+
+if (!function_exists('setting')) {
+    /**
+     * Get a setting value with an optional default.
+     *
+     * @param  string  $key
+     * @param  mixed  $default
+     * @return mixed
+     */
+    function setting(string $key, mixed $default = null): mixed
+    {
+        return \App\Models\Setting::get($key, $default);
+    }
+}
+
+if (!function_exists('setting_json')) {
+    /**
+     * Get a setting value decoded from JSON with an optional default array.
+     *
+     * @param  string  $key
+     * @param  array  $default
+     * @return array
+     */
+    function setting_json(string $key, array $default = []): array
+    {
+        return \App\Models\Setting::getJson($key, $default);
+    }
+}
